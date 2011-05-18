@@ -1,0 +1,13 @@
+<html>
+<head>
+	<title>Proximus Gate GUI</title>
+	<?=$html->css('cake.generic');?>
+</head>
+<body>
+	<div id="container">
+	<div id="content">
+		<?=$content_for_layout;?>
+	</div>
+	</div>
+</body>
+</html>

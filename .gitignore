@@ -1,0 +1,3 @@
+*.swp
+app/tmp/*
+.ignored-files
