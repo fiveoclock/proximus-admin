@@ -37,7 +37,7 @@
 
 <div id="footer">
 <div id="copyrightdesign">
-Proximus-Admin
+ProXimus-Admin
 </div>
 
 <div id="footercontact">

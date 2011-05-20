@@ -15,10 +15,10 @@ if ($auth['Admin']['role_id'] >= 1) {
 # global admin is logged in 
 if ($auth['Admin']['role_id'] == 1) {
    echo " | ";
-   echo $html->link('No Auth.','/noauth_rules/index',null,null,false);
-   echo $html->link('B. Networks','/blockednetworks/index',null,null,false);
-#   echo $html->link('Users','/users/index',null,null,false);
-   echo $html->link('Admins','/admins/index',null,null,false);
+   #echo $html->link('No Auth.','/noauth_rules/index',null,null,false);
+   echo $html->link('Administration','/pages/admin',null,null,false);
+   #echo $html->link('Users','/users/index',null,null,false);
+   #echo $html->link('Admins','/admins/index',null,null,false);
 }
 
 # admin logged in

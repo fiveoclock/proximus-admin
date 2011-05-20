@@ -7,13 +7,9 @@
 		echo $form->input('realname');
 		echo $form->input('emailaddress');
 		echo $form->input('location_id');
-		echo $form->input('group_id');
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
+   <?php echo $this->element('back_btn');?>
+   <?php echo $form->end('Submit');?>
 </div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('List Users', true), array('action'=>'index'));?></li>
-	</ul>
-</div>
+

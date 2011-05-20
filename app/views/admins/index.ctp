@@ -1,5 +1,12 @@
 <div class="admins index">
 <h2><?php __('Admins');?></h2>
+<div class="actions">
+	<ul>
+		<li><?php echo $html->link(__('Create a new admin account', true), array('action'=>'add')); ?></li>
+	</ul>
+   <br>
+</div>
+
 <p>
 <?php
 echo $paginator->counter(array(
@@ -8,7 +15,6 @@ echo $paginator->counter(array(
 ?></p>
 <table cellpadding="0" cellspacing="0">
 <tr>
-	<th><?php echo $paginator->sort('id');?></th>
 	<th><?php echo $paginator->sort('username');?></th>
 	<th><?php echo $paginator->sort('Role','Role.name');?></th>
 	<th><?php echo $paginator->sort('active');?></th>
@@ -26,9 +32,6 @@ foreach ($admins as $admin):
 ?>
 	<tr<?php echo $class;?>>
 		<td>
-			<?php echo $admin['Admin']['id']; ?>
-		</td>
-		<td>
 			<?php echo $admin['Admin']['username']; ?>
 		</td>
 		<td>
@@ -43,10 +46,11 @@ foreach ($admins as $admin):
 		<td>
 			<?php echo $admin['Admin']['modified']; ?>
 		</td>
+
 		<td class="actions">
 			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $admin['Admin']['id'])); ?>
-			<?php echo $html->link(__('Password', true), array('action'=>'changePassword', $admin['Admin']['id'])); ?>
-			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $admin['Admin']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $admin['Admin']['id'])); ?>
+			<?php echo $html->link(__('/ Set Password', true), array('action'=>'changePassword', $admin['Admin']['id'])); ?>
+			<?php echo $html->link(__('/ Delete', true), array('action'=>'delete', $admin['Admin']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $admin['Admin']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -57,8 +61,4 @@ foreach ($admins as $admin):
  | 	<?php echo $paginator->numbers();?>
 	<?php echo $paginator->next(__('next', true).' >>', array(), null, array('class'=>'disabled'));?>
 </div>
-<div class="actions">
-	<ul>
-		<li><?php echo $html->link(__('New Admin', true), array('action'=>'add')); ?></li>
-	</ul>
-</div>
+

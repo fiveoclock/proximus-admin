@@ -3,10 +3,18 @@ class AdminsController extends AppController {
 
 	var $name = 'Admins';
 	var $helpers = array('Html', 'Form');
+   var $paginate = array('limit' => 100);
 
    function beforeFilter() {
       parent::beforeFilter(); 
       $this->Auth->allowedActions = array('login','logout');
+   }
+
+   function afterFilter() {
+      $allowedActions = array('display');
+      if (in_array($this->params['action'],$allowedActions)) {
+         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
+      }
    }
 
    #use this function to add/update permissions for roles
@@ -81,6 +89,10 @@ class AdminsController extends AppController {
 	}
 
 	function add() {
+      if (array_key_exists('cancel', $this->params['form'])) {
+         $this->Session->setFlash(__('Canceled', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }
 		if (!empty($this->data)) {
          if ($this->data['Admin']['password'] == $this->Auth->password($this->data['Admin']['password_confirm'])) {
 			   $this->Admin->create() && $this->Admin->validates();
@@ -114,6 +126,10 @@ class AdminsController extends AppController {
 			$this->Session->setFlash(__('Invalid Admin', true));
 			$this->redirect(array('action'=>'index'));
 		}
+      if (array_key_exists('cancel', $this->params['form'])) {
+         $this->Session->setFlash(__('Canceled', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }
 		if (!empty($this->data)) {
 			if ($this->Admin->save($this->data)) {
 				$this->Session->setFlash(__('The Admin has been saved', true));

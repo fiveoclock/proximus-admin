@@ -5,6 +5,8 @@
 	<?php
 		echo $form->input('type', array('options' => array('DN'=>'DN','IP'=>'IP')));
 		echo $form->input('sitename');
+      echo $form->input('location_id');
+      echo $form->input('valid_until', array('type'=>'text', 'label'=> 'Valid until (use yyyy-mm-dd hh-mm), leave empty for no limitation'));
 		echo $form->input('description');
 	?>
 	</fieldset>

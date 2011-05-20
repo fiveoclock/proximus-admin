@@ -26,7 +26,8 @@ class NoauthRulesController extends AppController {
 		   $this->set('noauth_rules', $this->paginate('NoauthRule',array('NoauthRule.sitename LIKE'=>'%'.$this->data['NoauthRule']['searchstring'].'%')));
       } 
       else {
-         $this->set('noauth_rules', $this->paginate());
+         #$this->set('noauth_rules', $this->paginate());
+         $this->set('noauth_rules', $this->paginate('NoauthRule',array('1=1 ORDER BY valid_until DESC') ));
       }
 	}
 
@@ -44,6 +45,21 @@ class NoauthRulesController extends AppController {
 				$this->Session->setFlash(__('The Noauth rule could not be saved. Please, try again.', true));
 			}
 		}
+
+      # show location code + name 
+      $locations_all = $this->NoauthRule->Location->find('all',array(
+         'fields'=>array('Location.id','Location.code','Location.name'),
+         'recursive'=>-1,
+         'order'=>array(
+            'Location.code',
+      )));
+      # convert array
+      $locations = Set::combine(
+         $locations_all,
+         '{n}.Location.id',
+         array('%s %s','{n}.Location.code','{n}.Location.name')
+      );
+      $this->set(compact('locations'));
 	}
 
 	function edit($id = null) {
@@ -66,6 +82,21 @@ class NoauthRulesController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->NoauthRule->read(null, $id);
 		}
+
+      # show location code + name 
+      $locations_all = $this->NoauthRule->Location->find('all',array(
+         'fields'=>array('Location.id','Location.code','Location.name'),
+         'recursive'=>-1,
+         'order'=>array(
+            'Location.code',
+      )));
+      # convert array
+      $locations = Set::combine(
+         $locations_all,
+         '{n}.Location.id',
+         array('%s %s','{n}.Location.code','{n}.Location.name')
+      );
+      $this->set(compact('locations'));
 	}
 
 	function delete($id = null) {

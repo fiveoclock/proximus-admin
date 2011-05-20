@@ -24,6 +24,8 @@ echo $paginator->counter(array(
 <tr>
 	<th><?php echo $paginator->sort('type');?></th>
 	<th><?php echo $paginator->sort('sitename');?></th>
+	<th><?php echo $paginator->sort('location');?></th>
+	<th><?php echo $paginator->sort('valid_until');?></th>
 	<th><?php echo $paginator->sort('description');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
@@ -40,7 +42,20 @@ foreach ($noauth_rules as $noauth_rule):
 			<?php echo $noauth_rule['NoauthRule']['type']; ?>
 		</td>
 		<td>
-			<?php echo $noauth_rule['NoauthRule']['sitename']; ?>
+			<?php
+         if ( isset($noauth_rule['NoauthRule']['valid_until']) && ( strtotime($noauth_rule['NoauthRule']['valid_until']) < time() ) ) {
+            echo "<strike>".$noauth_rule['NoauthRule']['sitename']."</strike>"; 
+         }
+         else {
+            echo $noauth_rule['NoauthRule']['sitename']; 
+         }
+         ?>
+		</td>
+		<td>
+			<?php echo $noauth_rule['Location']['code']; ?>
+		</td>
+		<td>
+			<?php echo $noauth_rule['NoauthRule']['valid_until']; ?>
 		</td>
 		<td>
 			<?php echo $noauth_rule['NoauthRule']['description']; ?>

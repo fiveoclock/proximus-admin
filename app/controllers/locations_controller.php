@@ -4,6 +4,7 @@ class LocationsController extends AppController {
 	var $name = 'Locations';
 	var $helpers = array('Html', 'Form');
 	var $actsAs = array('Containable');
+   var $paginate = array('limit' => 100);
 
    function beforeFilter() {
       parent::beforeFilter();
@@ -11,18 +12,18 @@ class LocationsController extends AppController {
    }
 
    function afterFilter() {
-      $allowedActions = array('view');
+      $allowedActions = array('view','index');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
       }
    }  
 
 # Not in use
-#	function index() {
-#		$this->Location->recursive = 0;
-#		$this->set('locations', $this->paginate());
-#      $this->set('locations', $this->paginate(null, array('Location.id'=>$this->Session->read('Auth.locations'))));
-#	}
+	function index() {
+		$this->Location->recursive = 0;
+		$this->set('locations', $this->paginate());
+      $this->set('locations', $this->paginate(null, array('Location.id'=>$this->Session->read('Auth.locations'))));
+	}
 	
 	function start() {
       $loggeduser = $this->Auth->user();
