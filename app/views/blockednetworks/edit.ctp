@@ -8,7 +8,8 @@
 		echo $form->input('description');
 		echo $form->input('location_id');
 	?>
+   <?php echo $form->end('Submit');?>
+   <?php echo $this->element('back_btn');?> 
 	</fieldset>
-<?php echo $this->element('back_btn');?> <?php echo $form->end('Submit');?>
 </div>
 

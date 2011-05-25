@@ -24,6 +24,7 @@
       echo $form->hidden('group_id');
 
 	?>
+   <?php echo $form->end('Submit');?>
+   <?php echo $this->element('back_btn');?> 
 	</fieldset>
-<?php echo $this->element('back_btn');?> <?php echo $form->end('Submit');?>
 </div>

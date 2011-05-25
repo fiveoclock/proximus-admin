@@ -3,6 +3,7 @@ class BlockednetworksController extends AppController {
 
 	var $name = 'Blockednetworks';
 	var $helpers = array('Html', 'Form');
+   var $paginate = array('limit' => 100);
 
    function beforeFilter() {
       parent::beforeFilter();
@@ -46,8 +47,20 @@ class BlockednetworksController extends AppController {
 				$this->Session->setFlash(__('The Blockednetwork could not be saved. Please, try again.', true));
 			}
 		}
-		$locations = $this->Blockednetwork->Location->find('list');
-		$this->set(compact('locations'));
+      # show location code + name 
+      $locations_all = $this->Blockednetwork->Location->find('all',array(
+         'fields'=>array('Location.id','Location.code','Location.name'),
+         'recursive'=>-1,
+         'order'=>array(
+            'Location.code',
+      )));
+      # convert array
+      $locations = Set::combine(
+         $locations_all,
+         '{n}.Location.id',
+         array('%s %s','{n}.Location.code','{n}.Location.name')
+      );
+      $this->set(compact('locations'));
 	}
 
 	function edit($id = null) {
@@ -70,8 +83,20 @@ class BlockednetworksController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Blockednetwork->read(null, $id);
 		}
-		$locations = $this->Blockednetwork->Location->find('list');
-		$this->set(compact('locations'));
+      # show location code + name 
+      $locations_all = $this->Blockednetwork->Location->find('all',array(
+         'fields'=>array('Location.id','Location.code','Location.name'),
+         'recursive'=>-1,
+         'order'=>array(
+            'Location.code',
+      )));
+      # convert array
+      $locations = Set::combine(
+         $locations_all,
+         '{n}.Location.id',
+         array('%s %s','{n}.Location.code','{n}.Location.name')
+      );
+      $this->set(compact('locations'));
 	}
 
 	function delete($id = null) {

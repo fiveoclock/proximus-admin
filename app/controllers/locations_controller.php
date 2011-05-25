@@ -22,7 +22,7 @@ class LocationsController extends AppController {
 	function index() {
 		$this->Location->recursive = 0;
 		$this->set('locations', $this->paginate());
-      $this->set('locations', $this->paginate(null, array('Location.id'=>$this->Session->read('Auth.locations'))));
+      #$this->set('locations', $this->paginate(null, array('Location.id'=>$this->Session->read('Auth.locations'))));
 	}
 	
 	function start() {
@@ -127,18 +127,21 @@ class LocationsController extends AppController {
 
 # implement authentification
 # test out if child objects are being deleted
-#	function delete($id = null) {
-#		if (!$id) {
-#			$this->Session->setFlash(__('Invalid id for Location', true));
-#         #$this->redirect(array('action'=>'view',$this->data['Location']['id']));
-#         $this->redirect($this->Tracker->loadLastPos());
-#		}
-#		if ($this->Location->del($id)) {
-#			$this->Session->setFlash(__('Location deleted', true));
-#         #$this->redirect(array('action'=>'view',$this->data['Location']['id']));
-#         $this->redirect($this->Tracker->loadLastPos());
-#		}
-#	}
+   function delete($id = null) {
+      if (!$id) {
+         $this->Session->setFlash(__('Invalid id for Location', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }
+      if ($id == 1) {
+         $this->Session->setFlash(__('Location with id 1 is a special location and cannot be deleted.', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }  
+      if ($this->Location->del($id,true)) {
+         $this->Session->setFlash(__('Location deleted', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }  
+   }
+
 
 }
 ?>

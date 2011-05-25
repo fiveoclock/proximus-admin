@@ -5,8 +5,18 @@
 		<li><?php echo $html->link(__('Create a new user', true), array('action'=>'add')); ?></li>
 	</ul>
 </div>
-<br>
 
+<div class="users form"> 
+<?php echo $form->create(null, array('url' => '/users/index')); ?> 
+   <fieldset> 
+   <?php 
+      echo $form->input('searchstring',array('label'=>'Search for a user:')); 
+   ?> 
+   <?php echo $form->end('Search');?> 
+   </fieldset> 
+</div>
+
+<br>
 <p>
 <?php
 echo $paginator->counter(array(

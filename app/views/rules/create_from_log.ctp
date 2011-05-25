@@ -25,6 +25,7 @@
       echo $form->hidden('log_id');
       echo $form->hidden('location_code');
 	?>
+   <?php echo $form->end('Submit');?>
+   <?php echo $this->element('back_btn');?> 
 	</fieldset>
-<?php echo $this->element('back_btn');?> <?php echo $form->end('Submit');?>
 </div>

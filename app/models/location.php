@@ -8,7 +8,7 @@ class Location extends AppModel {
 		'Blockednetwork' => array(
 			'className' => 'Blockednetwork',
 			'foreignKey' => 'location_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -18,10 +18,23 @@ class Location extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+      'NoauthRule' => array(
+         'className' => 'NoauthRule',
+         'foreignKey' => 'location_id',
+         'dependent' => true,
+         'conditions' => '',
+         'fields' => '',
+         'order' => '',
+         'limit' => '',
+         'offset' => '',
+         'exclusive' => '',
+         'finderQuery' => '',
+         'counterQuery' => ''
+      ),
 		'Group' => array(
 			'className' => 'Group',
 			'foreignKey' => 'location_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -60,7 +73,7 @@ class Location extends AppModel {
 		'Rule' => array(
 			'className' => 'Rule',
 			'foreignKey' => 'location_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',

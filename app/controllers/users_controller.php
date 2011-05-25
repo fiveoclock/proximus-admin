@@ -22,8 +22,16 @@ class UsersController extends AppController {
    }
 
 	function index() {
-      $this->User->recursive = 0;
-      $this->set('users', $this->paginate());
+      # If form has been submitted
+      if (!empty($this->data) && isset($this->data['User']['searchstring'])) {
+         $this->NoauthRules->recursive = 0;
+         $string = $this->data['User']['searchstring'];
+         $this->set('users', $this->paginate('User',array("User.username LIKE '%$string%' OR User.realname LIKE '%$string%'")));
+      }
+      else {
+         $this->User->recursive = 0;
+         $this->set('users', $this->paginate());
+      }
    }
 
 	function add() {

@@ -12,6 +12,7 @@
 <body>
 <div id="header">
 
+<?php echo $html->image('logo.png', array("id"=>"logo") ); ?>
 <div id="title"><a href="/">ProXimus</a></div>
 
 

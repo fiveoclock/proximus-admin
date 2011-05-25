@@ -2,9 +2,10 @@
 <h2><?php __('Blocked Networks');?></h2>
 <div class="actions">
 	<ul>
-		<li><?php echo $html->link(__('New Blockednetwork', true), array('action'=>'add')); ?></li>
+		<li><?php echo $html->link(__('Add a blocked network', true), array('action'=>'add')); ?></li>
 	</ul>
 </div>
+<br>
 <p>
 <?php
 echo $paginator->counter(array(

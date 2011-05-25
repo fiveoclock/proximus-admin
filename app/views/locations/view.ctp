@@ -75,7 +75,6 @@
 		<th><?php __('Username'); ?></th>
 		<th><?php __('Realname'); ?></th>
 		<th><?php __('Emailaddress'); ?></th>
-		<th><?php __('Location'); ?></th>
 	</tr>
 	<?php
 		foreach ($users as $user):
@@ -84,7 +83,6 @@
 			<td><?php echo $user['User']['username'];?></td>
 			<td><?php echo $user['User']['realname'];?></td>
 			<td><?php echo $user['User']['emailaddress'];?></td>
-			<td><?php echo $user['Location']['code'];?></td>	
 		</tr>
 	<?php endforeach; ?>
 	</table>
