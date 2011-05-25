@@ -42,7 +42,7 @@ ProXimus-Admin
 </div>
 
 <div id="footercontact">
-<a href="https://github.com/fiveoclock/proximus/wiki">Proximus Website</a>
+<a href="http://proximus.5-o-clock.net">Proximus Website</a>
 </div>
 
 </div>
