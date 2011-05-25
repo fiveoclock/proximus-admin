@@ -166,12 +166,11 @@ class GroupsController extends AppController {
          }
 		}
 
-      if (($this->Group->Rule->findCount(array('Rule.group_id'=>$id))) > 0 || 
-          ($this->Group->User->findCount(array('User.group_id'=>$id))) > 0 ) {
-            $this->Session->setFlash(__('Group is not empty, cannot delete', true));
-            $this->redirect($this->Tracker->loadLastPos());
+      if ( $this->Group->User->findCount(array('User.group_id'=>$id)) > 0 ) {
+         $this->Session->setFlash(__('Group is not empty, cannot delete', true));
+         $this->redirect($this->Tracker->loadLastPos());
       }
-		if ($this->Group->del($id)) {
+		if ($this->Group->del($id, true)) {
 			$this->Session->setFlash(__('Group deleted', true));
 			$this->redirect($this->Tracker->loadLastPos());
 		}

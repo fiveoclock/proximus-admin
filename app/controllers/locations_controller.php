@@ -135,8 +135,12 @@ class LocationsController extends AppController {
       if ($id == 1) {
          $this->Session->setFlash(__('Location with id 1 is a special location and cannot be deleted.', true));
          $this->redirect($this->Tracker->loadLastPos());
-      }  
-      if ($this->Location->del($id,true)) {
+      }
+      if ( $this->Location->User->findCount(array('User.location_id'=>$id)) > 0 ) {
+         $this->Session->setFlash(__('Cannot delete; please remove users from this location before', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }
+      if ($this->Location->del($id, true)) {
          $this->Session->setFlash(__('Location deleted', true));
          $this->redirect($this->Tracker->loadLastPos());
       }  
