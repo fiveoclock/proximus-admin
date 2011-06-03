@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS `acos` (
   `lft` int(10) DEFAULT NULL,
   `rght` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=99 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=104 ;
 
 --
 -- Dumping data for table `acos`
 --
 
 INSERT INTO `acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `rght`) VALUES
-(1, NULL, NULL, NULL, 'controllers', 1, 178),
+(1, NULL, NULL, NULL, 'controllers', 1, 184),
 (2, 1, NULL, NULL, 'Pages', 2, 7),
 (3, 2, NULL, NULL, 'display', 3, 4),
 (4, 1, NULL, NULL, 'Blockednetworks', 8, 23),
@@ -123,56 +123,10 @@ INSERT INTO `acos` (`id`, `parent_id`, `model`, `foreign_key`, `alias`, `lft`, `
 (95, 94, NULL, NULL, 'index', 169, 170),
 (96, 94, NULL, NULL, 'edit', 171, 172),
 (97, 94, NULL, NULL, 'add', 173, 174),
-(98, 94, NULL, NULL, 'delete', 175, 176);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admins`
---
-
-CREATE TABLE IF NOT EXISTS `admins` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password` char(40) COLLATE utf8_unicode_ci NOT NULL,
-  `active` varchar(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Y',
-  `role_id` int(11) NOT NULL,
-  `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `admins`
---
-
-INSERT INTO `admins` (`id`, `username`, `password`, `active`, `role_id`, `created`, `modified`) VALUES
-(1, 'admin', '2a489457d306f3bd0d0c4d833aa8b2336cdb8303', 'Y', 1, '2011-05-25 10:31:44', '2011-05-25 10:31:44'),
-(2, 'locadmin', '2a489457d306f3bd0d0c4d833aa8b2336cdb8303', 'Y', 2, '2009-06-18 14:37:46', '2011-05-25 12:24:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admins_locations`
---
-
-CREATE TABLE IF NOT EXISTS `admins_locations` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `admin_id` int(11) NOT NULL,
-  `location_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ADMINS_LOCATIONS_KEY` (`admin_id`,`location_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `admins_locations`
---
-
-INSERT INTO `admins_locations` (`id`, `admin_id`, `location_id`, `created`, `modified`) VALUES
-(2, 2, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(98, 94, NULL, NULL, 'delete', 175, 176),
+(101, 1, NULL, NULL, 'GlobalSettings', 178, 183),
+(102, 101, NULL, NULL, 'index', 179, 180),
+(103, 101, NULL, NULL, 'edit', 181, 182);
 
 -- --------------------------------------------------------
 
@@ -287,6 +241,55 @@ INSERT INTO `aros_acos` (`id`, `aro_id`, `aco_id`, `_create`, `_read`, `_update`
 (33, 2, 85, '1', '1', '1', '1'),
 (34, 2, 86, '1', '1', '1', '1'),
 (35, 2, 87, '1', '1', '1', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admins`
+--
+
+CREATE TABLE IF NOT EXISTS `admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password` char(40) COLLATE utf8_unicode_ci NOT NULL,
+  `active` varchar(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Y',
+  `role_id` int(11) NOT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `admins`
+--
+
+INSERT INTO `admins` (`id`, `username`, `password`, `active`, `role_id`, `created`, `modified`) VALUES
+(1, 'admin', '2a489457d306f3bd0d0c4d833aa8b2336cdb8303', 'Y', 1, '2011-05-25 10:31:44', '2011-05-25 10:31:44'),
+(2, 'locadmin', '2a489457d306f3bd0d0c4d833aa8b2336cdb8303', 'Y', 2, '2009-06-18 14:37:46', '2011-05-25 12:24:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admins_locations`
+--
+
+CREATE TABLE IF NOT EXISTS `admins_locations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL,
+  `location_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ADMINS_LOCATIONS_KEY` (`admin_id`,`location_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `admins_locations`
+--
+
+INSERT INTO `admins_locations` (`id`, `admin_id`, `location_id`, `created`, `modified`) VALUES
+(2, 2, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 

@@ -29,6 +29,8 @@ if ($auth['Admin']['role_id'] == 1) {
    echo "<br>";
    echo $html->link('Proxy settings','/proxy_settings/index',null,null,false);
    echo "<br>";
+   echo $html->link('Global settings','/global_settings/index',null,null,false);
+   echo "<br>";
    echo "<br>";
    echo "<br>";
    echo $html->link('About ProXimus / Documentation','/pages/about',null,null,false);
