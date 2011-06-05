@@ -8,7 +8,6 @@
 	?>
    <?php echo $form->end('Search');?>
 	</fieldset>
-	<fieldset>
    <?php if (!empty($results)):?>
       <table cellpadding = "0" cellspacing = "0">
    	<?php
@@ -40,5 +39,4 @@
       <?php endforeach; ?> 
       </table>
    <?php endif; ?>
-	</fieldset>
 </div>

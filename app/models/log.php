@@ -3,6 +3,30 @@ class Log extends AppModel {
 
 	var $name = 'Log';
 
+   var $belongsTo = array(
+      'Location' => array(
+         'className' => 'Location',
+         'foreignKey' => 'location_id',
+         'conditions' => '',
+         'fields' => '',
+         'order' => ''
+      ),
+      'User' => array(
+         'className' => 'User',
+         'foreignKey' => 'user_id',
+         'conditions' => '',
+         'fields' => '',
+         'order' => ''
+      ),
+   );
+
+   var $hasMany = array(
+      'Childlog' => array(
+         'className' => 'Log',
+         'foreignKey' => 'parent_id'
+      ),
+   );
+
 function deleteLog($id = null,$loc_code = null) {
       
       if (!$id || !$loc_code) {

@@ -44,10 +44,10 @@ foreach ($logs as $log):
 			<?php echo $log['Log']['created']; ?>
 		</td>
 		<td>
-			<?php echo $log['Log']['user_id']; ?>
+			<?php echo $log['User']['username']; ?>
 		</td>
 		<td>
-			<?php echo $log['Log']['location_id']; ?>
+			<?php echo $log['Location']['code']; ?>
 		</td>
 		<td>
 			<?php echo $log['Log']['parent_id']; ?>
@@ -57,7 +57,6 @@ foreach ($logs as $log):
 		</td>
 		<td class="actions">
 			<?php echo $html->link(__('View', true), array('action'=>'view', $log['Log']['id'])); ?>
-			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $log['Log']['id'])); ?>
 			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $log['Log']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $log['Log']['id'])); ?>
 		</td>
 	</tr>

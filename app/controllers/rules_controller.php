@@ -24,24 +24,36 @@ class RulesController extends AppController {
    function search($pattern = null) {
       # code after form submit
 		if (!empty($this->data)) {
-      $pattern = "'%".$this->data['Rule']['pattern']."%'";
-      $WILDCARD = "'*'";
-      $search_result = $this->Rule->query('SELECT * 
-                                          FROM rules LEFT JOIN groups on rules.group_id = groups.id 
-                                                     LEFT JOIN locations as loc1 on rules.location_id = loc1.id 
-                                                     LEFT JOIN locations as loc2 on groups.location_id = loc2.id
-                                          WHERE (rules.sitename LIKE '.$pattern.' OR rules.sitename = '.$WILDCARD.')
-                                          AND (rules.location_id = 1 OR rules.location_id = '.$this->data['Rule']['locations'].')
-                                          ORDER BY sitename, priority;',$cachequeries = false);
-      #pr($search_result);
-      $this->set('results',$search_result);
+         $pattern = "'%".$this->data['Rule']['pattern']."%'";
+         $WILDCARD = "'*'";
+         $search_result = $this->Rule->query('SELECT * 
+                                             FROM rules LEFT JOIN groups on rules.group_id = groups.id 
+                                                        LEFT JOIN locations as loc1 on rules.location_id = loc1.id 
+                                                        LEFT JOIN locations as loc2 on groups.location_id = loc2.id
+                                             WHERE (rules.sitename LIKE '.$pattern.' OR rules.sitename = '.$WILDCARD.')
+                                             AND (rules.location_id = 1 OR rules.location_id = '.$this->data['Rule']['locations'].')
+                                             ORDER BY sitename, priority;',$cachequeries = false);
+         #pr($search_result);
+         $this->set('results',$search_result);
       }
-      # get all locations over proxysetting table in order to get only existing locations
-      $locations = $this->ProxySetting->find('all',array('fields'=>array('Location.id','Location.code'),
-                                                         'conditions'=>array('Location.id'=>$this->Session->read('Auth.locations')),
-                                                        'order'=>array('Location.code')));
-      $locations_list = Set::combine($locations,'{n}.Location.id','{n}.Location.code');
-      $this->set('locations',$locations_list);
+
+      if($this->Session->read('Auth.godmode') !=1) {
+         $allowed_locations = $this->Session->read('Auth.locations');
+         $find_condition = array('fields' => array('Location.*'),
+                              'conditions'=>array('Location.id'=>$allowed_locations),
+                              'order'=>'Location.code' );
+      }
+      elseif($this->Session->read('Auth.godmode') == 1) {
+         $find_condition = array('fields' => array('Location.*'), 'order'=>'Location.code' );
+      }
+
+      $locations_list = $this->Location->find('all',$find_condition);
+      $locations = Set::combine(
+         $locations_list,
+         '{n}.Location.id',
+         array('%s %s','{n}.Location.code','{n}.Location.name')
+      );
+      $this->set(compact('locations'));
    }
   
 	function createFromLog($log_id = null,$location_id = null) {
