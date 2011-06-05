@@ -21,7 +21,7 @@ class Log extends AppModel {
    );
 
    var $hasMany = array(
-      'Childlog' => array(
+      'Child' => array(
          'className' => 'Log',
          'foreignKey' => 'parent_id'
       ),
