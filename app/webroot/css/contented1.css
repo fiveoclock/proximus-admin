@@ -303,6 +303,13 @@ a:hover {
    float:right;
    clear:none;
 }
+.parent{
+   text-align: left;
+}
+.child{
+   text-align: left;
+   padding-left: 35px;
+}
 
 /* tables */
 

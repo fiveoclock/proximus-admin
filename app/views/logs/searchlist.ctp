@@ -12,8 +12,8 @@
 	<fieldset>
       <legend><?php __('View Logs');?></legend>
 	<?php
-      echo $form->input('locations');
-      echo $form->input('users',array('empty' => 'ALL'));
+      echo $form->input('location');
+      echo $form->input('users',array('label'=>'User (search pattern - part of username or real name)'));
 	?>
    <?php echo $form->end('Search');?>
 	</fieldset>
@@ -30,8 +30,7 @@
    <?php if (!empty($logs)):?>
    <table cellpadding = "0" cellspacing = "0">
    <tr>
-      <th><?php __('Parent site'); ?></th>
-      <th><?php __('Subsite'); ?></th>
+      <th><?php __('Site'); ?></th>
       <th><?php __('Hits'); ?></th>
       <th><?php __('Protocol'); ?></th>
       <th><?php __('Client IP'); ?></th>
@@ -45,8 +44,7 @@
    <?php if ($i % 2) { $color="#EEEEEE";} 
          else { $color="#DDDDDD";} ?>
       <tr bgcolor=<?php echo $color; ?>>
-         <td><?php echo $log['Log']['sitename'];?></td>
-         <td><?php echo " ";?></td>
+         <td class="parent"><?php echo $log['Log']['sitename'];?></td>
          <td><?php echo $log['Log']['hitcount'];?></td>
          <td><?php echo $log['Log']['protocol'];?></td>
          <td><?php echo $log['Log']['ipaddress'];?></td>
@@ -61,8 +59,7 @@
       <?php if (!empty($log['Childlog'])):?>
       <?php foreach ($log['Childlog'] as $childlog): ?>
          <tr bgcolor=<?php echo $color; ?>>
-            <td><?php echo " ";?></td>
-            <td><?php echo $childlog['sitename'];?></td>
+            <td class="child"><?php echo $childlog['sitename'];?></td>
             <td><?php echo $childlog['hitcount'];?></td>
             <td><?php echo $childlog['protocol'];?></td>
             <td><?php echo $childlog['ipaddress'];?></td>
