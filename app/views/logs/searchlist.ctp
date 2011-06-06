@@ -5,6 +5,7 @@
 	<?php
       echo $form->input('location');
       echo $form->input('users',array('label'=>'User (search pattern - part of username or real name)'));
+      echo $form->input('site',array('label'=>'Site (search pattern - part of hostname or ip)'));
 	?>
    <?php echo $form->end('Search');?>
 	</fieldset>
@@ -27,11 +28,21 @@
    </tr>
    <?php 
       foreach ($logs as $log):
+         # if the log contains a parent, print this first
+         if (!empty($log['Parent'])) {
+            $parent = $log;
+            $parent['Log'] = $log['Parent'];
+            printLog($this, $html, $parent);
+         }
+         
+         # print the actual log
          printLog($this, $html, $log);
+         
+         # if the log contains children, print all of them
          if (!empty($log['Child'])):
-            foreach ($log['Child'] as $child): 
-               printLog($this, $html, $child, $log);
-            endforeach;
+            for ( $i=0; $i < sizeof($log['Child']); $i++ ) {
+               printLog($this, $html, $log, $i);
+            }
          endif;
       endforeach; ?>
 
@@ -43,19 +54,17 @@
 
 <?php 
 
-   function printLog($view, &$html, $log, $parent=null) {
-      if (!empty($log['Childlog'])) {
+   function printLog($view, &$html, $log, $childIndex=null) {
+      if ( is_null($childIndex) ) {
          $class = "parent";
          $l = $log['Log'];
+         if ( !empty($log['Log']['parent_id'])) {
+            $class = "child";
+         } 
       }
-      if (!empty($log['parent_id'])) {
-         $class = "child";
-         $l = $log;
-         $log = $parent;
-      } 
       else {
-         $class = "parent";
-         $l = $log['Log'];
+         $class = "child";
+         $l = $log['Child'][$childIndex];
       }
 
       echo "

@@ -18,13 +18,40 @@ class Log extends AppModel {
          'fields' => '',
          'order' => ''
       ),
-   );
+      'Parent' => array(
+         'className' => 'Log',
+         'foreignKey' => 'parent_id',
+         'conditions' => '',
+         'fields' => '',
+         'order' => ''
+      ),
 
+   );
+/*
    var $hasMany = array(
       'Child' => array(
          'className' => 'Log',
          'foreignKey' => 'parent_id'
       ),
+   );
+*/
+
+   var $hasAndBelongsToMany = array(
+      'Child' => array(
+         'className' => 'Log',
+         'joinTable' => 'logs',
+         'foreignKey' => 'parent_id',
+         'associationForeignKey' => 'id',
+         'unique' => '',
+         'conditions' => '',
+         'fields' => '',
+         'order' => '',
+         'limit' => '',
+         'offset' => '',
+         'finderQuery' => '',
+         'deleteQuery' => '',
+         'insertQuery' => ''
+      )
    );
 
 function deleteLog($id = null,$loc_code = null) {
