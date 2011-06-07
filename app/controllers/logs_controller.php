@@ -69,25 +69,18 @@ class LogsController extends AppController {
             $this->Session->setFlash(__('This location does not have a datasource defined yet.', true));
             return;
          }
+
          $this->Log->useDbConfig = $dbSource;
+         $conditions = array();
 
-         if(empty($this->data['Log']['users']) && empty($this->data['Log']['site']) ) {
-            $tree = $this->Log->find('all',array('conditions'=>array(
-                                                'parent_id'=>null,
-                                                'location_id'=>$this->data['Log']['location']
-            )));
-            #$this->Session->setFlash(__('ha', true));
+         # build up conditions for query
+         if( !empty($this->data['Log']['site'])) {
+            $conditions['sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
          }
-         elseif(isset($this->data['Log']['site'])) {
-            $tree = $this->Log->find('all',array('conditions'=>array(
-                                                'sitename LIKE'=>'%'.$this->data['Log']['site'].'%',
-                                                'location_id'=>$this->data['Log']['location']
-            )));
-            #$this->Session->setFlash(__('haha', true));
+         if ( !empty($this->data['Log']['onlyThisLoc'])) {
+            $conditions['location_id'] = $this->data['Log']['location'];
          }
-
-         # If location and user in form have been choosen
-         elseif (isset($this->data['Log']['users'])) {
+         if ( !empty($this->data['Log']['users'])) {
             # first get the ids of the matching users
             $user_ids = $this->User->find('all',array('fields'=>'id','conditions'=>array(
                                           'or'=>array(
@@ -95,14 +88,17 @@ class LogsController extends AppController {
                                              'User.username LIKE'=>'%'.$this->data['Log']['users'].'%'))));
             $user_ids = Set::extract('/User/id', $user_ids);
 
-            # then get the the logs
-            $tree = $this->Log->find('all',array('conditions'=>array(
-                                                'parent_id'=>null,
-                                                'user_id'=>$user_ids
-            )));
-            #$this->Session->setFlash(__('hahaha', true));
+            $conditions['user_id'] = $user_ids;
+            $this->Session->setFlash(__('hahaha', true));
          }
+         if( empty($this->data['Log']['users']) && empty($this->data['Log']['site']) ) {
+            $conditions['parent_id'] = null;
+         }
+
+         $tree = $this->Log->find('all',array('conditions'=>$conditions ));
          $this->set('logs',$tree);
+
+         #pr($conditions);    # debug
       }
 
       /**

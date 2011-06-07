@@ -6,13 +6,14 @@
       echo $form->input('location');
       echo $form->input('users',array('label'=>'User (search pattern - part of username or real name)'));
       echo $form->input('site',array('label'=>'Site (search pattern - part of hostname or ip)'));
+      echo $form->input('onlyThisLoc',array('label'=>'Show only users from this location', 'type'=>'checkbox'));
 	?>
    <?php echo $form->end('Search');?>
 	</fieldset>
 </div>
 
 <div class="related">
-   <h3><?php __('Logs and dynamically user created rules');?></h3>
+   <h3><?php __('Logs and dynamically created rules');?></h3>
    <br>
    <?php if (!empty($logs)):?>
    <table cellpadding = "0" cellspacing = "0">
@@ -77,8 +78,14 @@
             <td>". $log['User']['username'] ."</td>
             <td>". $l['created'] ."</td>
             <td class=\"actions\">" .
-               $html->link(__('Create rule', true), array('controller'=> 'rules', 'action'=>'createFromLog', $l['id'], $view->data['Log']['location'])) . " " .
-               $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'delete', $l['id'], $view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete # %s?', true), $l['id'])) . "
+               $html->link(__('Create rule', true), array('controller'=> 'rules', 'action'=>'createFromLog', $l['id'], $view->data['Log']['location'])) . " ";
+               if ($class == "parent") {
+                  echo $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'deleteWithChildren', $log['Log']['id'],$view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete this log and all its sub logs?',true )));
+               }
+               else {
+                  echo $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'delete', $l['id'], $view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete # %s?', true), $l['id']));
+               }
+               echo "
             </td>
          </tr>";
    }
