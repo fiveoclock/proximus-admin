@@ -41,6 +41,7 @@ class ProxySettingsController extends AppController {
       $locations_all = $this->ProxySetting->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));
@@ -78,6 +79,7 @@ class ProxySettingsController extends AppController {
       $locations_all = $this->ProxySetting->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));

@@ -40,11 +40,13 @@ class RulesController extends AppController {
       if($this->Session->read('Auth.godmode') !=1) {
          $allowed_locations = $this->Session->read('Auth.locations');
          $find_condition = array('fields' => array('Location.*'),
-                              'conditions'=>array('Location.id'=>$allowed_locations),
+                              'conditions'=>array("AND" => array(
+                                    'Location.id'=>$allowed_locations,
+                                    'Location.id NOT' => "1"),),
                               'order'=>'Location.code' );
       }
       elseif($this->Session->read('Auth.godmode') == 1) {
-         $find_condition = array('fields' => array('Location.*'), 'order'=>'Location.code' );
+         $find_condition = array('fields' => array('Location.*'), 'order'=>'Location.code', 'conditions'=>array("id NOT" => "1"), );
       }
 
       $locations_list = $this->Location->find('all',$find_condition);

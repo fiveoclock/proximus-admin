@@ -107,6 +107,7 @@ class AdminsController extends AppController {
       $locations_all = $this->Admin->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));
@@ -144,6 +145,7 @@ class AdminsController extends AppController {
 		$locations_all = $this->Admin->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));  

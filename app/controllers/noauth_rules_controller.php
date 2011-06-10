@@ -50,6 +50,7 @@ class NoauthRulesController extends AppController {
       $locations_all = $this->NoauthRule->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));
@@ -87,6 +88,7 @@ class NoauthRulesController extends AppController {
       $locations_all = $this->NoauthRule->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));

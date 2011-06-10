@@ -86,6 +86,7 @@ class UsersController extends AppController {
       $locations_all = $this->User->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));
@@ -125,6 +126,7 @@ class UsersController extends AppController {
       $locations_all = $this->User->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
+         'conditions'=>array("Location.id NOT" => "1"),
          'order'=>array(
             'Location.code',
       )));
