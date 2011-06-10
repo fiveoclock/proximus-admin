@@ -55,7 +55,7 @@ class Admin extends AppModel {
     'confirm_password' => array( 
                        VALID_NOT_EMPTY, 
                         'alphanumeric' => array( 
-                                'rule' => 'alphaNumeric', 
+                                'rule' => array('custom', '/^[a-z0-9 ]*$/i'),
                                 'message' => 'Only alphabets and numbers allowed' 
                         ), 
                         'between' => array( 

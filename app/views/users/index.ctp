@@ -10,7 +10,7 @@
 <?php echo $form->create(null, array('url' => '/users/index')); ?> 
    <fieldset> 
    <?php 
-      echo $form->input('searchstring',array('label'=>'Search for a user:')); 
+      echo $form->input('searchstring',array('label'=>'Search for a user:'));
    ?> 
    <?php echo $form->end('Search');?> 
    </fieldset> 
@@ -62,6 +62,10 @@ foreach ($users as $user):
 		</td>
 		<td class="actions">
 			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $user['User']['id'])); ?>
+			<?php 
+            if ( $settings['auth_method_user'] == "internal" ) {
+               echo $html->link(__('Set password', true), array('action'=>'setPassword', $user['User']['id'])); 
+            } ?>
 			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $user['User']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
 		</td>
 	</tr>
