@@ -37,24 +37,30 @@ class LogsController extends AppController {
       $this->set('users',$users_list);
       */
 
-      # get locations      
+      # get proxys / locations
       if($this->Session->read('Auth.godmode') !=1) {
          $allowed_locations = $this->Session->read('Auth.locations');
-         $find_condition = array('fields' => array('Location.*'),
-                              'conditions'=>array("AND" => array(
-                                    'Location.id'=>$allowed_locations,
-                                    'Location.id NOT' => "1"),),
-                              'order'=>'Location.code' );
+         $find_conditions = array('Location.id'=>$allowed_locations,
+                                 'Location.id NOT' => "1");
       }
       elseif($this->Session->read('Auth.godmode') == 1) {
-         $find_condition = array('fields' => array('Location.*'), 'order'=>'Location.code', 'conditions'=>array("Location.id NOT" => "1") );
+         $find_conditions = array("Location.id NOT" => "1");
       }
 
-      $locations_list = $this->Location->find('all',$find_condition);
+      $locations_list = $this->ProxySetting->find('all',
+            array(
+               'fields'=>array(
+                  'Location.id','Location.code','Location.name','ProxySetting.fqdn_proxy_hostname', 'ProxySetting.id'
+                  ),
+               'conditions'=>$find_conditions,
+               'order'=>array('Location.code')
+            )
+         );
+
       $locations = Set::combine(
          $locations_list,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
+         '{n}.ProxySetting.id',
+         array('%s - %s','{n}.Location.code','{n}.ProxySetting.fqdn_proxy_hostname')
       );
       $this->set(compact('locations'));
 
@@ -62,8 +68,32 @@ class LogsController extends AppController {
       ##################
       # If form was submitted
       if (!empty($this->data) && isset($this->data['Log']['location'])) {
-         $location = $this->Location->findById($this->data['Log']['location']);
+#         $location = $this->Location->findById($this->data['Log']['location']);
+         $proxy = $this->ProxySetting->findById($this->data['Log']['location']);
 
+         pr($proxy);
+         if ( ! $proxy['ProxySetting']['db_default'] ) {
+            $serverConfig = array(
+               'host' => $proxy['ProxySetting']['db_host'],
+               'database' => $proxy['ProxySetting']['db_name'],
+               'login' => $proxy['ProxySetting']['db_user'],
+               'password' => $proxy['ProxySetting']['db_pass'],
+               'datasource' => "default",
+            );
+
+            $newDbConfig = $this->dbConnect($serverConfig);
+            pr($newDbConfig);
+            if ( ! $newDbConfig ) {
+               $this->Session->setFlash(__('Could not connect to database, make sure proxy settings are correct.', true));
+               return;
+            }
+            $this->Log->useDbConfig = $newDbConfig['name'];
+            $this->Log->cacheQueries = false;
+            #pr($newDbConfig);
+         }
+
+
+/*
          # test if a datasource for this location exists..
          $dbConnectionObjects = ConnectionManager::enumConnectionObjects();
          $dbSource = $location['Location']['code'];
@@ -71,9 +101,9 @@ class LogsController extends AppController {
             $this->Session->setFlash(__('This location does not have a datasource defined yet.', true));
             return;
          }
-
-         $this->Log->useDbConfig = $dbSource;
-         $conditions = array();
+*/
+#         $this->Log->useDbConfig = $dbSource;
+#         $conditions = array();
 
          # build up conditions for query
          if( !empty($this->data['Log']['site'])) {
@@ -102,14 +132,31 @@ class LogsController extends AppController {
 
          #pr($conditions);    # debug
       }
+   }
 
-      /**
-         # get all locations over proxysetting table in order to get only existing locations
-         $locations = $this->ProxySetting->find('all',array('fields'=>array('Location.id','Location.code'),
-                                      'conditions'=>array('Location.id'=>$this->Session->read('Auth.locations')),
-                                      'order'=>array('Location.code')));
-         $locations_list = Set::combine($locations,'{n}.Location.id','{n}.Location.code');
-      **/
+
+   /**
+    * Connects to specified database
+    *
+    * @param array $config Server config to use {datasource:?, database:?}
+    * @return array db->config on success, false on failure
+    * @access public
+    */
+   function dbConnect($config = array()) {
+      ClassRegistry::init('ConnectionManager');
+
+      $nds = $config['datasource'] . '_' . $config['host'];
+      $db =& ConnectionManager::getDataSource($config['datasource']);
+      #$db->setConfig(array('name' => $nds, 'database' => $config['database'], 'persistent' => false));
+      $db->setConfig(array('name' => $nds, 
+         'host' => $config['host'], 
+         'database' => $config['database'], 
+         'login' => $config['login'], 
+         'password' => $config['password'], 
+         'persistent' => false
+      ));
+      if ( ( $ds = ConnectionManager::create($nds, $db->config) ) && $db->connect() ) return $db->config;
+      return false;
    }
 
 	function index() {
@@ -147,6 +194,7 @@ class LogsController extends AppController {
 		}
    
 	}
+
 
 	function deleteWithChildren($id = null,$loc_id = null) {
 		if (!$id || !$loc_id) {
