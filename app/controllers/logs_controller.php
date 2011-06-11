@@ -93,18 +93,6 @@ class LogsController extends AppController {
          }
 
 
-/*
-         # test if a datasource for this location exists..
-         $dbConnectionObjects = ConnectionManager::enumConnectionObjects();
-         $dbSource = $location['Location']['code'];
-         if ($dbConnectionObjects[$dbSource] == null ) {
-            $this->Session->setFlash(__('This location does not have a datasource defined yet.', true));
-            return;
-         }
-*/
-#         $this->Log->useDbConfig = $dbSource;
-#         $conditions = array();
-
          # build up conditions for query
          if( !empty($this->data['Log']['site'])) {
             $conditions['sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
