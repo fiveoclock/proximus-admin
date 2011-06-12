@@ -92,6 +92,29 @@ class ProxySettingsController extends AppController {
       $this->set(compact('locations'));
    }
 
+   function editdb($id = null) {
+      if (!$id && empty($this->data)) {
+         $this->Session->setFlash(__('Invalid proxy', true));
+         $this->redirect(array('action'=>'index'));
+      }
+      if (array_key_exists('cancel', $this->params['form'])) {
+         $this->Session->setFlash(__('Canceled', true));
+         $this->redirect($this->Tracker->loadLastPos());
+      }
+      if (!empty($this->data)) {
+         if ($this->ProxySetting->save($this->data)) {
+            $this->Session->setFlash(__('The proxy has been saved', true));
+            $this->redirect(array('action'=>'index'));
+         } else {
+            $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
+         }
+      }
+      if (empty($this->data)) {
+         $this->data = $this->ProxySetting->read(null, $id);
+      }
+
+   }
+
 
 	function delete($id = null) {
 		if (!$id) {

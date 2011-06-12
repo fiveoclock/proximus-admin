@@ -45,6 +45,7 @@ foreach ($proxy_settings as $proxy_setting):
 		</td>
 		<td class="actions">
 			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $proxy_setting['ProxySetting']['id'])); ?>
+			<?php echo $html->link(__('DB settings', true), array('action'=>'editdb', $proxy_setting['ProxySetting']['id'])); ?>
 			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $proxy_setting['ProxySetting']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $proxy_setting['ProxySetting']['id'])); ?>
 		</td>
 	</tr>
