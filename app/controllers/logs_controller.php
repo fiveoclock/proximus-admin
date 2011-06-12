@@ -68,10 +68,9 @@ class LogsController extends AppController {
       ##################
       # If form was submitted
       if (!empty($this->data) && isset($this->data['Log']['location'])) {
-#         $location = $this->Location->findById($this->data['Log']['location']);
          $proxy = $this->ProxySetting->findById($this->data['Log']['location']);
 
-         pr($proxy);
+         #pr($proxy);  # debug
          if ( ! $proxy['ProxySetting']['db_default'] ) {
             $serverConfig = array(
                'host' => $proxy['ProxySetting']['db_host'],
@@ -82,7 +81,7 @@ class LogsController extends AppController {
             );
 
             $newDbConfig = $this->dbConnect($serverConfig);
-            pr($newDbConfig);
+            #pr($newDbConfig);  ## debug
             if ( ! $newDbConfig ) {
                $this->Session->setFlash(__('Could not connect to database, make sure proxy settings are correct.', true));
                return;
