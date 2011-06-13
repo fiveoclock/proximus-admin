@@ -21,51 +21,51 @@ class AdminsController extends AppController {
    function initDB() {
       $role =& $this->Admin->Role;
       //Rights for Global Admin role
-       $role->id = 1;     
-       $this->Acl->allow($role, 'controllers');
+      $role->id = 1;
+      $this->Acl->allow($role, 'controllers');
     
-       //Rights for Location Admin role
-       $role->id = 2;
-       $this->Acl->deny($role, 'controllers');
+      //Rights for Location Admin role
+      $role->id = 2;
+      $this->Acl->deny($role, 'controllers');
 
-       $this->Acl->allow($role, 'controllers/Groups/view');
-       $this->Acl->allow($role, 'controllers/Groups/add');
-       $this->Acl->allow($role, 'controllers/Groups/edit');
-       $this->Acl->allow($role, 'controllers/Groups/delete');
+      $this->Acl->allow($role, 'controllers/Groups/view');
+      $this->Acl->allow($role, 'controllers/Groups/add');
+      $this->Acl->allow($role, 'controllers/Groups/edit');
+      $this->Acl->allow($role, 'controllers/Groups/delete');
        
-       $this->Acl->allow($role, 'controllers/Locations/start');
-       $this->Acl->allow($role, 'controllers/Locations/view');
-       $this->Acl->allow($role, 'controllers/Locations/edit');
+      $this->Acl->allow($role, 'controllers/Locations/start');
+      $this->Acl->allow($role, 'controllers/Locations/view');
+      $this->Acl->allow($role, 'controllers/Locations/edit');
        
-       $this->Acl->allow($role, 'controllers/Rules/search');
-       $this->Acl->allow($role, 'controllers/Rules/view');
-       $this->Acl->allow($role, 'controllers/Rules/add');
-       $this->Acl->allow($role, 'controllers/Rules/edit');
-       $this->Acl->allow($role, 'controllers/Rules/delete');
-       $this->Acl->allow($role, 'controllers/Rules/createFromLog');
+      $this->Acl->allow($role, 'controllers/Rules/search');
+      $this->Acl->allow($role, 'controllers/Rules/view');
+      $this->Acl->allow($role, 'controllers/Rules/add');
+      $this->Acl->allow($role, 'controllers/Rules/edit');
+      $this->Acl->allow($role, 'controllers/Rules/delete');
+      $this->Acl->allow($role, 'controllers/Rules/createFromLog');
          
-       $this->Acl->allow($role, 'controllers/Admins/changePassword');
-       $this->Acl->allow($role, 'controllers/Admins/view');
+      $this->Acl->allow($role, 'controllers/Admins/changePassword');
+      $this->Acl->allow($role, 'controllers/Admins/view');
 
-       $this->Acl->allow($role, 'controllers/Logs/searchlist');
-       $this->Acl->allow($role, 'controllers/Logs/searchstring');
-       $this->Acl->allow($role, 'controllers/Logs/deleteWithChildren');
-       $this->Acl->allow($role, 'controllers/Logs/delete');
+      $this->Acl->allow($role, 'controllers/Logs/searchlist');
+      $this->Acl->allow($role, 'controllers/Logs/searchstring');
+      $this->Acl->allow($role, 'controllers/Logs/deleteWithChildren');
+      $this->Acl->allow($role, 'controllers/Logs/delete');
 
 
-       $role->id = 3;
-       $this->Acl->deny($role, 'controllers');
+      $role->id = 3;
+      $this->Acl->deny($role, 'controllers');
    }
 
 
    function login() {
       //Auth Magic
-      $this->log( $this->Auth->user('username') . "; $this->name ; login: " . $this->data['Admin']['username'], 'activity');
+      $this->log( $this->Auth->user('username') . "; $this->name; failed login for: " . $this->data['Admin']['username'], 'activity');
    }
  
    function logout() {
       $this->Session->setFlash('Good-Bye');
-      $this->log( $this->Auth->user('username') . "; $this->name ; logout: " . $this->data['Admin']['username'], 'activity');
+      $this->log( $this->Auth->user('username') . "; $this->name; logout: " . $this->data['Admin']['username'], 'activity');
       $this->redirect($this->Auth->logout());
    }
 
@@ -100,7 +100,7 @@ class AdminsController extends AppController {
 			   $this->Admin->create() && $this->Admin->validates();
    			if ($this->Admin->save($this->data)) {
 	   			$this->Session->setFlash(__('The Admin has been saved', true));
-               $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['Admin']['username'], 'activity');
+               $this->log( $this->Auth->user('username') . "; $this->name; add: " . $this->data['Admin']['username'], 'activity');
 		   		$this->redirect(array('action'=>'index'));
    			} else {
 	   			$this->Session->setFlash(__('The Admin could not be saved. Please, try again.', true));

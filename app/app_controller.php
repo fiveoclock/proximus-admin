@@ -8,7 +8,6 @@ class AppController extends Controller {
    }
 
    function beforeFilter() {
-      #Security::setHash('md5');
       //Configure AuthComponent
       $this->Auth->userModel = 'Admin';
       $this->Auth->authorize = 'actions';

@@ -32,6 +32,11 @@ if ($auth['Admin']['role_id'] == 1) {
    echo $html->link('Global settings','/global_settings/index',null,null,false);
    echo "<br>";
    echo "<br>";
+   echo 'Other:';
+   echo "<br>";
+   echo $html->link('View eventlog','/eventlogs/index',null,null,false);
+   echo "<br>";
+   echo "<br>";
    echo "<br>";
    echo $html->link('About ProXimus / Documentation','/pages/about',null,null,false);
 }

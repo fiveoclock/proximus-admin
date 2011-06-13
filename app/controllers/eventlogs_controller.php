@@ -20,16 +20,16 @@ class EventlogsController extends AppController {
       }
    }
 
-
    function index() {
-#      $this->GlobalSetting->recursive = 0;
-
+      if ( ! $this->data ) {
+         $this->data['lines'] = 50;
+      }
       $file = "../tmp/logs/activity.log";
-      $kdf = file_get_contents($file);
-      $kdf = explode("\n", $kdf);
-      $logs = array();
-      foreach ( array_reverse($kdf, true) as $key=>$line ) {
-         if ( empty($line)) continue;
+      $kdf = array_reverse( file($file) );
+
+      foreach ( $kdf as $key=>$line ) {
+         if ( $key == $this->data['lines'] ) break;
+         if ( empty($line) ) continue;
 
          $val = explode("Activity: ", $line );
          $logs[$key]['date'] = strtotime( $val[0] );

@@ -1,5 +1,17 @@
 <div class="eventlog index">
 <h2><?php __('Eventlog');?></h2>
+
+<div class="eventlogs form">
+<?php echo $form->create(null, array('url' => '/eventlogs/index')); ?>
+   <fieldset>
+      <legend><?php __('View Logs');?></legend>
+   <?php
+      echo $form->input('lines', array('label' => 'Lines to show', 'options' => array('50' => '50', '100'=>'100','200'=>'200','-1'=>'All')));
+   ?>
+   <?php echo $form->end('Show');?>
+   </fieldset>
+</div>
+
 <table cellpadding="0" cellspacing="0">
 <br>
 <tr>
