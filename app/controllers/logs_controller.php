@@ -117,6 +117,8 @@ class LogsController extends AppController {
          $tree = $this->Log->find('all',array('conditions'=>$conditions ));
          $this->set('logs',$tree);
 
+         $this->log( $this->Auth->user('username') . "; $this->name; search logs", "activity");
+
          #pr($conditions);    # debug
       }
    }
@@ -176,6 +178,7 @@ class LogsController extends AppController {
       }
 
 		if ($this->Log->del($id)) {
+         $this->log( $this->Auth->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
 			$this->Session->setFlash(__('Log deleted', true));
 		   $this->redirect(array('action'=>'searchlist'));
 		}
@@ -203,10 +206,12 @@ class LogsController extends AppController {
       $children = $this->Log->findByParentId($id);
       if (!empty($children)) {
          $condition = array('parent_id'=>$id);
+         $this->log( $this->Auth->user('username') . "; $this->name; delete with subsites: " . $this->data['Log']['id'], 'activity');
          $this->Log->deleteAll($condition);
       }
 		if ($this->Log->del($id)) {
 			$this->Session->setFlash(__('Log deleted', true));
+         $this->log( $this->Auth->user('username') . "; $this->name; delete with subsites: " . $this->data['Log']['id'], 'activity');
 			$this->redirect(array('action'=>'searchlist'));
 		}
       else {

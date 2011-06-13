@@ -8,7 +8,6 @@ class UsersController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      Security::setHash('sha1');
       #$this->Auth->allowedActions = array('*');
    }
 
@@ -75,6 +74,7 @@ class UsersController extends AppController {
             $this->User->create() && $this->User->validates();
             if ($this->User->save($this->data)) {
                $this->Session->setFlash(__('The User was saved', true));
+               $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['User']['username'], 'activity');
                $this->redirect(array('action'=>'index'));
             } else {
                #$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
@@ -113,6 +113,7 @@ class UsersController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->User->save($this->data)) {
 				$this->Session->setFlash(__('The User has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['User']['username'], 'activity');
 				$this->redirect(array('action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
@@ -165,6 +166,7 @@ class UsersController extends AppController {
             $this->User->set($this->data) && $this->User->validates();
             if ($this->User->save($this->data)) {
                $this->Session->setFlash(__('New password was set', true));
+               $this->log( $this->Auth->user('username') . "; $this->name ; set password: " . $this->data['User']['username'], 'activity');
                $this->redirect(array('action'=>'index'));
             } else {
                $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
@@ -186,6 +188,7 @@ class UsersController extends AppController {
 		}
 		if ($this->User->del($id)) {
 			$this->Session->setFlash(__('User deleted', true));
+         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['User']['username'], 'activity');
 			$this->redirect(array('action'=>'index'));
 		}
 	}

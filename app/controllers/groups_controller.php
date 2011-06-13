@@ -38,22 +38,6 @@ class GroupsController extends AppController {
 		$this->Session->write("Group",$id);
 	}
 
-	function view_old($id = null) {
-      if (!$id) {
-			$this->Session->setFlash(__('Invalid Group.', true));
-         $this->redirect(array('controller'=>'locations','action'=>'start'));
-		}
-      $group = $this->Group->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($group['Group']['location_id'],$this->Session->read('Auth.locations'))) {
-            $this->Session->setFlash(__('You are not allowed to access this Group', true));
-            $this->redirect(array('controller'=>'locations','action'=>'start'));
-         }
-      }
-		$this->set('group', $group);
-		$this->Session->write("Group",$id);
-	}
-
 	function add($location_id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
@@ -63,6 +47,7 @@ class GroupsController extends AppController {
 			$this->Group->create();
 			if ($this->Group->save($this->data)) {
 				$this->Session->setFlash(__('The Group has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['Group']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Group could not be saved. Please, try again.', true));
@@ -120,6 +105,7 @@ class GroupsController extends AppController {
 				   }
 				}
 				$this->Session->setFlash(__('The Group has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['Group']['id'], 'activity');
 				
 				$this->redirect($this->Tracker->loadLastPos());
 			} else {
@@ -172,6 +158,7 @@ class GroupsController extends AppController {
       }
 		if ($this->Group->del($id, true)) {
 			$this->Session->setFlash(__('Group deleted', true));
+         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['Group']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}

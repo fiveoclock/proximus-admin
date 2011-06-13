@@ -42,6 +42,7 @@ class BlockednetworksController extends AppController {
 			$this->Blockednetwork->create();
 			if ($this->Blockednetwork->save($this->data)) {
 				$this->Session->setFlash(__('The Blockednetwork has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['Blockednetwork']['id'], 'activity');
 				$this->redirect(array('action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The Blockednetwork could not be saved. Please, try again.', true));
@@ -76,6 +77,7 @@ class BlockednetworksController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Blockednetwork->save($this->data)) {
 				$this->Session->setFlash(__('The Blockednetwork has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['Blockednetwork']['id'], 'activity');
 				$this->redirect(array('action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The Blockednetwork could not be saved. Please, try again.', true));
@@ -108,6 +110,7 @@ class BlockednetworksController extends AppController {
 		}
 		if ($this->Blockednetwork->del($id)) {
 			$this->Session->setFlash(__('Blockednetwork deleted', true));
+         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['Blockednetwork']['id'], 'activity');
 			$this->redirect(array('action'=>'index'));
 		}
 	}

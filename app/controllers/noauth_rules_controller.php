@@ -40,6 +40,7 @@ class NoauthRulesController extends AppController {
 			$this->NoauthRule->create();
 			if ($this->NoauthRule->save($this->data)) {
 				$this->Session->setFlash(__('The Noauth rule has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $id, 'activity');
 				$this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Noauth rule could not be saved. Please, try again.', true));
@@ -75,6 +76,7 @@ class NoauthRulesController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->NoauthRule->save($this->data)) {
 				$this->Session->setFlash(__('The Noauth rule has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $id, 'activity');
 				$this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Noauth rule could not be saved. Please, try again.', true));
@@ -108,6 +110,7 @@ class NoauthRulesController extends AppController {
 		}
 		if ($this->NoauthRule->del($id)) {
 			$this->Session->setFlash(__('Noauth rule deleted', true));
+         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $id, 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}

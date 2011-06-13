@@ -33,6 +33,7 @@ class GlobalSettingsController extends AppController {
          $this->GlobalSetting->create();
          if ($this->GlobalSetting->save($this->data)) {
             $this->Session->setFlash(__('The setting was saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['GlobalSetting']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
          }
          else {
@@ -54,6 +55,7 @@ class GlobalSettingsController extends AppController {
       if (!empty($this->data)) {
          if ($this->GlobalSetting->save($this->data)) {
             $this->Session->setFlash(__('The setting was saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['GlobalSetting']['id'], 'activity');
             $this->redirect(array('action'=>'index'));
          } else {
             $this->Session->setFlash(__('The setting not be saved. Please, try again.', true));
@@ -71,6 +73,7 @@ class GlobalSettingsController extends AppController {
       }
       if ($this->GlobalSetting->del($id)) {
          $this->Session->setFlash(__('Setting deleted', true));
+         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['GlobalSetting']['id'], 'activity');
          $this->redirect(array('action'=>'index'));
       }
    }

@@ -93,7 +93,7 @@ class LocationsController extends AppController {
 			$this->Location->create();
 			if ($this->Location->save($this->data)) {
 				$this->Session->setFlash(__('The Location has been saved', true));
-				#$this->redirect(array('action'=>'index'));
+            $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['Location']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Location could not be saved. Please, try again.', true));
@@ -114,6 +114,7 @@ class LocationsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Location->save($this->data)) {
 				$this->Session->setFlash(__('The Location has been saved', true));
+            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['Location']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Location could not be saved. Please, try again.', true));
@@ -134,6 +135,7 @@ class LocationsController extends AppController {
       }
       if ($id == 1) {
          $this->Session->setFlash(__('Location with id 1 is a special location and cannot be deleted.', true));
+         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['Location']['id'], 'activity');
          $this->redirect($this->Tracker->loadLastPos());
       }
       if ( $this->Location->User->findCount(array('User.location_id'=>$id)) > 0 ) {
