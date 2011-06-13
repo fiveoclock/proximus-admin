@@ -38,6 +38,31 @@ class AdminsController extends AppController {
       $this->Acl->allow($role, 'controllers/Locations/edit');
        
       $this->Acl->allow($role, 'controllers/Rules/search');
+      $this->Acl->allow($role, 'controllers/Rules/add');
+      $this->Acl->allow($role, 'controllers/Rules/edit');
+      $this->Acl->allow($role, 'controllers/Rules/delete');
+      $this->Acl->allow($role, 'controllers/Rules/createFromLog');
+         
+      $this->Acl->allow($role, 'controllers/Admins/changePassword');
+      $this->Acl->allow($role, 'controllers/Admins/view');
+
+      $this->Acl->allow($role, 'controllers/Logs/searchlist');
+      $this->Acl->allow($role, 'controllers/Logs/deleteWithChildren');
+      $this->Acl->allow($role, 'controllers/Logs/delete');
+
+      # global read-only admin
+      $role->id = 3;
+
+      $this->Acl->allow($role, 'controllers/Groups/view');
+      $this->Acl->allow($role, 'controllers/Groups/add');
+      $this->Acl->allow($role, 'controllers/Groups/edit');
+      $this->Acl->allow($role, 'controllers/Groups/delete');
+       
+      $this->Acl->allow($role, 'controllers/Locations/start');
+      $this->Acl->allow($role, 'controllers/Locations/view');
+      $this->Acl->allow($role, 'controllers/Locations/edit');
+       
+      $this->Acl->allow($role, 'controllers/Rules/search');
       $this->Acl->allow($role, 'controllers/Rules/view');
       $this->Acl->allow($role, 'controllers/Rules/add');
       $this->Acl->allow($role, 'controllers/Rules/edit');
@@ -48,13 +73,12 @@ class AdminsController extends AppController {
       $this->Acl->allow($role, 'controllers/Admins/view');
 
       $this->Acl->allow($role, 'controllers/Logs/searchlist');
-      $this->Acl->allow($role, 'controllers/Logs/searchstring');
       $this->Acl->allow($role, 'controllers/Logs/deleteWithChildren');
       $this->Acl->allow($role, 'controllers/Logs/delete');
-
-
-      $role->id = 3;
-      $this->Acl->deny($role, 'controllers');
+      
+      # global
+      $this->Acl->allow($role, 'controllers/Noauth_rules/index');
+      $this->Acl->allow($role, 'controllers/Blockednetworks/index');
    }
 
 
@@ -72,22 +96,6 @@ class AdminsController extends AppController {
 	function index() {
 		$this->Admin->recursive = 0;
 		$this->set('admins', $this->paginate());
-	}
-
-	function view($id = null) {
-		if (!$id) {
-			$this->Session->setFlash(__('Invalid Admin.', true));
-			$this->redirect(array('action'=>'index'));
-		}
-
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if ($id != $this->Session->read('Auth.Admin.id')) {
-            $this->Session->setFlash(__('Access denied.', true));
-            $this->redirect(array('controller'=>'locations','action'=>'start'));
-         }
-      }
-      
-		$this->set('admin', $this->Admin->read(null, $id));
 	}
 
 	function add() {
