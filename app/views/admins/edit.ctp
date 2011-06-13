@@ -7,6 +7,7 @@
 	<?php
 		echo $form->input('id');
 		echo $form->input('username', array('disabled'=>'disabled' ));
+		echo $form->input('username', array('type'=>'hidden' ));
 		echo $form->input('role_id');
 		echo $form->input('active', array('options' => array('Y'=>'Yes','N'=>'No')));
       echo $form->input('Location',array('type'=>'select','multiple'=>'multiple'));

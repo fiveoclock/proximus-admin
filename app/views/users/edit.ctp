@@ -5,6 +5,7 @@
 	<?php
 		echo $form->input('id');
 		echo $form->input('username', array('disabled'=>'disabled' ));
+		echo $form->input('username', array('type'=>'hidden' ));
 		echo $form->input('realname');
 		echo $form->input('emailaddress');
 		echo $form->input('location_id');

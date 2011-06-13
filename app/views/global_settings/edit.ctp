@@ -5,6 +5,7 @@
 	<?php
 		echo $form->input('id');
 		echo $form->input('name', array('disabled'=>'disabled' ));
+		echo $form->input('name', array('type'=>'hidden' ));
 		echo $form->input('value', array('type'=>'text'));
 	?>
    <?php echo $form->end('Submit');?>
