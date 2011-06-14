@@ -28,6 +28,8 @@ class LocationsController extends AppController {
 	function start() {
       $loggeduser = $this->Auth->user();
       $allowed_locations = $this->Session->read('Auth.locations');
+      # allow everyone to view location ALL...
+      array_push($allowed_locations, 1);
 
       if( in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
          $find_condition = array('fields' => array('Location.*'),
@@ -47,13 +49,16 @@ class LocationsController extends AppController {
 
 	function view($id = null) {
       $loggeduser = $this->Auth->user();
+      $allowed_locations = $this->Session->read('Auth.locations');
+      # allow everyone to view location ALL...
+      array_push($allowed_locations, 1);
 
       if (!$id) {
 			$this->Session->setFlash(__('Invalid Location.', true));
 			$this->redirect(array('action'=>'start'));
 		}
       if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
-         if (!in_array($id,$this->Session->read('Auth.locations'))) {
+         if (!in_array($id, $allowed_locations)) {
             $this->Session->setFlash(__('You are not allowed to access this location', true));
             $this->redirect(array('action'=>'start'));
          }
