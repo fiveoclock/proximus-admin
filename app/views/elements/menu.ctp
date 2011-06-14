@@ -23,7 +23,7 @@ if ( ($auth['Admin']['role_id'] == 1) or ($auth['Admin']['role_id'] == 3) ) {
 if ($auth['Admin']['role_id'] >= 1) {
    $user = $auth['Admin']['username'];
    echo " | ";
-   echo $html->link($user.'s '.'Profile',array('controller'=>'admins','action'=>'changePassword',$auth['Admin']['id']));
+   echo $html->link($user.'s '.'Profile',array('controller'=>'admins','action'=>'view',$auth['Admin']['id']));
    echo $html->link('Logout','/admins/logout',null,null,false);
    #echo " | ";
    #echo $auth['Admin']['username'];

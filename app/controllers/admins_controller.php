@@ -192,7 +192,24 @@ class AdminsController extends AppController {
 			$this->redirect(array('action'=>'index'));
 		}
 	}
-   
+
+
+   function view($id = null) {
+      if (!$id) {
+         $this->Session->setFlash(__('Invalid Group.', true));
+         $this->redirect(array('controller'=>'locations','action'=>'start'));
+      }
+      $admin = $this->Admin->read(null, $id);
+      if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
+         if (!in_array($admin['Admin']['location_id'],$this->Session->read('Auth.locations'))) {
+            $this->Session->setFlash(__('You are not allowed to access this Group', true));
+            $this->redirect(array('controller'=>'locations','action'=>'start'));
+         }
+      }
+      $this->set('admin', $admin);
+      $this->Session->write("Admin",$id);
+   }
+
    function changePassword($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid Admin', true));

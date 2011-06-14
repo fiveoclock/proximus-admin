@@ -27,10 +27,9 @@ class LocationsController extends AppController {
 	
 	function start() {
       $loggeduser = $this->Auth->user();
-      $priv_roles = array(1, 3); # global- and read-only admins
       $allowed_locations = $this->Session->read('Auth.locations');
 
-      if( in_array($this->Session->read('Auth.Admin.role_id'), $priv_roles) ) {
+      if( in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
          $find_condition = array('fields' => array('Location.*'),
                               'order'=>'Location.code'
                                );
@@ -48,13 +47,12 @@ class LocationsController extends AppController {
 
 	function view($id = null) {
       $loggeduser = $this->Auth->user();
-      $priv_roles = array(1, 3); # global- and read-only admins
 
       if (!$id) {
 			$this->Session->setFlash(__('Invalid Location.', true));
 			$this->redirect(array('action'=>'start'));
 		}
-      if( ! in_array($this->Session->read('Auth.Admin.role_id'), $priv_roles) ) {
+      if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
          if (!in_array($id,$this->Session->read('Auth.locations'))) {
             $this->Session->setFlash(__('You are not allowed to access this location', true));
             $this->redirect(array('action'=>'start'));

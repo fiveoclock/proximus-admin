@@ -28,7 +28,7 @@ class GroupsController extends AppController {
          $this->redirect(array('controller'=>'locations','action'=>'start'));
 		}
       $group = $this->Group->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
+      if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
          if (!in_array($group['Group']['location_id'],$this->Session->read('Auth.locations'))) {
             $this->Session->setFlash(__('You are not allowed to access this Group', true));
             $this->redirect(array('controller'=>'locations','action'=>'start'));

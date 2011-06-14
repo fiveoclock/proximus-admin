@@ -1,6 +1,7 @@
 <?php  
 class AppController extends Controller { 
   var $components = array('Acl', 'Auth', 'Session', 'Tracker');
+  var $priv_roles = array(1, 3); # global- and read-only admins
 
    function beforeRender() {
       $this->set('auth', $this->Auth->user());
