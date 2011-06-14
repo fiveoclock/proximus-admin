@@ -17,7 +17,7 @@ class AppController extends Controller {
       $this->Auth->logoutRedirect = array('controller' => 'admins', 'action' => 'login');
       $this->Auth->loginRedirect = array('controller' => 'locations', 'action' => 'start');
       $this->Auth->loginError = 'Invalid username / password combination. Please try again';
-      $this->Auth->authError = 'Your session has expired or you are not authorized to access that location!  Please log in again.';
+      $this->Auth->authError = 'Access denied';
       $this->Auth->userScope = array('Admin.active' => 'Y');
       if ($this->Auth->user()) {
          $this->Session->write('Auth.locations', $this->checkAllowedLocations());
