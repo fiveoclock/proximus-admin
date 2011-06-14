@@ -1,5 +1,4 @@
 <?php
-/* SVN FILE: $Id: api.php 7945 2008-12-19 02:16:01Z gwoo $ */
 /**
  * API shell to get CakePHP core method signatures.
  *
@@ -7,22 +6,18 @@
  *
  * PHP versions 4 and 5
  *
- * CakePHP(tm) :  Rapid Development Framework (http://www.cakephp.org)
- * Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @filesource
- * @copyright     Copyright 2005-2008, Cake Software Foundation, Inc. (http://www.cakefoundation.org)
- * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
+ * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
  * @package       cake
  * @subpackage    cake.cake.console.libs
  * @since         CakePHP(tm) v 1.2.0.5012
- * @version       $Revision: 7945 $
- * @modifiedby    $LastChangedBy: gwoo $
- * @lastmodified  $Date: 2008-12-18 18:16:01 -0800 (Thu, 18 Dec 2008) $
- * @license       http://www.opensource.org/licenses/mit-license.php The MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
 /**
@@ -32,6 +27,7 @@
  * @subpackage    cake.cake.console.libs
  */
 class ApiShell extends Shell {
+
 /**
  * Map between short name for paths and real paths.
  *
@@ -39,12 +35,13 @@ class ApiShell extends Shell {
  * @access public
  */
 	var $paths = array();
+
 /**
  * Override intialize of the Shell
  *
  * @access public
  */
-	function initialize () {
+	function initialize() {
 		$this->paths = array_merge($this->paths, array(
 			'behavior' => LIBS . 'model' . DS . 'behaviors' . DS,
 			'cache' => LIBS . 'cache' . DS,
@@ -56,6 +53,7 @@ class ApiShell extends Shell {
 			'core' => LIBS
 		));
 	}
+
 /**
  * Override main() to handle action
  *
@@ -66,7 +64,7 @@ class ApiShell extends Shell {
 			return $this->help();
 		}
 
-		$type = low($this->args[0]);
+		$type = strtolower($this->args[0]);
 
 		if (isset($this->paths[$type])) {
 			$path = $this->paths[$type];
@@ -82,7 +80,7 @@ class ApiShell extends Shell {
 			$class = Inflector::camelize($file);
 		}
 
-		$objects = Configure::listObjects('class', $path);
+		$objects = App::objects('class', $path);
 		if (in_array($class, $objects)) {
 			if (in_array($type, array('behavior', 'component', 'helper')) && $type !== $file) {
 				if (!preg_match('/' . Inflector::camelize($type) . '$/', $class)) {
@@ -117,7 +115,7 @@ class ApiShell extends Shell {
 				$this->out($list);
 
 				$methods = array_keys($parsed);
-				while ($number = $this->in(__('Select a number to see the more information about a specific method. q to quit. l to list.', true), null, 'q')) {
+				while ($number = strtolower($this->in(__('Select a number to see the more information about a specific method. q to quit. l to list.', true), null, 'q'))) {
 					if ($number === 'q') {
 						$this->out(__('Done', true));
 						$this->_stop();
@@ -151,17 +149,17 @@ class ApiShell extends Shell {
 
 		$commands = array(
 			'path' => "\t<type>\n" .
-						"\t\tEither a full path or type of class (model, behavior, controller, component, view, helper).\n".
-						"\t\tAvailable values:\n\n".
-						"\t\tbehavior\tLook for class in CakePHP behavior path\n".
-						"\t\tcache\tLook for class in CakePHP cache path\n".
-						"\t\tcontroller\tLook for class in CakePHP controller path\n".
-						"\t\tcomponent\tLook for class in CakePHP component path\n".
-						"\t\thelper\tLook for class in CakePHP helper path\n".
-						"\t\tmodel\tLook for class in CakePHP model path\n".
-						"\t\tview\tLook for class in CakePHP view path\n",
+				"\t\tEither a full path or type of class (model, behavior, controller, component, view, helper).\n".
+				"\t\tAvailable values:\n\n".
+				"\t\tbehavior\tLook for class in CakePHP behavior path\n".
+				"\t\tcache\tLook for class in CakePHP cache path\n".
+				"\t\tcontroller\tLook for class in CakePHP controller path\n".
+				"\t\tcomponent\tLook for class in CakePHP component path\n".
+				"\t\thelper\tLook for class in CakePHP helper path\n".
+				"\t\tmodel\tLook for class in CakePHP model path\n".
+				"\t\tview\tLook for class in CakePHP view path\n",
 			'className' => "\t<className>\n" .
-						"\t\tA CakePHP core class name (e.g: Component, HtmlHelper).\n"
+				"\t\tA CakePHP core class name (e.g: Component, HtmlHelper).\n"
 		);
 
 		$this->out($head);
@@ -169,8 +167,8 @@ class ApiShell extends Shell {
 			foreach ($commands as $cmd) {
 				$this->out("{$cmd}\n\n");
 			}
-		} elseif (isset($commands[low($this->args[1])])) {
-			$this->out($commands[low($this->args[1])] . "\n\n");
+		} elseif (isset($commands[strtolower($this->args[1])])) {
+			$this->out($commands[strtolower($this->args[1])] . "\n\n");
 		} else {
 			$this->out("Command '" . $this->args[1] . "' not found");
 		}
@@ -196,16 +194,16 @@ class ApiShell extends Shell {
 
 		$contents = $File->read();
 
-		if (preg_match_all('%(/\\*\\*[\\s\\S]*?\\*/)(\\s+function\\s+\\w+)(\\(.+\\))%', $contents, $result, PREG_PATTERN_ORDER)) {
+		if (preg_match_all('%(/\\*\\*[\\s\\S]*?\\*/)(\\s+function\\s+\\w+)(\\(.*\\))%', $contents, $result, PREG_PATTERN_ORDER)) {
 			foreach ($result[2] as $key => $method) {
 				$method = str_replace('function ', '', trim($method));
 
 				if (strpos($method, '__') === false && $method[0] != '_') {
 					$parsed[$method] = array(
-											'comment' => r(array('/*', '*/', '*'), '', trim($result[1][$key])),
-											'method' => $method,
-											'parameters' => trim($result[3][$key]),
-											);
+						'comment' => str_replace(array('/*', '*/', '*'), '', trim($result[1][$key])),
+						'method' => $method,
+						'parameters' => trim($result[3][$key])
+					);
 				}
 			}
 		}
@@ -213,4 +211,3 @@ class ApiShell extends Shell {
 		return $parsed;
 	}
 }
-?>

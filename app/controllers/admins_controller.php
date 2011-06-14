@@ -85,6 +85,7 @@ class AdminsController extends AppController {
    function login() {
       //Auth Magic
       $this->log( $this->Auth->user('username') . "; $this->name; failed login for: " . $this->data['Admin']['username'], 'activity');
+      # http://lanrat.com/programs/cakephp_ldap
    }
  
    function logout() {

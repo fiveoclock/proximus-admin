@@ -1,6 +1,6 @@
 <?php  
 class AppController extends Controller { 
-  var $components = array('Acl', 'Auth', 'Tracker');
+  var $components = array('Acl', 'Auth', 'Session', 'Tracker');
 
    function beforeRender() {
       $this->set('auth', $this->Auth->user());
