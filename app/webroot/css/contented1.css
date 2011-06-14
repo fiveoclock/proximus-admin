@@ -78,6 +78,8 @@ form div.required {
    color: #333;
    font-weight: bold;
 }
+
+
 form div.submit {
    border: 0;
    float: left;
@@ -96,6 +98,7 @@ form div.button {
    padding: 5px;
    width: 100px;
 }
+
 label {
    display: block;
    font-size: 110%;
@@ -156,7 +159,12 @@ div.radio label {
 }*/
 
 
-
+div.message {
+	font-weight: bold;
+   padding-left: 14px;
+   margin-top: 6px;
+   padding-bottom: 6px;
+}
 
 a {
 	color: #6699FF;
