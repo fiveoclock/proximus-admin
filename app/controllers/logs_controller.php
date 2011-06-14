@@ -108,7 +108,6 @@ class LogsController extends AppController {
             $user_ids = Set::extract('/User/id', $user_ids);
 
             $conditions['user_id'] = $user_ids;
-            $this->Session->setFlash(__('hahaha', true));
          }
          if( empty($this->data['Log']['users']) && empty($this->data['Log']['site']) ) {
             $conditions['parent_id'] = null;

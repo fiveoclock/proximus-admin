@@ -25,7 +25,7 @@ class UsersController extends AppController {
 	function index() {
       # get global settings
       $Setting  = ClassRegistry::init('GlobalSetting');
-      foreach( $Setting->findAll() as $key=>$value){
+      foreach( $Setting->find('all') as $key=>$value ){
          $content = $value['GlobalSetting'];
          $settings[ $content['name'] ] = $content['value'] ; 
       }
@@ -48,7 +48,7 @@ class UsersController extends AppController {
       # get global settings
       $Setting  = ClassRegistry::init('GlobalSetting');
       $settings = array();
-      foreach( $Setting->findAll() as $key=>$value){
+      foreach( $Setting->find('all') as $key=>$value){
          $content = $value['GlobalSetting'];
          $settings[ $content['name'] ] = $content['value'] ; 
       }
