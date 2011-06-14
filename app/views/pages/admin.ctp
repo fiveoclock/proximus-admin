@@ -6,9 +6,12 @@ Below you can find a list of elements you can administer in ProXimus.<br><br>
 
 <h3>
 
+
 <?php
+$allowed_roles = array(1, 3);
+
 # global admin is logged in 
-if ($auth['Admin']['role_id'] == 1) {
+if ( in_array($auth['Admin']['role_id'], $allowed_roles) ) {
    echo 'Basic Objects:';
    echo "<br>";
    echo $html->link('Locations','/locations/index',null,null,false);

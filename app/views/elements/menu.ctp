@@ -1,5 +1,6 @@
 <?php
 
+
 # not logged in
 if (!$auth['Admin']['role_id']) {
    #echo $html->link('Login','/',null,null,false);
@@ -13,7 +14,7 @@ if ($auth['Admin']['role_id'] >= 1) {
 }
 
 # global admin is logged in 
-if ($auth['Admin']['role_id'] == 1) {
+if ( ($auth['Admin']['role_id'] == 1) or ($auth['Admin']['role_id'] == 3) ) {
    echo " | ";
    #echo $html->link('No Auth.','/noauth_rules/index',null,null,false);
    echo $html->link('Administration','/pages/admin',null,null,false);

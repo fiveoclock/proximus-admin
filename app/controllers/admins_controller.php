@@ -52,6 +52,7 @@ class AdminsController extends AppController {
 
       # global read-only admin
       $role->id = 3;
+      $this->Acl->deny($role, 'controllers');
 
       $this->Acl->allow($role, 'controllers/Groups/view');
       $this->Acl->allow($role, 'controllers/Groups/add');
@@ -77,8 +78,15 @@ class AdminsController extends AppController {
       $this->Acl->allow($role, 'controllers/Logs/delete');
       
       # global
-      $this->Acl->allow($role, 'controllers/Noauth_rules/index');
+      $this->Acl->allow($role, 'controllers/Pages');
+      $this->Acl->allow($role, 'controllers/Users/index');
+      $this->Acl->allow($role, 'controllers/Admins/index');
+      $this->Acl->allow($role, 'controllers/Locations/index');
+      $this->Acl->allow($role, 'controllers/NoauthRules/index');
       $this->Acl->allow($role, 'controllers/Blockednetworks/index');
+      $this->Acl->allow($role, 'controllers/Eventlogs/index');
+      $this->Acl->allow($role, 'controllers/GlobalSettings/index');
+      $this->Acl->allow($role, 'controllers/ProxySettings/index');
    }
 
 
