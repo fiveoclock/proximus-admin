@@ -97,7 +97,7 @@ class LogsController extends AppController {
             $conditions['sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
          }
          if ( !empty($this->data['Log']['onlyThisLoc'])) {
-            $conditions['location_id'] = $this->data['Log']['location'];
+            $conditions['location_id'] = $proxy['ProxySetting']['location_id'];
          }
          if ( !empty($this->data['Log']['users'])) {
             # first get the ids of the matching users
