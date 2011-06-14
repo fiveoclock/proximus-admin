@@ -16,6 +16,7 @@ echo $paginator->counter(array(
 <table cellpadding="0" cellspacing="0">
 <tr>
 	<th><?php echo $paginator->sort('username');?></th>
+	<th><?php echo $paginator->sort('name');?></th>
 	<th><?php echo $paginator->sort('Role','Role.name');?></th>
 	<th><?php echo $paginator->sort('active');?></th>
 	<th><?php echo $paginator->sort('created');?></th>
@@ -33,6 +34,9 @@ foreach ($admins as $admin):
 	<tr<?php echo $class;?>>
 		<td>
 			<?php echo $admin['Admin']['username']; ?>
+		</td>
+		<td>
+			<?php echo $admin['Admin']['name']; ?>
 		</td>
 		<td>
 			<?php echo $admin['Role']['name']; ?>

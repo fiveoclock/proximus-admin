@@ -4,6 +4,7 @@
  		<legend><?php __('Add Admin');?></legend>
 	<?php
 		echo $form->input('username');
+      echo $form->input('name' );
       echo $form->input('password', array('size'=>'20', 'label' => 'Password', 'value' => ''));
       echo $form->input('password_confirm', array('size'=>'20', 'type' => 'password', 'label' => 'Confirm password', 'value' => ''));
 		echo $form->input('role_id');
