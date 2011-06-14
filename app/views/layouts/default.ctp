@@ -29,8 +29,7 @@
 
 <div id="content">
 <div id="maincontent">
-<?php if ($session->check('Message.flash')) $session->flash(); ?>
-<?php $session->flash('auth'); ?>
+<?php echo $this->Session->flash(); ?>
 <?php echo $content_for_layout?>
 
 </div>
