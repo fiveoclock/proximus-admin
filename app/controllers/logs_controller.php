@@ -3,12 +3,15 @@ class LogsController extends AppController {
    var $name = 'Logs';
    var $helpers = array('Html', 'Form');
    var $uses = array('Log','Location','User','ProxySetting');
+   var $paginate = array('limit' => 100);
 
    function beforeFilter() {
       parent::beforeFilter();
    }
 
    function searchlist() {
+//      pr($this->params['form'] );
+//      pr($this->data);
       # retrieve data for form fields
 
       /* # don't really know.......
@@ -52,13 +55,21 @@ class LogsController extends AppController {
          $proxy = $this->ProxySetting->findById($this->data['Log']['location']);
          $this->setDataSource($proxy);
 
-
+         $conditions = array();
          # build up conditions for query
          if( !empty($this->data['Log']['site'])) {
             $conditions['Log.sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
          }
          if ( !empty($this->data['Log']['onlyThisLoc'])) {
             $conditions['Log.location_id'] = $proxy['ProxySetting']['location_id'];
+         }
+         if ( !empty($this->data['Log']['status'])) {
+            $conditions['Log.source'] = $this->data['Log']['status'];
+         }
+         if ( !empty($this->data['Log']['type'])) {
+            //$$conditions['Log.parent_id IS '. $this->data['Log']['type']] ;
+            //$conditions['Log.parent_id IS '] = $this->data['Log']['type'];
+            a;
          }
          if ( !empty($this->data['Log']['users'])) {
             # first get the ids of the matching users
@@ -70,10 +81,17 @@ class LogsController extends AppController {
 
             $conditions['Log.user_id'] = $user_ids;
          }
-         if( empty($this->data['Log']['users']) && empty($this->data['Log']['site']) ) {
+         // set parrent id to avoid double entries...
+         if( empty($this->data['Log']['users']) && empty($this->data['Log']['site']) && empty($this->data['Log']['type']) ) {
             $conditions['Log.parent_id'] = null;
          }
 
+         // delete if requested...
+         if ( isset($this->params['form']['deleteMatching']) ) {
+            $this->Log->deleteAll($conditions);
+         }
+
+         // do a search 
          $tree = $this->Log->find('all',array('conditions'=>$conditions ));
          $this->set('logs',$tree);
 
@@ -81,6 +99,7 @@ class LogsController extends AppController {
          #pr($conditions);    # debug
       }
    }
+
 
    function setDataSource($proxy) {
       //pr($proxy);  # debug
