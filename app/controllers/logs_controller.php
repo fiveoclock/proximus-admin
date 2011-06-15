@@ -69,7 +69,7 @@ class LogsController extends AppController {
          if ( !empty($this->data['Log']['type'])) {
             //$$conditions['Log.parent_id IS '. $this->data['Log']['type']] ;
             //$conditions['Log.parent_id IS '] = $this->data['Log']['type'];
-            a;
+            $a;
          }
          if ( !empty($this->data['Log']['users'])) {
             # first get the ids of the matching users
