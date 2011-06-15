@@ -6,9 +6,7 @@ class LogsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->Auth->allowedActions = array('*');
    }
-
 
    function searchlist() {
       # retrieve data for form fields
@@ -18,23 +16,6 @@ class LogsController extends AppController {
          $this->Session->setFlash(__('You are not allowed to access this search method', true));
          $this->redirect(array('action'=>'searchlist'));
       }
-      */
-
-
-      /* # not used right now
-      # get users
-      if($this->Session->read('Auth.godmode') !=1) {
-         $allowed_locations = $this->Session->read('Auth.locations');
-         $users = $this->User->find('all',array('fields'=>array('id','username','realname'),
-                                   'conditions'=>array('User.location_id'=>$allowed_locations),
-                                   'order'=>array('realname')));
-      }
-      elseif($this->Session->read('Auth.godmode') == 1) {
-         $users = $this->User->find('all',array('fields'=>array('id','username','realname'),
-                                   'order'=>array('realname')));
-      }
-      $users_list = Set::combine($users,'{n}.User.id',array('%s (%s)',"{n}.User.realname","{n}.User.username"));
-      $this->set('users',$users_list);
       */
 
       # get proxys / locations
@@ -69,35 +50,15 @@ class LogsController extends AppController {
       # If form was submitted
       if (!empty($this->data) && isset($this->data['Log']['location'])) {
          $proxy = $this->ProxySetting->findById($this->data['Log']['location']);
-
-         #pr($proxy);  # debug
-         if ( ! $proxy['ProxySetting']['db_default'] ) {
-            $serverConfig = array(
-               'host' => $proxy['ProxySetting']['db_host'],
-               'database' => $proxy['ProxySetting']['db_name'],
-               'login' => $proxy['ProxySetting']['db_user'],
-               'password' => $proxy['ProxySetting']['db_pass'],
-               'datasource' => "default",
-            );
-
-            $newDbConfig = $this->dbConnect($serverConfig);
-            #pr($newDbConfig);  ## debug
-            if ( ! $newDbConfig ) {
-               $this->Session->setFlash(__('Could not connect to database, make sure proxy settings are correct.', true));
-               return;
-            }
-            $this->Log->useDbConfig = $newDbConfig['name'];
-            $this->Log->cacheQueries = false;
-            #pr($newDbConfig);
-         }
+         $this->setDataSource($proxy);
 
 
          # build up conditions for query
          if( !empty($this->data['Log']['site'])) {
-            $conditions['sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
+            $conditions['Log.sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
          }
          if ( !empty($this->data['Log']['onlyThisLoc'])) {
-            $conditions['location_id'] = $proxy['ProxySetting']['location_id'];
+            $conditions['Log.location_id'] = $proxy['ProxySetting']['location_id'];
          }
          if ( !empty($this->data['Log']['users'])) {
             # first get the ids of the matching users
@@ -107,21 +68,44 @@ class LogsController extends AppController {
                                              'User.username LIKE'=>'%'.$this->data['Log']['users'].'%'))));
             $user_ids = Set::extract('/User/id', $user_ids);
 
-            $conditions['user_id'] = $user_ids;
+            $conditions['Log.user_id'] = $user_ids;
          }
          if( empty($this->data['Log']['users']) && empty($this->data['Log']['site']) ) {
-            $conditions['parent_id'] = null;
+            $conditions['Log.parent_id'] = null;
          }
 
          $tree = $this->Log->find('all',array('conditions'=>$conditions ));
          $this->set('logs',$tree);
 
          $this->log( $this->Auth->user('username') . "; $this->name; search logs", "activity");
-
          #pr($conditions);    # debug
       }
    }
 
+   function setDataSource($proxy) {
+      //pr($proxy);  # debug
+      if ( $proxy['ProxySetting']['db_default'] != 1 ) {
+         $serverConfig = array(
+            'host' => $proxy['ProxySetting']['db_host'],
+            'database' => $proxy['ProxySetting']['db_name'],
+            'login' => $proxy['ProxySetting']['db_user'],
+            'password' => $proxy['ProxySetting']['db_pass'],
+            'datasource' => "default",
+         );
+
+         $newDbConfig = $this->dbConnect($serverConfig);
+         //pr($newDbConfig);  ## debug
+         if ( ! $newDbConfig ) {
+            return;
+         }
+         else {
+            //return $newDbConfig['name'];
+            $this->Log->useDbConfig = $newDbConfig['name'];
+            $this->Log->cacheQueries = false;
+            #pr($newDbConfig);
+         }
+      }
+   }
 
    /**
     * Connects to specified database
@@ -160,14 +144,15 @@ class LogsController extends AppController {
 		$this->set('log', $this->Log->read(null, $id));
 	}
 
-	function delete($id = null, $loc_id = null) {
-		if (!$id || !$loc_id) {
-			$this->Session->setFlash(__('Invalid id or loc_id for Log', true));
+	function delete($id = null, $proxy_id = null) {
+		if (!$id || !$proxy_id) {
+			$this->Session->setFlash(__('Invalid id for Log', true));
 			$this->redirect(array('action'=>'searchlist'));
       }
-      $location = $this->Location->findById($loc_id);
-      # connect Log model the correct DB
-      $this->Log->useDbConfig = $location['Location']['code'];
+      $proxy = $this->ProxySetting->findById($proxy_id);
+      pr($proxy);
+      $this->setDataSource($proxy);
+
       $log = $this->Log->read(null, $id);
       if ($this->Session->read('Auth.godmode') != 1) {
          if (!in_array($log['Log']['location_id'],$this->Session->read('Auth.locations'))) {
@@ -176,12 +161,11 @@ class LogsController extends AppController {
          }
       }
 
-		if ($this->Log->del($id)) {
+		if ($this->Log->delete($id)) {
          $this->log( $this->Auth->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
 			$this->Session->setFlash(__('Log deleted', true));
 		   $this->redirect(array('action'=>'searchlist'));
 		}
-   
 	}
 
 

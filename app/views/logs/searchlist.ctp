@@ -78,14 +78,9 @@
             <td>". $log['User']['username'] ."</td>
             <td>". $l['created'] ."</td>
             <td class=\"actions\">" .
-               $html->link(__('Create rule', true), array('controller'=> 'rules', 'action'=>'createFromLog', $l['id'], $view->data['Log']['location'])) . " ";
-               if ($class == "parent") {
-                  echo $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'deleteWithChildren', $log['Log']['id'],$view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete this log and all its sub logs?',true )));
-               }
-               else {
-                  echo $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'delete', $l['id'], $view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete # %s?', true), $l['id']));
-               }
-               echo "
+               $html->link(__('Create rule', true), array('controller'=> 'rules', 'action'=>'createFromLog', $l['id'], $view->data['Log']['location'])) . " " .
+               $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'delete', $l['id'], $view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete # %s?', true), $l['id'])) .
+               "
             </td>
          </tr>";
    }
