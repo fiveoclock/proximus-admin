@@ -168,38 +168,5 @@ class LogsController extends AppController {
 		}
 	}
 
-
-	function deleteWithChildren($id = null,$loc_id = null) {
-		if (!$id || !$loc_id) {
-			$this->Session->setFlash(__('Invalid id for Log', true));
-			$this->redirect(array('action'=>'searchlist'));
-      }
-      $location = $this->Location->findById($loc_id);
-      # connect Log model the correct DB
-      $this->Log->useDbConfig = $location['Location']['code'];
-
-      $log = $this->Log->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($log['Log']['location_id'],$this->Session->read('Auth.locations'))) {
-            $this->Session->setFlash(__('You are not allowed to access this Log', true));
-			   $this->redirect(array('action'=>'searchlist'));
-         }
-      }
-		
-      $children = $this->Log->findByParentId($id);
-      if (!empty($children)) {
-         $condition = array('parent_id'=>$id);
-         $this->log( $this->Auth->user('username') . "; $this->name; delete with subsites: " . $this->data['Log']['id'], 'activity');
-         $this->Log->deleteAll($condition);
-      }
-		if ($this->Log->del($id)) {
-			$this->Session->setFlash(__('Log deleted', true));
-         $this->log( $this->Auth->user('username') . "; $this->name; delete with subsites: " . $this->data['Log']['id'], 'activity');
-			$this->redirect(array('action'=>'searchlist'));
-		}
-      else {
-         $this->Session->setFlash(__('Log or Log children could not be deleted, please inform your admin', true));
-      }
-   }
 }
 ?>
