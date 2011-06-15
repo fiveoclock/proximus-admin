@@ -4,11 +4,14 @@
       <legend><?php __('View Logs');?></legend>
 	<?php
       echo $form->input('location');
-      echo $form->input('users',array('label'=>'User (search pattern - part of username or real name)'));
-      echo $form->input('site',array('label'=>'Site (search pattern - part of hostname or ip)'));
-      echo $form->input('onlyThisLoc',array('label'=>'Show only users from this location', 'type'=>'checkbox'));
+      echo $form->input('users', array('label'=>'User (search pattern - part of username or real name)'));
+      echo $form->input('site', array('label'=>'Site (search pattern - part of hostname or ip)'));
+      echo $form->input('status', array('options' => array(''=>'All', 'USER'=>'Confirmed by user','REDIRECT'=>'Not confirmed yet', 'LEARN'=>'Automatically learned')));
+      echo $form->input('type', array('options' => array(''=>'All sites', 'null'=>'Only parent sites','NOT null'=>'Only subsites')));
+      echo $form->input('onlyThisLoc', array('label'=>'Show only users from this location', 'type'=>'checkbox'));
 	?>
-   <?php echo $form->end('Search');?>
+   <?php echo $form->submit('Search',array('name'=>'search'));?>
+   <?php echo $form->submit('Delete all', array('name'=>'deleteMatching'));?>
 	</fieldset>
 </div>
 
@@ -30,7 +33,7 @@
    <?php 
       foreach ($logs as $log):
          # if the log contains a parent, print this first
-         if (!empty($log['Parent'])) {
+         if (!empty($log['Parent']['id'])) {
             $parent = $log;
             $parent['Log'] = $log['Parent'];
             printLog($this, $html, $parent);
@@ -38,6 +41,7 @@
          
          # print the actual log
          printLog($this, $html, $log);
+         //pr($log);
          
          # if the log contains children, print all of them
          if (!empty($log['Child'])):

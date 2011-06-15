@@ -67,9 +67,8 @@ class LogsController extends AppController {
             $conditions['Log.source'] = $this->data['Log']['status'];
          }
          if ( !empty($this->data['Log']['type'])) {
-            //$$conditions['Log.parent_id IS '. $this->data['Log']['type']] ;
-            //$conditions['Log.parent_id IS '] = $this->data['Log']['type'];
-            $a;
+            if ( $this->data['Log']['type'] == "NOT null" ) array_push($conditions, array("not" => array ( "Log.parent_id" => null) ) );
+            if ( $this->data['Log']['type'] == "null" ) $conditions['Log.parent_id'] = null;
          }
          if ( !empty($this->data['Log']['users'])) {
             # first get the ids of the matching users
