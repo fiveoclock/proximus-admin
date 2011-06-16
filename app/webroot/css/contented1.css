@@ -25,8 +25,13 @@ body {
 	width:1100px;
 }
 
-h1, h2, h3, h4, h5, h6, p, pre, blockquote, label, ul, ol, dl, 
-fieldset, address { margin:1em 0;}
+h1, h2, h3 {
+  margin: 1em 0;
+}
+   
+h4, h5, h6, p, pre, blockquote, label, ul, ol, dl, fieldset, address { 
+  margin: 0 0 8px 0;
+}
 
 h1 {font-size:167%;}
 
@@ -106,7 +111,7 @@ label {
 }
 input, textarea {
    font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-   padding: 2px;
+   padding: 1px;
    width: 100px;
    margin-left: 15px;
 }
