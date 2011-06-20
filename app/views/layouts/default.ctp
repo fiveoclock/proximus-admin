@@ -8,6 +8,8 @@
 <?php echo $html->charset('UTF-8')?>
 <?php echo $html->css('cake.forms', 'stylesheet', array("media"=>"all" ));?>
 <?php echo $html->css('contented1', 'stylesheet', array("media"=>"all" ));?>
+<?php echo $this->Html->script('jquery-1.6.1'); ?> 
+<?php echo $this->Html->script('ani'); ?> 
 </head>
 <body>
 <div id="header">

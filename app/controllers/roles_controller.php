@@ -6,7 +6,7 @@ class RolesController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter(); 
-      #$this->Auth->allowedActions = array('*');
+      #$this->MyAuth-->allowedActions = array('*');
    }
 
 	function index() {
