@@ -1,0 +1,3 @@
+cache/models/cake_model_*
+cache/persistent/cake_core_*
+logs/*.log
