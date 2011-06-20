@@ -78,7 +78,7 @@ class AdminsController extends AppController {
       # global
       $this->Acl->allow($role, 'controllers/Pages');
       $this->Acl->allow($role, 'controllers/Users/index');
-#      $this->Acl->allow($role, 'controllers/Admins/index');
+      $this->Acl->allow($role, 'controllers/Admins/index');
       $this->Acl->allow($role, 'controllers/Locations/index');
       $this->Acl->allow($role, 'controllers/NoauthRules/index');
       $this->Acl->allow($role, 'controllers/Blockednetworks/index');
