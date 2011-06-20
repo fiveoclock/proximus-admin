@@ -1,25 +1,28 @@
 <?php  
 class AppController extends Controller { 
-  var $components = array('Acl', 'Auth', 'Session', 'Tracker');
+  var $components = array('Acl', 'MyAuth', 'Session', 'Tracker');
   var $priv_roles = array(1, 3); # global- and read-only admins
 
+
+// http://unknown-host.com/blog/2011/04/06/ldap-authentication-in-cakephp/#more-35
+
    function beforeRender() {
-      $this->set('auth', $this->Auth->user());
+      $this->set('auth', $this->MyAuth->user());
       $this->set('godmode', $this->Session->read('Auth.Admin.role_id'));
    }
 
    function beforeFilter() {
       //Configure AuthComponent
-      $this->Auth->userModel = 'Admin';
-      $this->Auth->authorize = 'actions';
-      $this->Auth->actionPath = 'controllers/';
-      $this->Auth->loginAction = array('controller' => 'admins', 'action' => 'login');
-      $this->Auth->logoutRedirect = array('controller' => 'admins', 'action' => 'login');
-      $this->Auth->loginRedirect = array('controller' => 'locations', 'action' => 'start');
-      $this->Auth->loginError = 'Invalid username / password combination. Please try again';
-      $this->Auth->authError = 'Access denied';
-      $this->Auth->userScope = array('Admin.active' => 'Y');
-      if ($this->Auth->user()) {
+      $this->MyAuth->userModel = 'Admin';
+      $this->MyAuth->authorize = 'actions';
+      $this->MyAuth->actionPath = 'controllers/';
+      $this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
+      //$this->MyAuth->logoutRedirect = array('controller' => 'admins', 'action' => 'login');
+      //$this->MyAuth->loginRedirect = array('controller' => 'locations', 'action' => 'start');
+      $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
+      $this->MyAuth->authError = 'Access denied';
+      $this->MyAuth->userScope = array('Admin.active' => 'Y');
+      if ($this->MyAuth->user()) {
          $this->Session->write('Auth.locations', $this->checkAllowedLocations());
          if ($this->Session->read('Auth.Admin.role_id')==1) {
             #set godmode to 1 for global admin groups in order to see all entries
@@ -34,7 +37,8 @@ class AppController extends Controller {
    
    function checkAllowedLocations() {
       $Location = ClassRegistry::init('Location'); 
-      $loggeduser = $this->Auth->user();
+      $loggeduser = $this->MyAuth->user();
+      //pr($loggeduser);
       $locations_array = $Location->adminLocations($loggeduser['Admin']['id']);
       $results = Set::extract('/Location/id', $locations_array);
       #$locations = implode(',',$results);

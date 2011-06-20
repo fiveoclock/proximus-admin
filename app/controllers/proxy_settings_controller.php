@@ -8,7 +8,7 @@ class ProxySettingsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->Auth->allowedActions = array('*');
+      #$this->MyAuth-->allowedActions = array('*');
    }
 
    function afterFilter() {
@@ -31,7 +31,7 @@ class ProxySettingsController extends AppController {
          $this->ProxySetting->create();
          if ($this->ProxySetting->save($this->data)) {
             $this->Session->setFlash(__('The proxy has been saved', true));
-            $this->log( $this->Auth->user('username') . "; $this->name ; add: " . $this->data['ProxySetting']['id'], 'activity');
+            $this->log( $this->MyAuth-->user('username') . "; $this->name ; add: " . $this->data['ProxySetting']['id'], 'activity');
             $this->redirect(array('action'=>'index'));
          } else {
             $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
@@ -67,7 +67,7 @@ class ProxySettingsController extends AppController {
       if (!empty($this->data)) {
          if ($this->ProxySetting->save($this->data)) {
             $this->Session->setFlash(__('The proxy has been saved', true));
-            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['ProxySetting']['id'], 'activity');
+            $this->log( $this->MyAuth-->user('username') . "; $this->name ; edit: " . $this->data['ProxySetting']['id'], 'activity');
             $this->redirect(array('action'=>'index'));
          } else {
             $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
@@ -106,7 +106,7 @@ class ProxySettingsController extends AppController {
       if (!empty($this->data)) {
          if ($this->ProxySetting->save($this->data)) {
             $this->Session->setFlash(__('The proxy has been saved', true));
-            $this->log( $this->Auth->user('username') . "; $this->name ; edit database: " . $this->data['ProxySetting']['id'], 'activity');
+            $this->log( $this->MyAuth-->user('username') . "; $this->name ; edit database: " . $this->data['ProxySetting']['id'], 'activity');
             $this->redirect(array('action'=>'index'));
          } else {
             $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
@@ -126,7 +126,7 @@ class ProxySettingsController extends AppController {
 		}
 		if ($this->ProxySetting->del($id)) {
 			$this->Session->setFlash(__('Proxy deleted', true));
-         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['ProxySetting']['id'], 'activity');
+         $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['ProxySetting']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}

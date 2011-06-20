@@ -7,7 +7,7 @@ class AdminsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter(); 
-      $this->Auth->allowedActions = array('login','logout');
+      $this->MyAuth->allowedActions = array('login','logout');
    }
 
    function afterFilter() {
@@ -90,14 +90,14 @@ class AdminsController extends AppController {
 
    function login() {
       //Auth Magic
-      $this->log( $this->Auth->user('username') . "; $this->name; failed login for: " . $this->data['Admin']['username'], 'activity');
+      //$this->log( $this->MyAuth->user('username') . "; $this->name; failed login for: " . $this->data['Admin']['username'], 'activity');
       # http://lanrat.com/programs/cakephp_ldap
    }
  
    function logout() {
       $this->Session->setFlash('Good-Bye');
-      $this->log( $this->Auth->user('username') . "; $this->name; logout: " . $this->data['Admin']['username'], 'activity');
-      $this->redirect($this->Auth->logout());
+      $this->log( $this->MyAuth->user('username') . "; $this->name; logout: " . $this->data['Admin']['username'], 'activity');
+      $this->redirect($this->MyAuth->logout());
    }
 
 	function index() {
@@ -111,11 +111,11 @@ class AdminsController extends AppController {
          $this->redirect($this->Tracker->loadLastPos());
       }
 		if (!empty($this->data)) {
-         if ($this->data['Admin']['password'] == $this->Auth->password($this->data['Admin']['password_confirm'])) {
+         if ($this->data['Admin']['password'] == $this->MyAuth-->password($this->data['Admin']['password_confirm'])) {
 			   $this->Admin->create() && $this->Admin->validates();
    			if ($this->Admin->save($this->data)) {
 	   			$this->Session->setFlash(__('The Admin has been saved', true));
-               $this->log( $this->Auth->user('username') . "; $this->name; add: " . $this->data['Admin']['username'], 'activity');
+               $this->log( $this->MyAuth-->user('username') . "; $this->name; add: " . $this->data['Admin']['username'], 'activity');
 		   		$this->redirect(array('action'=>'index'));
    			} else {
 	   			$this->Session->setFlash(__('The Admin could not be saved. Please, try again.', true));
@@ -152,7 +152,7 @@ class AdminsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Admin->save($this->data)) {
 				$this->Session->setFlash(__('The Admin has been saved', true));
-            $this->log( $this->Auth->user('username') . "; $this->name ; edit: " . $this->data['Admin']['username'], 'activity');
+            $this->log( $this->MyAuth-->user('username') . "; $this->name ; edit: " . $this->data['Admin']['username'], 'activity');
 				$this->redirect(array('action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The Admin could not be saved. Please, try again.', true));
@@ -186,7 +186,7 @@ class AdminsController extends AppController {
 		}
 		if ($this->Admin->del($id)) {
 			$this->Session->setFlash(__('Admin deleted', true));
-         $this->log( $this->Auth->user('username') . "; $this->name ; delete: " . $this->data['Admin']['username'], 'activity');
+         $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Admin']['username'], 'activity');
 			$this->redirect(array('action'=>'index'));
 		}
 	}
@@ -216,8 +216,8 @@ class AdminsController extends AppController {
       }
 
       if (!empty($this->data)) {
-         if ($this->Auth->password($this->data['Admin']['password']) == $this->Auth->password($this->data['Admin']['password_confirm'])) {
-            $temp_password = $this->Auth->password($this->data['Admin']['password']);   
+         if ($this->MyAuth-->password($this->data['Admin']['password']) == $this->MyAuth-->password($this->data['Admin']['password_confirm'])) {
+            $temp_password = $this->MyAuth-->password($this->data['Admin']['password']);   
             $temp_password_confirm = $this->data['Admin']['password_confirm'];
             $this->Admin->recursive = -1;
             $admin = $this->Admin->findById($id);
@@ -227,7 +227,7 @@ class AdminsController extends AppController {
             $this->Admin->set($this->data) && $this->Admin->validates();
             if ($this->Admin->save($this->data)) {
                $this->Session->setFlash(__('New password has been set', true));
-               $this->log( $this->Auth->user('username') . "; $this->name ; set password for: " . $this->data['Admin']['username'], 'activity');
+               $this->log( $this->MyAuth-->user('username') . "; $this->name ; set password for: " . $this->data['Admin']['username'], 'activity');
                $this->redirect(array('action'=>'index'));
             } else {
                $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
