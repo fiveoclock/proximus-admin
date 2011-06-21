@@ -156,6 +156,12 @@ class Location extends AppModel {
       return $location_array;
    }
 
+   var $validate = array(
+      'code' => array(
+         'rule' => array('isUnique'),
+         'message' => 'Location code already used.'
+      )
+   );
 
 }
 ?>
