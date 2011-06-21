@@ -60,7 +60,7 @@ class UsersController extends AppController {
          $this->redirect($this->Tracker->loadLastPos());
       }
       if (!empty($this->data)) {
-         if ( $settings['auth_method_user'] != "internal" ) {
+         if ( $settings['auth_method_User'] != "internal" ) {
             $this->data['User']['password'] = "notyetset";
             $this->data['User']['password_confirm'] = "notyetset";
          }

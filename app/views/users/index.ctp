@@ -63,7 +63,7 @@ foreach ($users as $user):
 		<td class="actions">
 			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $user['User']['id'])); ?>
 			<?php 
-            if ( $settings['auth_method_user'] == "internal" ) {
+            if ( $settings['auth_method_User'] == "internal" ) {
                echo $html->link(__('Set password', true), array('action'=>'setPassword', $user['User']['id'])); 
             } ?>
 			<?php echo $html->link(__('Delete', true), array('action'=>'delete', $user['User']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $user['User']['id'])); ?>
