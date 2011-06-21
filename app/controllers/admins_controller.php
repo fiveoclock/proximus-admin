@@ -216,7 +216,7 @@ class AdminsController extends AppController {
       }
 
       if (!empty($this->data)) {
-         if ($this->MyAuth->password($this->data['Admin']['password']) == $this->MyAuth-->password($this->data['Admin']['password_confirm'])) {
+         if ($this->MyAuth->password($this->data['Admin']['password']) == $this->MyAuth->password($this->data['Admin']['password_confirm'])) {
             $temp_password = $this->MyAuth->password($this->data['Admin']['password']);   
             $temp_password_confirm = $this->data['Admin']['password_confirm'];
             $this->Admin->recursive = -1;

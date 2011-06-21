@@ -65,7 +65,7 @@ class UsersController extends AppController {
             $this->data['User']['password_confirm'] = "notyetset";
          }
 
-         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth-->password($this->data['User']['password_confirm'])) {
+         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth->password($this->data['User']['password_confirm'])) {
             $temp_password = $this->MyAuth->password($this->data['User']['password']);
             $temp_password_confirm = $this->data['User']['password_confirm'];
             $this->data['User']['password'] = $temp_password;
@@ -155,7 +155,7 @@ class UsersController extends AppController {
          }
       }
       if (!empty($this->data)) {
-         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth-->password($this->data['User']['password_confirm'])) {
+         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth->password($this->data['User']['password_confirm'])) {
             $temp_password = $this->MyAuth->password($this->data['User']['password']);
             $temp_password_confirm = $this->data['User']['password_confirm'];
             $this->User->recursive = -1;
