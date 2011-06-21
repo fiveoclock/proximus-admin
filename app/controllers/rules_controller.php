@@ -7,7 +7,7 @@ class RulesController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->MyAuth-->allowedActions = array('*');
+      #$this->MyAuth->allowedActions = array('*');
    }
 
 	function getAll() {
@@ -78,7 +78,7 @@ class RulesController extends AppController {
                }
                else {
                   $this->Session->setFlash(__('The Rule has been saved', true));
-                  $this->log( $this->MyAuth-->user('username') . "; $this->name; create from log: " . $this->data['Rule']['id'], 'activity');
+                  $this->log( $this->MyAuth->user('username') . "; $this->name; create from log: " . $this->data['Rule']['id'], 'activity');
                } 
                $this->redirect(array('controller'=>'logs','action'=>'searchlist'));
             } else {
@@ -125,7 +125,7 @@ class RulesController extends AppController {
 			
          if ($this->Rule->save($this->data)) {
 				$this->Session->setFlash(__('The Rule has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name; add: " . $this->data['Rule']['id'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name; add: " . $this->data['Rule']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 
 			} else {
@@ -183,7 +183,7 @@ class RulesController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Rule->save($this->data)) {
 				$this->Session->setFlash(__('The Rule has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name; edit: " . $this->data['Rule']['id'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name; edit: " . $this->data['Rule']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Rule could not be saved. Please, try again.', true));
@@ -219,7 +219,7 @@ class RulesController extends AppController {
 
 		if ($this->Rule->delete($id)) {
 			$this->Session->setFlash(__('Rule deleted', true));
-         $this->log( $this->MyAuth-->user('username') . "; $this->name; delete: " . $this->data['Rule']['id'], 'activity');
+         $this->log( $this->MyAuth->user('username') . "; $this->name; delete: " . $this->data['Rule']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}

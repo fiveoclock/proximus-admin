@@ -8,7 +8,7 @@ class UsersController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->MyAuth-->allowedActions = array('*');
+      #$this->MyAuth->allowedActions = array('*');
    }
 
    function afterFilter() {
@@ -65,8 +65,8 @@ class UsersController extends AppController {
             $this->data['User']['password_confirm'] = "notyetset";
          }
 
-         if ($this->MyAuth-->password($this->data['User']['password']) == $this->MyAuth-->password($this->data['User']['password_confirm'])) {
-            $temp_password = $this->MyAuth-->password($this->data['User']['password']);
+         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth-->password($this->data['User']['password_confirm'])) {
+            $temp_password = $this->MyAuth->password($this->data['User']['password']);
             $temp_password_confirm = $this->data['User']['password_confirm'];
             $this->data['User']['password'] = $temp_password;
             $this->data['User']['password_confirm'] = $temp_password_confirm;
@@ -74,7 +74,7 @@ class UsersController extends AppController {
             $this->User->create() && $this->User->validates();
             if ($this->User->save($this->data)) {
                $this->Session->setFlash(__('The User was saved', true));
-               $this->log( $this->MyAuth-->user('username') . "; $this->name ; add: " . $this->data['User']['username'], 'activity');
+               $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['User']['username'], 'activity');
                $this->redirect(array('action'=>'index'));
             } else {
                #$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
@@ -113,7 +113,7 @@ class UsersController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->User->save($this->data)) {
 				$this->Session->setFlash(__('The User has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name ; edit: " . $this->data['User']['username'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['User']['username'], 'activity');
 				$this->redirect(array('action'=>'index'));
 			} else {
 				$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
@@ -155,8 +155,8 @@ class UsersController extends AppController {
          }
       }
       if (!empty($this->data)) {
-         if ($this->MyAuth-->password($this->data['User']['password']) == $this->MyAuth-->password($this->data['User']['password_confirm'])) {
-            $temp_password = $this->MyAuth-->password($this->data['User']['password']);
+         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth-->password($this->data['User']['password_confirm'])) {
+            $temp_password = $this->MyAuth->password($this->data['User']['password']);
             $temp_password_confirm = $this->data['User']['password_confirm'];
             $this->User->recursive = -1;
             $user = $this->User->findById($id);
@@ -166,7 +166,7 @@ class UsersController extends AppController {
             $this->User->set($this->data) && $this->User->validates();
             if ($this->User->save($this->data)) {
                $this->Session->setFlash(__('New password was set', true));
-               $this->log( $this->MyAuth-->user('username') . "; $this->name ; set password: " . $this->data['User']['username'], 'activity');
+               $this->log( $this->MyAuth->user('username') . "; $this->name ; set password: " . $this->data['User']['username'], 'activity');
                $this->redirect(array('action'=>'index'));
             } else {
                $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
@@ -188,7 +188,7 @@ class UsersController extends AppController {
 		}
 		if ($this->User->delete($id)) {
 			$this->Session->setFlash(__('User deleted', true));
-         $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['User']['username'], 'activity');
+         $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['User']['username'], 'activity');
 			$this->redirect(array('action'=>'index'));
 		}
 	}

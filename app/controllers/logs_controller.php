@@ -94,7 +94,7 @@ class LogsController extends AppController {
          $tree = $this->Log->find('all',array('conditions'=>$conditions ));
          $this->set('logs',$tree);
 
-         $this->log( $this->MyAuth-->user('username') . "; $this->name; search logs", "activity");
+         $this->log( $this->MyAuth->user('username') . "; $this->name; search logs", "activity");
          #pr($conditions);    # debug
       }
    }
@@ -180,7 +180,7 @@ class LogsController extends AppController {
       }
 
 		if ($this->Log->delete($id)) {
-         $this->log( $this->MyAuth-->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
+         $this->log( $this->MyAuth->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
 			$this->Session->setFlash(__('Log deleted', true));
 		   $this->redirect(array('action'=>'searchlist'));
 		}

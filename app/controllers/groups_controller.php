@@ -6,7 +6,7 @@ class GroupsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->MyAuth-->allowedActions = array('*');
+      #$this->MyAuth->allowedActions = array('*');
    }
 
    function afterFilter() {
@@ -47,7 +47,7 @@ class GroupsController extends AppController {
 			$this->Group->create();
 			if ($this->Group->save($this->data)) {
 				$this->Session->setFlash(__('The Group has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name ; add: " . $this->data['Group']['id'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['Group']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Group could not be saved. Please, try again.', true));
@@ -105,7 +105,7 @@ class GroupsController extends AppController {
 				   }
 				}
 				$this->Session->setFlash(__('The Group has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name ; edit: " . $this->data['Group']['id'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['Group']['id'], 'activity');
 				
 				$this->redirect($this->Tracker->loadLastPos());
 			} else {
@@ -158,7 +158,7 @@ class GroupsController extends AppController {
       }
 		if ($this->Group->delete($id, true)) {
 			$this->Session->setFlash(__('Group deleted', true));
-         $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Group']['id'], 'activity');
+         $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['Group']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}

@@ -8,7 +8,7 @@ class LocationsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->MyAuth-->allowedActions = array('*');
+      #$this->MyAuth->allowedActions = array('*');
    }
 
    function afterFilter() {
@@ -98,7 +98,7 @@ class LocationsController extends AppController {
 			$this->Location->create();
 			if ($this->Location->save($this->data)) {
 				$this->Session->setFlash(__('The Location has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name ; add: " . $this->data['Location']['id'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['Location']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Location could not be saved. Please, try again.', true));
@@ -119,7 +119,7 @@ class LocationsController extends AppController {
 		if (!empty($this->data)) {
 			if ($this->Location->save($this->data)) {
 				$this->Session->setFlash(__('The Location has been saved', true));
-            $this->log( $this->MyAuth-->user('username') . "; $this->name ; edit: " . $this->data['Location']['id'], 'activity');
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['Location']['id'], 'activity');
             $this->redirect($this->Tracker->loadLastPos());
 			} else {
 				$this->Session->setFlash(__('The Location could not be saved. Please, try again.', true));
@@ -140,7 +140,7 @@ class LocationsController extends AppController {
       }
       if ($id == 1) {
          $this->Session->setFlash(__('Location with id 1 is a special location and cannot be deleted.', true));
-         $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Location']['id'], 'activity');
+         $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['Location']['id'], 'activity');
          $this->redirect($this->Tracker->loadLastPos());
       }
       if ( $this->Location->User->find('count', array('conditions'=>array('User.location_id'=>$id))) > 0 ) {
