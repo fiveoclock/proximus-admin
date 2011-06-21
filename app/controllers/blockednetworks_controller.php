@@ -108,7 +108,7 @@ class BlockednetworksController extends AppController {
 			$this->Session->setFlash(__('Invalid id for Blockednetwork', true));
 			$this->redirect(array('action'=>'index'));
 		}
-		if ($this->Blockednetwork->del($id)) {
+		if ($this->Blockednetwork->delete($id)) {
 			$this->Session->setFlash(__('Blockednetwork deleted', true));
          $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Blockednetwork']['id'], 'activity');
 			$this->redirect(array('action'=>'index'));

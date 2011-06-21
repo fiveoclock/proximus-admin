@@ -184,7 +184,7 @@ class AdminsController extends AppController {
 			$this->Session->setFlash(__('Invalid id for Admin', true));
 			$this->redirect(array('action'=>'index'));
 		}
-		if ($this->Admin->del($id)) {
+		if ($this->Admin->delete($id)) {
 			$this->Session->setFlash(__('Admin deleted', true));
          $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Admin']['username'], 'activity');
 			$this->redirect(array('action'=>'index'));

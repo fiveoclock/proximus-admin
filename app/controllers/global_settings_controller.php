@@ -71,7 +71,7 @@ class GlobalSettingsController extends AppController {
          $this->Session->setFlash(__('Invalid id', true));
          $this->redirect(array('action'=>'index'));
       }
-      if ($this->GlobalSetting->del($id)) {
+      if ($this->GlobalSetting->delete($id)) {
          $this->Session->setFlash(__('Setting deleted', true));
          $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['GlobalSetting']['id'], 'activity');
          $this->redirect(array('action'=>'index'));

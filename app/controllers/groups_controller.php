@@ -156,7 +156,7 @@ class GroupsController extends AppController {
          $this->Session->setFlash(__('Group is not empty, cannot delete', true));
          $this->redirect($this->Tracker->loadLastPos());
       }
-		if ($this->Group->del($id, true)) {
+		if ($this->Group->delete($id, true)) {
 			$this->Session->setFlash(__('Group deleted', true));
          $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Group']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());

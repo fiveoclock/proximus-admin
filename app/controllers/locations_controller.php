@@ -143,11 +143,11 @@ class LocationsController extends AppController {
          $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $this->data['Location']['id'], 'activity');
          $this->redirect($this->Tracker->loadLastPos());
       }
-      if ( $this->Location->User->findCount(array('User.location_id'=>$id)) > 0 ) {
+      if ( $this->Location->User->find('count', array('conditions'=>array('User.location_id'=>$id))) > 0 ) {
          $this->Session->setFlash(__('Cannot delete; please remove users from this location before', true));
          $this->redirect($this->Tracker->loadLastPos());
       }
-      if ($this->Location->del($id, true)) {
+      if ($this->Location->delete($id, true)) {
          $this->Session->setFlash(__('Location deleted', true));
          $this->redirect($this->Tracker->loadLastPos());
       }  

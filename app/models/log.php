@@ -68,7 +68,7 @@ function deleteLog($id = null,$loc_code = null) {
             $condition = array('parent_id'=>$id);
             $this->deleteAll($condition);
          }
-         if ($this->del($id)) {
+         if ($this->delete($id)) {
             return true;
          }
          else {

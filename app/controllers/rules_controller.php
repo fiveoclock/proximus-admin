@@ -217,7 +217,7 @@ class RulesController extends AppController {
          }
       }
 
-		if ($this->Rule->del($id)) {
+		if ($this->Rule->delete($id)) {
 			$this->Session->setFlash(__('Rule deleted', true));
          $this->log( $this->MyAuth-->user('username') . "; $this->name; delete: " . $this->data['Rule']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());

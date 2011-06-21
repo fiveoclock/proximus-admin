@@ -108,7 +108,7 @@ class NoauthRulesController extends AppController {
 			$this->Session->setFlash(__('Invalid id for Noauth rule', true));
 			$this->redirect($this->Tracker->loadLastPos());
 		}
-		if ($this->NoauthRule->del($id)) {
+		if ($this->NoauthRule->delete($id)) {
 			$this->Session->setFlash(__('Noauth rule deleted', true));
          $this->log( $this->MyAuth-->user('username') . "; $this->name ; delete: " . $id, 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
