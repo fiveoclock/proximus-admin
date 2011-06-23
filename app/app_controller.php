@@ -8,20 +8,21 @@ class AppController extends Controller {
 
    function beforeRender() {
       $this->set('auth', $this->MyAuth->user());
-      $this->set('godmode', $this->Session->read('Auth.Admin.role_id'));
+      //$this->set('godmode', $this->Session->read('Auth.Admin.role_id'));
    }
 
    function beforeFilter() {
       //Configure AuthComponent
       $this->MyAuth->userModel = 'Admin';
-      $this->MyAuth->authorize = 'actions';
-      $this->MyAuth->actionPath = 'controllers/';
+      //$this->MyAuth->authorize = 'controller';
+      //$this->MyAuth->actionPath = 'controllers/';
       $this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
       //$this->MyAuth->logoutRedirect = array('controller' => 'admins', 'action' => 'login');
-      //$this->MyAuth->loginRedirect = array('controller' => 'locations', 'action' => 'start');
-      $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
-      $this->MyAuth->authError = 'Access denied';
-      $this->MyAuth->userScope = array('Admin.active' => 'Y');
+      $this->MyAuth->loginRedirect = array('admin' => true, 'controller' => 'locations', 'action' => 'start');
+      //$this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
+      //$this->MyAuth->authError = 'Access denied';
+      //$this->MyAuth->userScope = array('Admin.active' => 'Y');
+/*
       if ($this->MyAuth->user()) {
          $this->Session->write('Auth.locations', $this->checkAllowedLocations());
          if ($this->Session->read('Auth.Admin.role_id')==1) {
@@ -32,7 +33,7 @@ class AppController extends Controller {
       else {
          $this->Session->destroy();
       }
-      
+ */     
    } 
    
    function checkAllowedLocations() {

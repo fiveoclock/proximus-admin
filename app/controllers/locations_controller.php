@@ -19,13 +19,13 @@ class LocationsController extends AppController {
    }  
 
 # Not in use
-	function index() {
+	function admin_index() {
 		$this->Location->recursive = 0;
 		$this->set('locations', $this->paginate());
       #$this->set('locations', $this->paginate(null, array('Location.id'=>$this->Session->read('Auth.locations'))));
 	}
 	
-	function start() {
+	function admin_start() {
       $loggeduser = $this->MyAuth->user();
       $allowed_locations = $this->Session->read('Auth.locations');
       # allow everyone to view location ALL...
@@ -47,7 +47,7 @@ class LocationsController extends AppController {
       $this->set('locations', $locations);
    }
 
-	function view($id = null) {
+	function admin_view($id = null) {
       $loggeduser = $this->MyAuth->user();
       $allowed_locations = $this->Session->read('Auth.locations');
       # allow everyone to view location ALL...
@@ -55,12 +55,12 @@ class LocationsController extends AppController {
 
       if (!$id) {
 			$this->Session->setFlash(__('Invalid Location.', true));
-			$this->redirect(array('action'=>'start'));
+         $this->redirect($this->Tracker->loadLastPos());
 		}
       if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
          if (!in_array($id, $allowed_locations)) {
             $this->Session->setFlash(__('You are not allowed to access this location', true));
-            $this->redirect(array('action'=>'start'));
+            $this->redirect($this->Tracker->loadLastPos());
          }
       }
       $this->Location->recursive = 0;
@@ -89,7 +89,7 @@ class LocationsController extends AppController {
       
 	}
 
-	function add() {
+	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -107,7 +107,7 @@ class LocationsController extends AppController {
 		}
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -133,7 +133,7 @@ class LocationsController extends AppController {
 
 # implement authentification
 # test out if child objects are being deleted
-   function delete($id = null) {
+   function admin_delete($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid id for Location', true));
          $this->redirect($this->Tracker->loadLastPos());

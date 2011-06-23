@@ -6,7 +6,11 @@ class AdminsController extends AppController {
    var $paginate = array('limit' => 100);
 
    function beforeFilter() {
-      parent::beforeFilter(); 
+      //parent::beforeFilter();
+      $this->MyAuth->userModel = 'Admin';
+      //$this->MyAuth->authorize = 'actions';
+      //$this->MyAuth->actionPath = 'controllers/';
+      $this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
       $this->MyAuth->allowedActions = array('login','logout');
    }
 
@@ -18,7 +22,7 @@ class AdminsController extends AppController {
    }
 
    #use this function to add/update permissions for roles
-   function initDB() {
+   function admin_initDB() {
       $role =& $this->Admin->Role;
       //Rights for Global Admin role
       $role->id = 1;
@@ -100,12 +104,12 @@ class AdminsController extends AppController {
       $this->redirect($this->MyAuth->logout());
    }
 
-	function index() {
+	function admin_index() {
 		$this->Admin->recursive = 0;
 		$this->set('admins', $this->paginate());
 	}
 
-	function add() {
+	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -140,7 +144,7 @@ class AdminsController extends AppController {
 		$this->set(compact('locations', 'roles'));
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Admin', true));
 			$this->redirect(array('action'=>'index'));
@@ -179,7 +183,7 @@ class AdminsController extends AppController {
 		$this->set(compact('locations','roles'));
 	}
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Admin', true));
 			$this->redirect(array('action'=>'index'));
@@ -192,7 +196,7 @@ class AdminsController extends AppController {
 	}
 
 
-   function view($id = null) {
+   function admin_view($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid admin.', true));
          $this->redirect(array('controller'=>'locations','action'=>'start'));
@@ -202,7 +206,7 @@ class AdminsController extends AppController {
       $this->Session->write("Admin",$id);
    }
 
-   function changePassword($id = null) {
+   function admin_changePassword($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid Admin', true));
          $this->redirect(array('action'=>'index'));

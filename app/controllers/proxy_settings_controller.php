@@ -18,11 +18,11 @@ class ProxySettingsController extends AppController {
       }
    }   
 
-	function index() {
+	function admin_index() {
       $this->set('proxy_settings', $this->paginate());
 	}
 
-	function add() {
+	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -55,7 +55,7 @@ class ProxySettingsController extends AppController {
       $this->set(compact('locations'));
    }
 
-   function edit($id = null) {
+   function admin_edit($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid proxy', true));
          $this->redirect(array('action'=>'index'));
@@ -94,7 +94,7 @@ class ProxySettingsController extends AppController {
       $this->set(compact('locations'));
    }
 
-   function editdb($id = null) {
+   function admin_editdb($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid proxy', true));
          $this->redirect(array('action'=>'index'));
@@ -119,7 +119,7 @@ class ProxySettingsController extends AppController {
    }
 
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for proxy', true));
 			$this->redirect($this->Tracker->loadLastPos());

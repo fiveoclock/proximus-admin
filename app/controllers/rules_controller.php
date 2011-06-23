@@ -21,7 +21,7 @@ class RulesController extends AppController {
       }   
    }   
 
-   function search($pattern = null) {
+   function admin_search($pattern = null) {
       # code after form submit
 		if (!empty($this->data)) {
          $pattern = "'%".$this->data['Rule']['pattern']."%'";
@@ -58,7 +58,7 @@ class RulesController extends AppController {
       $this->set(compact('locations'));
    }
   
-	function createFromLog($log_id = null,$location_id = null) {
+	function admin_createFromLog($log_id = null,$location_id = null) {
          
          if (!empty($this->data)) {
             $this->Rule->create();
@@ -115,7 +115,7 @@ class RulesController extends AppController {
 
    }
 
-	function add($location_id = null, $group_id = null) {
+	function admin_add($location_id = null, $group_id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {  
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -162,7 +162,7 @@ class RulesController extends AppController {
       }
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -203,7 +203,7 @@ class RulesController extends AppController {
 		
 	}
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Rule', true));
 			$this->redirect($this->Tracker->loadLastPos());

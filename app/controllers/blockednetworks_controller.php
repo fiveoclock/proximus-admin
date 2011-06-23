@@ -10,33 +10,15 @@ class BlockednetworksController extends AppController {
       #$this->MyAuth->allowedActions = array('*');
    }
 
-	function index() {
+	function admin_index() {
 		$this->Blockednetwork->recursive = 0;
 		$this->set('blockednetworks', $this->paginate());
-      $this->savePos();
 	}
 
-   function savePos() {
-      #pr($this->params['controller']);
-      #pr($this->params['action']);
-      #pr($this->params['pass'][0]);
-      if (!empty($this->params['controller'])) {$this->Session->write('PrevPos.Controller',$this->params['controller']);}
-      if (!empty($this->params['action'])) {$this->Session->write('PrevPos.Action',$this->params['action']);}
-      if (!empty($this->params['pass'][0])) {$this->Session->write('PrevPos.Id',$this->params['pass'][0]);}
-   }
-
-   function redirectBack() {
-      $this->redirect(array('controller'=>$this->Session->read('PrevPos.Controller'),
-         'action'=>$this->Session->read('PrevPos.Action'),
-         $this->Session->read('PrevPos.Id')
-         )
-      );
-   }
-
-	function add() {
+	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirectBack();
+         $this->redirect(array('action'=>'index'));
       }
 		if (!empty($this->data)) {
 			$this->Blockednetwork->create();
@@ -65,10 +47,10 @@ class BlockednetworksController extends AppController {
       $this->set(compact('locations'));
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirectBack();
+			$this->redirect(array('action'=>'index'));
       }
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Blockednetwork', true));
@@ -103,7 +85,7 @@ class BlockednetworksController extends AppController {
       $this->set(compact('locations'));
 	}
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Blockednetwork', true));
 			$this->redirect(array('action'=>'index'));

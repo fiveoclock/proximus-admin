@@ -19,12 +19,12 @@ class GlobalSettingsController extends AppController {
 
 
 
-   function index() {
+   function admin_index() {
       $this->GlobalSetting->recursive = 0;
       $this->set('global_settings', $this->paginate());
    }
 
-   function add() {
+   function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -43,7 +43,7 @@ class GlobalSettingsController extends AppController {
       }
    }
 
-   function edit($id = null) {
+   function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -66,7 +66,7 @@ class GlobalSettingsController extends AppController {
       }
    }
 
-   function delete($id = null) {
+   function admin_delete($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid id', true));
          $this->redirect(array('action'=>'index'));

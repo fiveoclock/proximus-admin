@@ -65,7 +65,6 @@ class MyAuthComponent extends AuthComponent {
 
 
 		if ($loginAction == $url) {
-         $controller->data[$this->userModel] = $controller->data["Admin"];
 			if (empty($controller->data) || !isset($controller->data[$this->userModel])) {
 				if (!$this->Session->check('Auth.redirect') && env('HTTP_REFERER')) {
 					$this->Session->write('Auth.redirect', $controller->referer(null, true));

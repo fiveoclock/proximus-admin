@@ -20,7 +20,7 @@ class EventlogsController extends AppController {
       }
    }
 
-   function index() {
+   function admin_index() {
       if ( ! $this->data ) {
          $this->data['lines'] = 50;
       }
@@ -44,7 +44,7 @@ class EventlogsController extends AppController {
       $this->set('eventlogs', $logs);
    }
 
-   function delete($id = null) {
+   function admin_delete($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid id', true));
          $this->redirect(array('action'=>'index'));

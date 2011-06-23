@@ -17,7 +17,7 @@ class NoauthRulesController extends AppController {
       }   
    }   
 
-	function index() {
+	function admin_index() {
 
       # If form submit has been done
       if (!empty($this->data) && isset($this->data['NoauthRule']['searchstring'])) {
@@ -31,7 +31,7 @@ class NoauthRulesController extends AppController {
       }
 	}
 
-	function add() {
+	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -64,7 +64,7 @@ class NoauthRulesController extends AppController {
       $this->set(compact('locations'));
 	}
 
-	function edit($id = null) {
+	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -103,7 +103,7 @@ class NoauthRulesController extends AppController {
       $this->set(compact('locations'));
 	}
 
-	function delete($id = null) {
+	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Noauth rule', true));
 			$this->redirect($this->Tracker->loadLastPos());

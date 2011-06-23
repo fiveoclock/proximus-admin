@@ -9,7 +9,7 @@ class LogsController extends AppController {
       parent::beforeFilter();
    }
 
-   function searchlist() {
+   function admin_searchlist() {
 //      pr($this->params['form'] );
 //      pr($this->data);
       # retrieve data for form fields
@@ -149,12 +149,12 @@ class LogsController extends AppController {
       return false;
    }
 
-	function index() {
+	function admin_index() {
 		$this->Log->recursive = 0;
 		$this->set('logs', $this->paginate());
 	}
 
-	function view($id = null) {
+	function admin_view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid Log.', true));
 			$this->redirect(array('action'=>'index'));
@@ -162,7 +162,7 @@ class LogsController extends AppController {
 		$this->set('log', $this->Log->read(null, $id));
 	}
 
-	function delete($id = null, $proxy_id = null) {
+	function admin_delete($id = null, $proxy_id = null) {
 		if (!$id || !$proxy_id) {
 			$this->Session->setFlash(__('Invalid id for Log', true));
 			$this->redirect(array('action'=>'searchlist'));
