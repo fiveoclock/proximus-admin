@@ -6,12 +6,10 @@ class AdminsController extends AppController {
    var $paginate = array('limit' => 100);
 
    function beforeFilter() {
-      //parent::beforeFilter();
-      $this->MyAuth->userModel = 'Admin';
-      //$this->MyAuth->authorize = 'actions';
-      //$this->MyAuth->actionPath = 'controllers/';
-      $this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
-      $this->MyAuth->allowedActions = array('login','logout');
+      parent::beforeFilter();
+      //$this->MyAuth->userModel = 'Admin';
+      //$this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
+      //$this->MyAuth->allowedActions = array('login','logout');
    }
 
    function afterFilter() {
@@ -92,13 +90,13 @@ class AdminsController extends AppController {
    }
 
 
-   function login() {
+   function admin_login() {
       //Auth Magic
       //$this->log( $this->MyAuth->user('username') . "; $this->name; failed login for: " . $this->data['Admin']['username'], 'activity');
       # http://lanrat.com/programs/cakephp_ldap
    }
  
-   function logout() {
+   function admin_logout() {
       $this->Session->setFlash('Good-Bye');
       $this->log( $this->MyAuth->user('username') . "; $this->name; logout: " . $this->data['Admin']['username'], 'activity');
       $this->redirect($this->MyAuth->logout());

@@ -25,7 +25,7 @@ if ( isset($auth['Admin']) ) {
       $user = $auth['Admin']['username'];
       echo " | ";
       echo $html->link($user.'s '.'Profile',array('admin' => true, 'controller'=>'admins','action'=>'view',$auth['Admin']['id']));
-      echo $html->link('Logout','/admins/logout',null,null,false);
+      echo $html->link('Logout','/admin/admins/logout',null,null,false);
       #echo " | ";
       #echo $auth['Admin']['username'];
    }
@@ -37,10 +37,10 @@ if ( isset($auth['User']) ) {
    $user = $auth['User']['username'];
 
    echo $html->link('Home','/pages/userstart',null,null,false);
-   echo $html->link('My logs','/profiles/logs',null,null,false);
+   echo $html->link('My logs','/user/profiles/logs',null,null,false);
    echo " | ";
-   echo $html->link($user.'s '.'Profile',array('user' => true, 'controller'=>'admins','action'=>'view',$auth['User']['id']));
-   echo $html->link('Logout','/profiles/logout',null,null,false);
+   echo $html->link($user.'s '.'Profile',array('user' => true, 'controller'=>'profiles','action'=>'view',$auth['User']['id']));
+   echo $html->link('Logout','/user/profiles/logout',null,null,false);
 
 }
 ?>

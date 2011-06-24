@@ -18,10 +18,6 @@ class UsersController extends AppController {
       }   
    }   
 
-   function login() {
-
-   }
-
 	function admin_index() {
       # get global settings
       $Setting  = ClassRegistry::init('GlobalSetting');

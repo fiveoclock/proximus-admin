@@ -16,7 +16,7 @@ class AppController extends Controller {
       $this->MyAuth->userModel = 'Admin';
       //$this->MyAuth->authorize = 'controller';
       //$this->MyAuth->actionPath = 'controllers/';
-      $this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
+      $this->MyAuth->loginAction = array('admin' => true, 'controller' => 'admins', 'action' => 'login');
       //$this->MyAuth->logoutRedirect = array('controller' => 'admins', 'action' => 'login');
       $this->MyAuth->loginRedirect = array('admin' => true, 'controller' => 'locations', 'action' => 'start');
       //$this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
