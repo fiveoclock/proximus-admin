@@ -6,7 +6,7 @@
 	</ul>
 </div>
 <div class="noauth_rules form">
-<?php echo $form->create(null, array('url' => '/noauth_rules/index')); ?>
+<?php echo $form->create(null, array('url' => '/admin/noauth_rules/index')); ?>
    <fieldset>
    <?php
       echo $form->input('searchstring',array('label'=>'Optionally enter a search pattern (part of sitename)'));

@@ -1,5 +1,5 @@
 <div class="logs form">
-<?php echo $form->create(null, array('url' => '/logs/searchlist')); ?>
+<?php echo $form->create(null, array('url' => '/admin/logs/searchlist')); ?>
 	<fieldset>
       <legend><?php __('View Logs');?></legend>
 	<?php

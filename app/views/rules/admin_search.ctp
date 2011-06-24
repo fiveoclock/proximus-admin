@@ -1,5 +1,5 @@
 <div class="rules form">
-<?php echo $form->create(null, array('url' => '/rules/search')); ?>
+<?php echo $form->create(null, array('url' => '/admin/rules/search')); ?>
 	<fieldset>
       <legend><?php __('Check rules');?></legend>
 	<?php

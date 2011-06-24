@@ -2,7 +2,7 @@
 <h2><?php __('Eventlog');?></h2>
 
 <div class="eventlogs form">
-<?php echo $form->create(null, array('url' => '/eventlogs/index')); ?>
+<?php echo $form->create(null, array('url' => '/admin/eventlogs/index')); ?>
    <fieldset>
       <legend><?php __('View Logs');?></legend>
    <?php
