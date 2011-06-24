@@ -38,7 +38,7 @@ class RulesController extends AppController {
       }
 
       if($this->Session->read('Auth.godmode') !=1) {
-         $allowed_locations = $this->Session->read('Auth.locations');
+         $allowed_locations = parent::checkAllowedLocations();
          $find_condition = array('fields' => array('Location.*'),
                               'conditions'=>array("AND" => array(
                                     'Location.id'=>$allowed_locations,
@@ -137,7 +137,7 @@ class RulesController extends AppController {
 		
       if(!is_null($location_id)) {
          if ($this->Session->read('Auth.godmode') != 1) {
-            if (!in_array($location_id,$this->Session->read('Auth.locations'))) {
+            if (!in_array($location_id, parent::checkAllowedLocations() )) {
                $this->Session->setFlash(__('You are not allowed to add Rules to this Location', true));
                $this->redirect($this->Tracker->loadLastPos());
              }
@@ -150,7 +150,7 @@ class RulesController extends AppController {
       if(!is_null($group_id)) {
          $group = $this->Group->read(null, $group_id);
          if ($this->Session->read('Auth.godmode') != 1) {
-            if (!in_array($group['Group']['location_id'],$this->Session->read('Auth.locations'))) {
+            if (!in_array($group['Group']['location_id'], parent::checkAllowedLocations() )) {
                $this->Session->setFlash(__('You are not allowed to add Rules for this Group', true));
 			      $this->redirect(array('controller'=>'locations','action'=>'start'));
             }
@@ -174,7 +174,7 @@ class RulesController extends AppController {
       
       $rule = $this->Rule->read(null, $id);
       if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($rule['Rule']['location_id'],$this->Session->read('Auth.locations'))) {
+         if (!in_array($rule['Rule']['location_id'], parent::checkAllowedLocations() )) {
             $this->Session->setFlash(__('You are not allowed to access this Rule', true));
             $this->redirect($this->Tracker->loadLastPos());
          }
@@ -211,7 +211,7 @@ class RulesController extends AppController {
 
       $rule = $this->Rule->read(null, $id);
       if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($rule['Rule']['location_id'],$this->Session->read('Auth.locations'))) {
+         if (!in_array($rule['Rule']['location_id'], parent::checkAllowedLocations() )) {
             $this->Session->setFlash(__('You are not allowed to access this Rule', true));
             $this->redirect($this->Tracker->loadLastPos());
          }

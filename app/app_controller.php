@@ -47,5 +47,15 @@ class AppController extends Controller {
 
       return $results;   
    }
+
+   function getAdminLocations() {
+      $Location = ClassRegistry::init('Location'); 
+      $loggeduser = $this->MyAuth->user();
+      $locations_array = $Location->adminLocations($loggeduser['Admin']['id']);
+      return $locations_array;   
+      $results = Set::extract('/Location/id', $locations_array);
+      return $results;   
+   }
+
 } 
 ?>

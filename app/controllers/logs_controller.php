@@ -23,7 +23,7 @@ class LogsController extends AppController {
 
       # get proxys / locations
       if($this->Session->read('Auth.godmode') !=1) {
-         $allowed_locations = $this->Session->read('Auth.locations');
+         $allowed_locations = parent::checkAllowedLocations();
          $find_conditions = array('Location.id'=>$allowed_locations,
                                  'Location.id NOT' => "1");
       }
@@ -173,7 +173,7 @@ class LogsController extends AppController {
 
       $log = $this->Log->read(null, $id);
       if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($log['Log']['location_id'],$this->Session->read('Auth.locations'))) {
+         if (!in_array($log['Log']['location_id'], parent::checkAllowedLocations() )) {
             $this->Session->setFlash(__('You are not allowed to access this Log', true));
 			   $this->redirect(array('action'=>'searchlist'));
          }

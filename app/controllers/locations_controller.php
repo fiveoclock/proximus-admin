@@ -27,7 +27,7 @@ class LocationsController extends AppController {
 	
 	function admin_start() {
       $loggeduser = $this->MyAuth->user();
-      $allowed_locations = $this->Session->read('Auth.locations');
+      $allowed_locations = parent::checkAllowedLocations();
       # allow everyone to view location ALL...
       array_push($allowed_locations, 1);
 
@@ -49,7 +49,7 @@ class LocationsController extends AppController {
 
 	function admin_view($id = null) {
       $loggeduser = $this->MyAuth->user();
-      $allowed_locations = $this->Session->read('Auth.locations');
+      $allowed_locations = parent::checkAllowedLocations();
       # allow everyone to view location ALL...
       array_push($allowed_locations, 1);
 
