@@ -1,5 +1,6 @@
-<div class="users form">
-<?php echo $form->create('User', array('action' => 'setPassword'));?>	
+<div class="profiles form">
+<?php //echo $form->create('Profile', array('action' => 'setPassword'));?>	
+<?php echo $form->create('User', array('url'=>$this->Html->url(array('user' => true, 'controller'=>'profiles', 'action'=>'setPassword'), true))); ?>
    <fieldset>
  		<legend><?php __('Change password');?></legend>
 	<?php
