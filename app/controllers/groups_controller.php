@@ -162,5 +162,27 @@ class GroupsController extends AppController {
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}
+
+
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      $locs = parent::getAdminLocationIds();
+      $group = $this->Group->read(null, $this->passedArgs['0'] );
+      $locId = $group['Location']['id'];
+      //pr($locs);
+
+      if ( in_array($this->action, array('admin_view', 'admin_add', 'admin_edit' ) )) {
+         if (!in_array($locId, $locs )) {
+            $this->Session->setFlash(__('You are not allowed to access this group', true));
+            return false;
+         }
+         return true;
+      }
+
+      return false;
+   }
+
 }
 ?>

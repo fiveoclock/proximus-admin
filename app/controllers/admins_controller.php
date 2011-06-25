@@ -7,88 +7,15 @@ class AdminsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      //$this->MyAuth->userModel = 'Admin';
-      //$this->MyAuth->loginAction = array('controller' => 'admins', 'action' => 'login');
-      //$this->MyAuth->allowedActions = array('login','logout');
+      //$this->MyAuth->allowedActions = array('admin_login');
    }
 
    function afterFilter() {
-      $allowedActions = array('display');
+      $allowedActions = array('admin_index');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
       }
    }
-
-   #use this function to add/update permissions for roles
-   function admin_initDB() {
-      $role =& $this->Admin->Role;
-      //Rights for Global Admin role
-      $role->id = 1;
-      $this->Acl->allow($role, 'controllers');
-    
-      //Rights for Location Admin role
-      $role->id = 2;
-      $this->Acl->deny($role, 'controllers');
-
-      $this->Acl->allow($role, 'controllers/Groups/view');
-      $this->Acl->allow($role, 'controllers/Groups/add');
-      $this->Acl->allow($role, 'controllers/Groups/edit');
-      $this->Acl->allow($role, 'controllers/Groups/delete');
-       
-      $this->Acl->allow($role, 'controllers/Locations/start');
-      $this->Acl->allow($role, 'controllers/Locations/view');
-       
-      $this->Acl->allow($role, 'controllers/Rules/search');
-      $this->Acl->allow($role, 'controllers/Rules/add');
-      $this->Acl->allow($role, 'controllers/Rules/edit');
-      $this->Acl->allow($role, 'controllers/Rules/delete');
-      $this->Acl->allow($role, 'controllers/Rules/createFromLog');
-         
-      $this->Acl->allow($role, 'controllers/Admins/changePassword');
-      $this->Acl->allow($role, 'controllers/Admins/view');
-
-      $this->Acl->allow($role, 'controllers/Logs/searchlist');
-      $this->Acl->allow($role, 'controllers/Logs/deleteWithChildren');
-      $this->Acl->allow($role, 'controllers/Logs/delete');
-
-      # global read-only admin
-      $role->id = 3;
-      $this->Acl->deny($role, 'controllers');
-
-      $this->Acl->allow($role, 'controllers/Groups/view');
-      $this->Acl->allow($role, 'controllers/Groups/add');
-      $this->Acl->allow($role, 'controllers/Groups/edit');
-      $this->Acl->allow($role, 'controllers/Groups/delete');
-       
-      $this->Acl->allow($role, 'controllers/Locations/start');
-      $this->Acl->allow($role, 'controllers/Locations/view');
-       
-      $this->Acl->allow($role, 'controllers/Rules/search');
-      $this->Acl->allow($role, 'controllers/Rules/view');
-      $this->Acl->allow($role, 'controllers/Rules/add');
-      $this->Acl->allow($role, 'controllers/Rules/edit');
-      $this->Acl->allow($role, 'controllers/Rules/delete');
-      $this->Acl->allow($role, 'controllers/Rules/createFromLog');
-         
-      $this->Acl->allow($role, 'controllers/Admins/changePassword');
-      $this->Acl->allow($role, 'controllers/Admins/view');
-
-      $this->Acl->allow($role, 'controllers/Logs/searchlist');
-      $this->Acl->allow($role, 'controllers/Logs/deleteWithChildren');
-      $this->Acl->allow($role, 'controllers/Logs/delete');
-      
-      # global
-      $this->Acl->allow($role, 'controllers/Pages');
-      $this->Acl->allow($role, 'controllers/Users/index');
-      $this->Acl->allow($role, 'controllers/Admins/index');
-      $this->Acl->allow($role, 'controllers/Locations/index');
-      $this->Acl->allow($role, 'controllers/NoauthRules/index');
-      $this->Acl->allow($role, 'controllers/Blockednetworks/index');
-      $this->Acl->allow($role, 'controllers/Eventlogs/index');
-      $this->Acl->allow($role, 'controllers/GlobalSettings/index');
-      $this->Acl->allow($role, 'controllers/ProxySettings/index');
-   }
-
 
    function admin_login() {
       //Auth Magic
@@ -210,13 +137,6 @@ class AdminsController extends AppController {
          $this->redirect(array('action'=>'index'));
       }
 
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if ($id != $this->Session->read('Auth.Admin.id')) {
-            $this->Session->setFlash(__('You may change only your own password', true));
-            $this->redirect(array('controller'=>'locations','action'=>'start'));
-         }
-      }
-
       if (!empty($this->data)) {
          if ($this->MyAuth->password($this->data['Admin']['password']) == $this->MyAuth->password($this->data['Admin']['password_confirm'])) {
             $temp_password = $this->MyAuth->password($this->data['Admin']['password']);   
@@ -242,5 +162,29 @@ class AdminsController extends AppController {
          $this->data = $this->Admin->read(null, $id);
       }
    }
+
+
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      if ( in_array($this->action, array('admin_login', 'admin_logout') )) {
+         return true;
+      }
+
+      if ($this->action == 'admin_view') {
+         return true;
+      }
+
+      if ($this->action == 'admin_changePassword') {
+         $admin = $this->Admin->read(null, $this->passedArgs['0'] );
+         if ( $admin['Admin']['id'] == $this->Session->read('Auth.Admin.id') ) return true;
+
+         $this->Session->setFlash(__('You can only set your own password', true));
+      }
+
+      return false;
+   }
+
 }
 ?>

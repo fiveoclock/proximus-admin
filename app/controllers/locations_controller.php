@@ -26,7 +26,6 @@ class LocationsController extends AppController {
 	}
 	
 	function admin_start() {
-      $loggeduser = $this->MyAuth->user();
       $allowed_locations = parent::checkAllowedLocations();
       # allow everyone to view location ALL...
       array_push($allowed_locations, 1);
@@ -48,21 +47,10 @@ class LocationsController extends AppController {
    }
 
 	function admin_view($id = null) {
-      $loggeduser = $this->MyAuth->user();
-      $allowed_locations = parent::checkAllowedLocations();
-      # allow everyone to view location ALL...
-      array_push($allowed_locations, 1);
-
       if (!$id) {
 			$this->Session->setFlash(__('Invalid Location.', true));
          $this->redirect($this->Tracker->loadLastPos());
 		}
-      if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
-         if (!in_array($id, $allowed_locations)) {
-            $this->Session->setFlash(__('You are not allowed to access this location', true));
-            $this->redirect($this->Tracker->loadLastPos());
-         }
-      }
       $this->Location->recursive = 0;
       $find_condition = array('fields' => array('Location.*'),
                                 'conditions'=>array('Location.id'=>$id),
@@ -114,7 +102,7 @@ class LocationsController extends AppController {
       }
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Location', true));
-			$this->redirect(array('action'=>'start'));
+         $this->redirect($this->Tracker->loadLastPos());
 		}
 		if (!empty($this->data)) {
 			if ($this->Location->save($this->data)) {
@@ -131,8 +119,6 @@ class LocationsController extends AppController {
 		}
 	}
 
-# implement authentification
-# test out if child objects are being deleted
    function admin_delete($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid id for Location', true));
@@ -152,6 +138,32 @@ class LocationsController extends AppController {
          $this->redirect($this->Tracker->loadLastPos());
       }  
    }
+
+
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+
+      if ($this->action == 'admin_start') {
+         return true;
+      }
+      if ($this->action == 'admin_view') {
+         $locs = parent::getAdminLocationIds();
+         array_push($locs, 1);
+
+         if (!in_array($this->Location->id, $locs )) {
+            $this->Session->setFlash(__('You are not allowed to access this location', true));
+            return false;
+         }
+         return true;
+      }
+
+      return false;
+   }
+
+
+
 
 
 }

@@ -186,5 +186,18 @@ class LogsController extends AppController {
 		}
 	}
 
+
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      if ( in_array($this->action, array('admin_searchlist', 'admin_delete', 'admin_view' ) )) {
+         // get proxy get location and compare
+         //pr($this->data['Log']['location']);
+         return true;
+      }
+      return false;
+   }
+
 }
 ?>

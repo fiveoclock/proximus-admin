@@ -118,7 +118,6 @@ class ProxySettingsController extends AppController {
 
    }
 
-
 	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for proxy', true));
@@ -130,6 +129,13 @@ class ProxySettingsController extends AppController {
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}
+
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      return false;
+   }
 
 }
 ?>

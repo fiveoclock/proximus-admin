@@ -115,5 +115,31 @@ class NoauthRulesController extends AppController {
 		}
 	}
 
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      $locs = parent::getAdminLocationIds();
+      $rule = $this->NoauthRule->read(null, $this->passedArgs['0'] );
+      $locId = $rule['Location']['id'];
+      //pr ( $rule) ;
+      //pr ( $locId) ;
+      //pr ( $locs) ;
+
+      if ($this->action == 'admin_index') {
+         return true;
+      }
+
+      if ( in_array($this->action, array('admin_view', 'admin_add', 'admin_edit', 'admin_delete') )) {
+         if (!in_array($locId, $locs )) {
+            $this->Session->setFlash(__('You are not allowed to access this rule', true));
+            return false;
+         }
+         return true;
+      }
+
+      return false;
+   }
+
 }
 ?>

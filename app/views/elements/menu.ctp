@@ -1,6 +1,5 @@
 <?php
 
-
 if ( isset($auth['Admin']) ) {
    # not logged in
    if (!$auth['Admin']['role_id']) {

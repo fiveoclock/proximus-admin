@@ -172,14 +172,6 @@ class RulesController extends AppController {
    		$this->redirect($this->Tracker->loadLastPos());
 		}
       
-      $rule = $this->Rule->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($rule['Rule']['location_id'], parent::checkAllowedLocations() )) {
-            $this->Session->setFlash(__('You are not allowed to access this Rule', true));
-            $this->redirect($this->Tracker->loadLastPos());
-         }
-      }
-
 		if (!empty($this->data)) {
 			if ($this->Rule->save($this->data)) {
 				$this->Session->setFlash(__('The Rule has been saved', true));
@@ -209,20 +201,38 @@ class RulesController extends AppController {
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 
-      $rule = $this->Rule->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($rule['Rule']['location_id'], parent::checkAllowedLocations() )) {
-            $this->Session->setFlash(__('You are not allowed to access this Rule', true));
-            $this->redirect($this->Tracker->loadLastPos());
-         }
-      }
-
 		if ($this->Rule->delete($id)) {
 			$this->Session->setFlash(__('Rule deleted', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name; delete: " . $this->data['Rule']['id'], 'activity');
 			$this->redirect($this->Tracker->loadLastPos());
 		}
 	}
+
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      $locs = parent::getAdminLocationIds();
+      $rule = $this->Rule->read(null, $this->passedArgs['0'] );
+      $locId = $rule['Location']['id'];
+      //pr ( $rule) ;
+      //pr ( $locId) ;
+      //pr ( $locs) ;
+
+      if ( in_array($this->action, array('admin_view', 'admin_add', 'admin_edit', 'admin_delete') )) {
+         if (!in_array($locId, $locs )) {
+            $this->Session->setFlash(__('You are not allowed to access this rule', true));
+            return false;
+         }
+         return true;
+      }
+
+      if ($this->action == 'admin_search') {
+         return true;
+      }
+
+      return false;
+   }
 
 }
 ?>

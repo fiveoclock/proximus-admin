@@ -189,5 +189,11 @@ class UsersController extends AppController {
 		}
 	}
 
+   function isAuthorized() {
+      $parent = parent::isAuthorized();
+      if ( !is_null($parent) ) return $parent;
+
+      return false;
+   }
 }
 ?>
