@@ -29,7 +29,7 @@ class GroupsController extends AppController {
 		}
       $group = $this->Group->read(null, $id);
       if( ! in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
-         if (!in_array($group['Group']['location_id'], parent::checkAllowedLocations() )) {
+         if (!in_array($group['Group']['location_id'], parent::getAdminLocationIds() )) {
             $this->Session->setFlash(__('You are not allowed to access this Group', true));
             $this->redirect(array('controller'=>'locations','action'=>'start'));
          }
@@ -56,7 +56,7 @@ class GroupsController extends AppController {
 		}
       if(!is_null($location_id)) {
          if ($this->Session->read('Auth.godmode') != 1) {
-            if (!in_array($location_id, parent::checkAllowedLocations() )) {
+            if (!in_array($location_id, parent::getAdminLocationIds() )) {
                $this->Session->setFlash(__('You are not allowed to add Groups to this Location', true));
                $this->redirect($this->Tracker->loadLastPos());
              }
@@ -78,13 +78,6 @@ class GroupsController extends AppController {
 			$this->Session->setFlash(__('Invalid Group', true));
 			$this->redirect($this->Tracker->loadLastPos());
 		}
-      $group = $this->Group->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-          if (!in_array($group['Group']['location_id'], parent::checkAllowedLocations() )) {
-             $this->Session->setFlash(__('You are not allowed to access this Group', true));
-             $this->redirect($this->Tracker->loadLastPos());
-          }
-      }
 		if (!empty($this->data)) {
 			if ($this->Group->save($this->data)) {
 				
@@ -144,14 +137,6 @@ class GroupsController extends AppController {
 			$this->Session->setFlash(__('Invalid id for Group', true));
 			$this->redirect($this->Tracker->loadLastPos());
       }
-      $group = $this->Group->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($group['Group']['location_id'], parent::checkAllowedLocations() )) {
-            $this->Session->setFlash(__('You are not allowed to access this Group', true));
-            $this->redirect($this->Tracker->loadLastPos());
-         }
-		}
-
       if ( $this->Group->User->findCount(array('User.group_id'=>$id)) > 0 ) {
          $this->Session->setFlash(__('Group is not empty, cannot delete', true));
          $this->redirect($this->Tracker->loadLastPos());
@@ -164,16 +149,17 @@ class GroupsController extends AppController {
 	}
 
 
-   function isAuthorized() {
+   function isAuthorized($id = null) {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
 
       $locs = parent::getAdminLocationIds();
-      $group = $this->Group->read(null, $this->passedArgs['0'] );
-      $locId = $group['Location']['id'];
-      //pr($locs);
 
-      if ( in_array($this->action, array('admin_view', 'admin_add', 'admin_edit' ) )) {
+      if ( in_array($this->action, array('admin_view', 'admin_edit', 'admin_delete') )) {
+         $group = $this->Group->read(null, $this->passedArgs['0'] );
+         $locId = $group['Location']['id'];
+         //pr($locs);
+
          if (!in_array($locId, $locs )) {
             $this->Session->setFlash(__('You are not allowed to access this group', true));
             return false;
@@ -181,6 +167,20 @@ class GroupsController extends AppController {
          return true;
       }
 
+      if ( in_array($this->action, array('admin_add') )) {
+         //pr($this->passedArgs['0']);  pr($this->data);
+         if ( !isset($this->data) ) {
+            if (in_array($this->passedArgs['0'], $locs )) {
+               return true;
+            }
+         }
+         else {
+            if (!in_array($this->data['Group']['location_id'], $locs )) {
+               $this->Session->setFlash(__('You are not allowed to access this group', true));
+               return false;
+            }
+         }
+      }
       return false;
    }
 

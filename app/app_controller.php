@@ -35,36 +35,19 @@ class AppController extends Controller {
       }
  */     
    } 
-   
-   function checkAllowedLocations() {
-      $Location = ClassRegistry::init('Location'); 
-      $loggeduser = $this->MyAuth->user();
-      //pr($loggeduser);
-      $locations_array = $Location->adminLocations($loggeduser['Admin']['id']);
-      $results = Set::extract('/Location/id', $locations_array);
-      #$locations = implode(',',$results);
-      #$locations = "'".implode("','", $results)."'";
-
-      return $results;   
-   }
-
+  
    function getAdminLocations() {
       $Location = ClassRegistry::init('Location'); 
       $loggeduser = $this->MyAuth->user();
       $locations_array = $Location->adminLocations($loggeduser['Admin']['id']);
       return $locations_array;   
-      $results = Set::extract('/Location/id', $locations_array);
-      return $results;   
    }
 
    function getAdminLocationIds() {
-      $Location = ClassRegistry::init('Location'); 
-      $loggeduser = $this->MyAuth->user();
-      $locations_array = $Location->adminLocations($loggeduser['Admin']['id']);
+      $locations_array = $this->getAdminLocations();
       $results = Set::extract('/Location/id', $locations_array);
       return $results;   
    }
-
 
    function isAuthorized() {
       $model = $this->MyAuth->getModel();

@@ -144,12 +144,6 @@ class UsersController extends AppController {
          $this->redirect($this->Tracker->loadLastPos());
       }
 
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if ($id != $this->Session->read('Auth.Admin.id')) {
-            $this->Session->setFlash(__('You may change only your own password', true));
-            $this->redirect($this->Tracker->loadLastPos());
-         }
-      }
       if (!empty($this->data)) {
          if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth->password($this->data['User']['password_confirm'])) {
             $temp_password = $this->MyAuth->password($this->data['User']['password']);

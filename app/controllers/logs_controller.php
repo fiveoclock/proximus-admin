@@ -23,7 +23,7 @@ class LogsController extends AppController {
 
       # get proxys / locations
       if($this->Session->read('Auth.godmode') !=1) {
-         $allowed_locations = parent::checkAllowedLocations();
+         $allowed_locations = parent::getAdminLocationIds();
          $find_conditions = array('Location.id'=>$allowed_locations,
                                  'Location.id NOT' => "1");
       }
@@ -168,16 +168,8 @@ class LogsController extends AppController {
 			$this->redirect(array('action'=>'searchlist'));
       }
       $proxy = $this->ProxySetting->findById($proxy_id);
-      pr($proxy);
+      //pr($proxy);
       $this->setDataSource($proxy);
-
-      $log = $this->Log->read(null, $id);
-      if ($this->Session->read('Auth.godmode') != 1) {
-         if (!in_array($log['Log']['location_id'], parent::checkAllowedLocations() )) {
-            $this->Session->setFlash(__('You are not allowed to access this Log', true));
-			   $this->redirect(array('action'=>'searchlist'));
-         }
-      }
 
 		if ($this->Log->delete($id)) {
          $this->log( $this->MyAuth->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
@@ -191,11 +183,37 @@ class LogsController extends AppController {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
 
-      if ( in_array($this->action, array('admin_searchlist', 'admin_delete', 'admin_view' ) )) {
-         // get proxy get location and compare
-         //pr($this->data['Log']['location']);
+      $locs = parent::getAdminLocationIds();
+
+      if ( in_array($this->action, array('admin_delete', 'admin_view' ) )) {
+         $log = $this->Log->read(null, $this->passedArgs['0'] );
+         $locId = $log['Location']['id'];
+         //pr($locs);
+         //pr($log);
+
+         if (!in_array($locId, $locs )) {
+            $this->Session->setFlash(__('You are not allowed to access this group', true));
+            return false;
+         }
          return true;
       }
+
+
+      if ( in_array($this->action, array('admin_searchlist' ) )) {
+         if ( isset($this->data) ) {
+            $proxy = $this->ProxySetting->read(null, $this->data['Log']['location'] );
+            $locId = $proxy['Location']['id'];
+            //pr($locs);
+            //pr($locId);
+            if (!in_array($locId, $locs )) {
+               $this->Session->setFlash(__('You are not allowed to access this group', true));
+               return false;
+            }
+         }
+
+         return true;
+      }
+
       return false;
    }
 

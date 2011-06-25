@@ -26,7 +26,7 @@ class LocationsController extends AppController {
 	}
 	
 	function admin_start() {
-      $allowed_locations = parent::checkAllowedLocations();
+      $allowed_locations = parent::getAdminLocationIds();
       # allow everyone to view location ALL...
       array_push($allowed_locations, 1);
 

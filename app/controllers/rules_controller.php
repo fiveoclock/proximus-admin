@@ -38,14 +38,14 @@ class RulesController extends AppController {
       }
 
       if($this->Session->read('Auth.godmode') !=1) {
-         $allowed_locations = parent::checkAllowedLocations();
+         $allowed_locations = parent::getAdminLocationIds();
          $find_condition = array('fields' => array('Location.*'),
                               'conditions'=>array("AND" => array(
                                     'Location.id'=>$allowed_locations,
                                     'Location.id NOT' => "1"),),
                               'order'=>'Location.code' );
       }
-      elseif($this->Session->read('Auth.godmode') == 1) {
+      else {
          $find_condition = array('fields' => array('Location.*'), 'order'=>'Location.code', 'conditions'=>array("id NOT" => "1"), );
       }
 
@@ -137,7 +137,7 @@ class RulesController extends AppController {
 		
       if(!is_null($location_id)) {
          if ($this->Session->read('Auth.godmode') != 1) {
-            if (!in_array($location_id, parent::checkAllowedLocations() )) {
+            if (!in_array($location_id, parent::getAdminLocationIds() )) {
                $this->Session->setFlash(__('You are not allowed to add Rules to this Location', true));
                $this->redirect($this->Tracker->loadLastPos());
              }
@@ -150,7 +150,7 @@ class RulesController extends AppController {
       if(!is_null($group_id)) {
          $group = $this->Group->read(null, $group_id);
          if ($this->Session->read('Auth.godmode') != 1) {
-            if (!in_array($group['Group']['location_id'], parent::checkAllowedLocations() )) {
+            if (!in_array($group['Group']['location_id'], parent::getAdminLocationIds() )) {
                $this->Session->setFlash(__('You are not allowed to add Rules for this Group', true));
 			      $this->redirect(array('controller'=>'locations','action'=>'start'));
             }
