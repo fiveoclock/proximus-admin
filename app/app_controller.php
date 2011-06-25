@@ -8,7 +8,6 @@ class AppController extends Controller {
 
    function beforeRender() {
       $this->set('auth', $this->MyAuth->user());
-      //$this->set('godmode', $this->Session->read('Auth.Admin.role_id'));
    }
 
    function beforeFilter() {
@@ -54,13 +53,15 @@ class AppController extends Controller {
       $user = $model->findById( $this->MyAuth->user('id') );
       //pr( $user);
       //pr( $user['Role']['name'] );
+
+      // maybe move this to auth??
+      $this->Session->write('role', $user['Role'] );
       
-      
-      $this->log( $this->MyAuth->user('username') . "; $this->action; " , 'activity');
-      if ( $user['Role']['name'] == 'Global Admin') {
+      $this->log( $user['Admin']['username'] . "; $this->action; " , 'activity');
+      if ( $user['Role']['name'] == 'admin_global') {
          return true;
       }
-      elseif ($user['Role']['name'] == 'Location Admin + global view') {
+      elseif ($user['Role']['name'] == 'admin_location_global_ro') {
          if ( in_array($this->action, array('admin_index', 'admin_view', 'admin_start')) ) {
             return true;
          }
