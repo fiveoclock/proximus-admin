@@ -1,10 +1,7 @@
 <?php  
-class AppController extends Controller { 
-  var $components = array('Acl', 'MyAuth', 'Session', 'Tracker');
-  var $priv_roles = array(1, 3); # global- and read-only admins
-
-
-// http://unknown-host.com/blog/2011/04/06/ldap-authentication-in-cakephp/#more-35
+class AppController extends Controller {
+   var $components = array('Acl', 'MyAuth', 'Session', 'Tracker');
+   var $priv_roles = array(1, 3); # global- and read-only admins
 
    function beforeRender() {
       $this->set('auth', $this->MyAuth->user());
@@ -14,10 +11,9 @@ class AppController extends Controller {
       //Configure AuthComponent
       $this->MyAuth->userModel = 'Admin';
       $this->MyAuth->authorize = 'controller';
-      //$this->MyAuth->actionPath = 'controllers/';
       $this->MyAuth->loginAction = array('admin' => true, 'controller' => 'admins', 'action' => 'login');
-      //$this->MyAuth->logoutRedirect = array('controller' => 'admins', 'action' => 'login');
-      //$this->MyAuth->loginRedirect = array('admin' => true, 'controller' => 'locations', 'action' => 'start');
+      $this->MyAuth->loginRedirect = array('admin' => true, 'controller' => 'locations', 'action' => 'start');
+      $this->MyAuth->logoutRedirect = array('admin' => false, 'controller' => 'pages', 'action' => 'start');
       $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
       $this->MyAuth->authError = 'Access denied';
       $this->MyAuth->userScope = array('Admin.active' => 'Y');

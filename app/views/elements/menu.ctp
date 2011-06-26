@@ -1,5 +1,11 @@
 <?php
 
+if ( !isset($auth) ) {
+   echo $html->link('Admin Login', array('admin' => true, 'controller'=>'admins','action'=>'login', null ));
+   echo $html->link('User Login', array('user' => true, 'controller'=>'profiles','action'=>'login', null ));
+}
+
+
 if ( isset($auth['Admin']) ) {
    # not logged in
    if (!$auth['Admin']['role_id']) {
