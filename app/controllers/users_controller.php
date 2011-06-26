@@ -8,11 +8,10 @@ class UsersController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->MyAuth->allowedActions = array('*');
    }
 
    function afterFilter() {
-      $allowedActions = array('view', 'index');
+      $allowedActions = array('admin_view', 'admin_index');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
       }   
@@ -53,7 +52,7 @@ class UsersController extends AppController {
 
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!empty($this->data)) {
          if ( $settings['auth_method_User'] != "internal" ) {
@@ -71,9 +70,10 @@ class UsersController extends AppController {
             if ($this->User->save($this->data)) {
                $this->Session->setFlash(__('The User was saved', true));
                $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['User']['username'], 'activity');
-               $this->redirect(array('action'=>'index'));
-            } else {
-               #$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
+               $this->Tracker->back();
+            }
+            else {
+               $this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
             }
          }
       }
@@ -100,17 +100,17 @@ class UsersController extends AppController {
 	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid User', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
 		}
 		if (!empty($this->data)) {
 			if ($this->User->save($this->data)) {
 				$this->Session->setFlash(__('The User has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['User']['username'], 'activity');
-				$this->redirect(array('action'=>'index'));
+            $this->Tracker->back();
 			} else {
 				$this->Session->setFlash(__('The User could not be saved. Please, try again.', true));
 			}
@@ -137,32 +137,41 @@ class UsersController extends AppController {
 		$groups = $this->User->Group->find('list');
 		$this->set(compact('locations','groups'));
 	}
-
+   
+   // set password function for the admin
    function admin_setPassword($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid User', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
 
       if (!empty($this->data)) {
-         if ($this->MyAuth->password($this->data['User']['password']) == $this->MyAuth->password($this->data['User']['password_confirm'])) {
-            $temp_password = $this->MyAuth->password($this->data['User']['password']);
-            $temp_password_confirm = $this->data['User']['password_confirm'];
-            $this->User->recursive = -1;
-            $user = $this->User->findById($id);
-            $this->data['User'] = $user['User'];
-            $this->data['User']['password'] = $temp_password;
-            $this->data['User']['password_confirm'] = $temp_password_confirm;
-            $this->User->set($this->data) && $this->User->validates();
-            if ($this->User->save($this->data)) {
-               $this->Session->setFlash(__('New password was set', true));
-               $this->log( $this->MyAuth->user('username') . "; $this->name ; set password: " . $this->data['User']['username'], 'activity');
-               $this->redirect(array('action'=>'index'));
-            } else {
-               $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
-            }   
-         } else {
+         $this->User->id = $id;
+         $user = $this->User->read();
+
+         $password1 = $this->data['User']['password'];
+         $password2 = $this->data['User']['password_confirm'];
+
+         // check if the new password was typed in correctly
+         if ( $password1 != $password2 ) {
             $this->Session->setFlash(__('New password mismatch. Please, retype the password again.', true));
+            return;
+         }
+
+         // set password in array and do validation
+         $user['User']['password'] = $this->MyAuth->password( $password1 );
+         $user['User']['password_confirm'] = $password2;
+         $this->User->set($user) && $this->User->validates();
+
+         // save the password
+         $user['User']['password'] = $this->MyAuth->password( $password1 );
+         if ($this->User->save($user)) {
+            $this->Session->setFlash(__('New password was set', true));
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; set password for: " . $this->data['User']['username'], 'activity');
+            $this->Tracker->back();
+         }
+         else {
+            $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
          }
       }
       if (empty($this->data)) {
@@ -170,16 +179,15 @@ class UsersController extends AppController {
       }
    }
 
-
 	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for User', true));
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 		if ($this->User->delete($id)) {
 			$this->Session->setFlash(__('User deleted', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['User']['username'], 'activity');
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 	}
 

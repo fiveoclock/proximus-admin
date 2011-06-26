@@ -74,7 +74,7 @@ class ProfilesController extends AppController {
          $user['User']['password'] = $this->MyAuth->password( $password1 );
          if ($this->User->save($user)) {
             $this->Session->setFlash(__('New password was set', true));
-            $this->redirect(array('action'=>'start'));
+            $this->Tracker->back();
          }
          else {
             $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
