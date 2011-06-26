@@ -65,11 +65,14 @@ class AppController extends Controller {
       return null;
    }
 
-   function checkSecurity($location_id, $location_ids = null) {
+   // cheks if a admin has permissions for a certain location
+   function checkSecurity($location_id, $location_ids=null) {
       $global = self::isAuthorized();
       if ( !is_null($global) ) return $global;
 
-      if ( !is_null($location_ids) ) $location_ids = self::getAdminLocationIds();
+      if ( is_null($location_ids) ) {
+         $location_ids = self::getAdminLocationIds();
+      }
       
       if ( !in_array($location_id, $location_ids) ) {
          $this->Session->setFlash(__('Sorry, you have no permissions for this location.', true));
