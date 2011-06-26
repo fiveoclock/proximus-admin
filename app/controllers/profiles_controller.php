@@ -43,7 +43,6 @@ class ProfilesController extends AppController {
       $this->set('user', $user);
    }
 
-   // password validation doesn't work right now
    function user_setPassword($id = null) {
       $this->User->recursive = -1;
       $this->User->id = $this->MyAuth->user('id');

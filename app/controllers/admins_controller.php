@@ -126,10 +126,9 @@ class AdminsController extends AppController {
       }
       $admin = $this->Admin->read(null, $id);
       $this->set('admin', $admin);
-      $this->Session->write("Admin",$id);
    }
 
-   function admin_changePassword($id = null) {
+   function admin_setPassword($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid Admin', true));
          $this->Tracker->back();
@@ -161,12 +160,52 @@ class AdminsController extends AppController {
       }
    }
 
+   // change own password
+   function admin_changePassword() {
+      $this->Admin->recursive = -1;
+      $this->Admin->id = $this->MyAuth->user('id');
+      $user = $this->Admin->read();
+
+      if (!empty($this->data)) {
+         $password1 = $this->data['Admin']['password'];
+         $password2 = $this->data['Admin']['password_confirm'];
+
+         // check if old password is correct
+         if ( $user['Admin']['password'] != $this->MyAuth->password($this->data['Admin']['password_old']) ) {
+            $this->Session->setFlash(__('Your current password is incorrect.', true));
+            pr ($user);
+            pr ( $this->MyAuth->password($this->data['Admin']['password_old']) );
+            return;
+         }
+
+         // check if the new password was typed in correctly
+         if ( $password1 != $password2 ) {
+            $this->Session->setFlash(__('New password mismatch. Please, retype the password again.', true));
+            return;
+         }
+
+         // set password in array and do validation
+         $user['Admin']['password'] = $this->MyAuth->password( $password1 );
+         $user['Admin']['password_confirm'] = $password2;
+         $this->Admin->set($user) && $this->Admin->validates();
+
+         // save the password
+         $user['Admin']['password'] = $this->MyAuth->password( $password1 );
+         if ($this->Admin->save($user)) {
+            $this->Session->setFlash(__('New password was set', true));
+            $this->Tracker->back();
+         }
+         else {
+            $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
+         }
+      }
+   }
 
    function isAuthorized() {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
 
-      if ( in_array($this->action, array('admin_login', 'admin_logout') )) {
+      if ( in_array($this->action, array('admin_login', 'admin_logout', 'admin_changePassword') )) {
          return true;
       }
 
