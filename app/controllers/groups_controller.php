@@ -141,9 +141,8 @@ class GroupsController extends AppController {
       if ( in_array($this->action, array('admin_view', 'admin_edit', 'admin_delete') )) {
          $group = $this->Group->read(null, $this->passedArgs['0'] );
          $locId = $group['Location']['id'];
-         //pr($locs);
 
-         if ( ! parent::checkLocationSecurity( $locId)) $this->Tracker->back();
+         if ( ! parent::checkSecurity( $locId)) $this->Tracker->back();
          return true;
       }
 

@@ -18,11 +18,9 @@ class LocationsController extends AppController {
       }
    }  
 
-# Not in use
 	function admin_index() {
 		$this->Location->recursive = 0;
 		$this->set('locations', $this->paginate());
-      #$this->set('locations', $this->paginate(null, array('Location.id'=>$this->Session->read('Auth.locations'))));
 	}
 	
 	function admin_start() {
@@ -30,7 +28,7 @@ class LocationsController extends AppController {
       # allow everyone to view location ALL...
       array_push($allowed_locations, 1);
 
-      if( in_array($this->Session->read('Auth.Admin.role_id'), $this->priv_roles) ) {
+      if( in_array($this->Session->read('role.name'), $this->priv_roles) ) {
          $find_condition = array('fields' => array('Location.*'),
                               'order'=>'Location.code'
                                );
@@ -49,15 +47,14 @@ class LocationsController extends AppController {
 	function admin_view($id = null) {
       if (!$id) {
 			$this->Session->setFlash(__('Invalid Location.', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
 		}
       $this->Location->recursive = 0;
-      $find_condition = array('fields' => array('Location.*'),
-                                'conditions'=>array('Location.id'=>$id),
-                                'order'=>'Location.code'
-                                );
-      $location = $this->Location->find('all',$find_condition);
+
+      // get all data for view
+      $location = $this->Location->find('first', array( 'conditions'=>array('Location.id'=>$id)) );
 		$groups = $this->Location->Group->find('all',array('conditions'=>array('Group.location_id'=>$id)));
+		$users = $this->Location->User->find('all',array('conditions'=>array('AND'=>array('User.location_id'=>$id,'User.group_id'=>0))));
 		$rules = $this->Location->Rule->find('all',array(
 			'conditions'=>array(
 						'AND'=>array(
@@ -69,28 +66,24 @@ class LocationsController extends AppController {
 				'Rule.sitename','Rule.priority'
 						  )
 		));
-		$users = $this->Location->User->find('all',array('conditions'=>array('AND'=>array('User.location_id'=>$id,'User.group_id'=>0))));
 		
 		$this->set(compact('location','groups','users','rules'));
-		
-		$this->Session->write("Location",$id);
-      
 	}
 
 	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
 		if (!empty($this->data)) {
 			$this->Location->create();
 			if ($this->Location->save($this->data)) {
 				$this->Session->setFlash(__('The Location has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['Location']['id'], 'activity');
-            $this->redirect($this->Tracker->loadLastPos());
+            $this->Tracker->back();
 			} else {
 				$this->Session->setFlash(__('The Location could not be saved. Please, try again.', true));
-            $this->redirect($this->Tracker->loadLastPos());
+            $this->Tracker->back();
 			}
 		}
 	}
@@ -98,20 +91,20 @@ class LocationsController extends AppController {
 	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Location', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
 		}
 		if (!empty($this->data)) {
 			if ($this->Location->save($this->data)) {
 				$this->Session->setFlash(__('The Location has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['Location']['id'], 'activity');
-            $this->redirect($this->Tracker->loadLastPos());
+            $this->Tracker->back();
 			} else {
 				$this->Session->setFlash(__('The Location could not be saved. Please, try again.', true));
-            $this->redirect($this->Tracker->loadLastPos());
+            $this->Tracker->back();
 			}
 		}
 		if (empty($this->data)) {
@@ -122,28 +115,26 @@ class LocationsController extends AppController {
    function admin_delete($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid id for Location', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if ($id == 1) {
          $this->Session->setFlash(__('Location with id 1 is a special location and cannot be deleted.', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['Location']['id'], 'activity');
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if ( $this->Location->User->find('count', array('conditions'=>array('User.location_id'=>$id))) > 0 ) {
          $this->Session->setFlash(__('Cannot delete; please remove users from this location before', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if ($this->Location->delete($id, true)) {
          $this->Session->setFlash(__('Location deleted', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }  
    }
-
 
    function isAuthorized() {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
-
 
       if ($this->action == 'admin_start') {
          return true;
@@ -152,19 +143,12 @@ class LocationsController extends AppController {
          $locs = parent::getAdminLocationIds();
          array_push($locs, 1);
 
-         if (!in_array($this->Location->id, $locs )) {
-            $this->Session->setFlash(__('You are not allowed to access this location', true));
-            return false;
-         }
+         if ( ! parent::checkSecurity( $locId, $locs)) $this->Tracker->back();
          return true;
       }
 
       return false;
    }
-
-
-
-
 
 }
 ?>

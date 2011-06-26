@@ -1,13 +1,13 @@
 <div class="locations view">	
 <h2>
 	<?php 
-	  echo "Location: "; echo $html->link(__($location[0]['Location']['code'], true), array('controller'=> 'locations', 'action'=>'edit', $location[0]['Location']['id'])); echo " - "; echo $location[0]['Location']['name']; 
+	  echo "Location: "; echo $html->link(__($location['Location']['code'], true), array('controller'=> 'locations', 'action'=>'edit', $location['Location']['id'])); echo " - "; echo $location['Location']['name']; 
 	?>
 </h2>
 </div>
 <div class="related">
 	<h3><?php __('Location Groups');?></h3>
-   <li><?php echo $html->link(__('New Group', true), array('controller'=> 'groups', 'action'=>'add', $location[0]['Location']['id']));?> </li>
+   <li><?php echo $html->link(__('New Group', true), array('controller'=> 'groups', 'action'=>'add', $location['Location']['id']));?> </li>
    <br>
 	<?php if (!empty($groups)):?>
 	<table cellpadding = "0" cellspacing = "0">
@@ -34,7 +34,7 @@
 </div>
 <div class="related">
 	<h3><?php __('Location-wide Rules');?></h3>
-	<li><?php echo $html->link(__('Create new Location Rule', true), array('controller'=> 'rules', 'action'=>'add', $location[0]['Location']['id']));?> </li>
+	<li><?php echo $html->link(__('Create new Location Rule', true), array('controller'=> 'rules', 'action'=>'add', $location['Location']['id']));?> </li>
    <br>
 	<?php if (!empty($rules)):?>
 	<table cellpadding = "0" cellspacing = "0">

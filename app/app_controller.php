@@ -1,7 +1,7 @@
 <?php  
 class AppController extends Controller {
    var $components = array('Acl', 'MyAuth', 'Session', 'Tracker');
-   var $priv_roles = array(1, 3); # global- and read-only admins
+   var $priv_roles = array('admin_global', 'admin_location_global_ro'); # global- and read-only admins
 
    function beforeRender() {
       $this->set('auth', $this->MyAuth->user());
@@ -45,7 +45,7 @@ class AppController extends Controller {
    }
 
    function isAuthorized() {
-      $user = $this->getUser();
+      $user = self::getUser();
       //pr( $user);
       //pr( $user['Role']['name'] );
 
@@ -57,7 +57,7 @@ class AppController extends Controller {
          return true;
       }
       elseif ($user['Role']['name'] == 'admin_location_global_ro') {
-         if ( in_array($this->action, array('admin_index', 'admin_view', 'admin_start')) ) {
+         if ( in_array($this->action, array('admin_index', 'admin_view')) ) {
             return true;
          }
          //return false;
@@ -65,19 +65,13 @@ class AppController extends Controller {
       return null;
    }
 
-   function checkSecurity($location_id) {
-      $global = $this->isAuthorized();
+   function checkSecurity($location_id, $location_ids = null) {
+      $global = self::isAuthorized();
       if ( !is_null($global) ) return $global;
-      
-      if ( !in_array($location_id, $this->getAdminLocationIds()) ) {
-         $this->Session->setFlash(__('Sorry, you have no permissions for this location.', true));
-         return false;
-      }
-      return true;
-   }
 
-   function checkLocationSecurity($location_id) {
-      if ( !in_array($location_id, $this->getAdminLocationIds()) ) {
+      if ( !is_null($location_ids) ) $location_ids = self::getAdminLocationIds();
+      
+      if ( !in_array($location_id, $location_ids) ) {
          $this->Session->setFlash(__('Sorry, you have no permissions for this location.', true));
          return false;
       }
