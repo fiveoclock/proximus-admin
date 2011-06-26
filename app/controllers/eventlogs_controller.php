@@ -4,20 +4,9 @@ class EventlogsController extends AppController {
    var $useTable = false;
    var $uses = array();
    var $helpers = array('Html', 'Form');
-   /*
-    * Lockdown all access to admins
- (this uses my custom method for security,
-    *  you'll need to use auth or whatever you prefer to prevent guest or lowly users from access
-    */   
+
    function beforeFilter(){
       parent::beforeFilter();
-   }
-
-   function afterFilter() {
-      $allowedActions = array('index');
-      if (in_array($this->params['action'],$allowedActions)) {
-         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
-      }
    }
 
    function admin_index() {
@@ -44,25 +33,12 @@ class EventlogsController extends AppController {
       $this->set('eventlogs', $logs);
    }
 
-   function admin_delete($id = null) {
-      if (!$id) {
-         $this->Session->setFlash(__('Invalid id', true));
-         $this->redirect(array('action'=>'index'));
-      }
-      if ($this->GlobalSetting->delete($id)) {
-         $this->Session->setFlash(__('Setting deleted', true));
-         $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['GlobalSetting']['id'], 'activity');
-         $this->redirect(array('action'=>'index'));
-      }
-   }
-
    function isAuthorized() {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
 
       return false;
    }
-
 
 }
 

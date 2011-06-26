@@ -17,11 +17,7 @@ class AdminsController extends AppController {
       }
    }
 
-   function admin_login() {
-      //Auth Magic
-      //$this->log( $this->MyAuth->user('username') . "; $this->name; failed login for: " . $this->data['Admin']['username'], 'activity');
-      # http://lanrat.com/programs/cakephp_ldap
-   }
+   function admin_login() { }
  
    function admin_logout() {
       $this->Session->setFlash('Good-Bye');
@@ -37,7 +33,7 @@ class AdminsController extends AppController {
 	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
 		if (!empty($this->data)) {
          if ($this->data['Admin']['password'] == $this->MyAuth->password($this->data['Admin']['password_confirm'])) {
@@ -45,12 +41,13 @@ class AdminsController extends AppController {
    			if ($this->Admin->save($this->data)) {
 	   			$this->Session->setFlash(__('The Admin has been saved', true));
                $this->log( $this->MyAuth->user('username') . "; $this->name; add: " . $this->data['Admin']['username'], 'activity');
-		   		$this->redirect(array('action'=>'index'));
+               $this->Tracker->back();
    			} else {
 	   			$this->Session->setFlash(__('The Admin could not be saved. Please, try again.', true));
 			   }
          }
 		}
+
       $locations_all = $this->Admin->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
@@ -72,17 +69,17 @@ class AdminsController extends AppController {
 	function admin_edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Admin', true));
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
 		if (!empty($this->data)) {
 			if ($this->Admin->save($this->data)) {
 				$this->Session->setFlash(__('The Admin has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['Admin']['username'], 'activity');
-				$this->redirect(array('action'=>'index'));
+            $this->Tracker->back();
 			} else {
 				$this->Session->setFlash(__('The Admin could not be saved. Please, try again.', true));
 			}
@@ -90,6 +87,7 @@ class AdminsController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->Admin->read(null, $id);
 		}
+
 		$locations_all = $this->Admin->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
          'recursive'=>-1,
@@ -111,12 +109,12 @@ class AdminsController extends AppController {
 	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Admin', true));
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 		if ($this->Admin->delete($id)) {
 			$this->Session->setFlash(__('Admin deleted', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['Admin']['username'], 'activity');
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 	}
 
@@ -124,7 +122,7 @@ class AdminsController extends AppController {
    function admin_view($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid admin.', true));
-         $this->redirect(array('controller'=>'locations','action'=>'start'));
+         $this->Tracker->back();
       }
       $admin = $this->Admin->read(null, $id);
       $this->set('admin', $admin);
@@ -134,7 +132,7 @@ class AdminsController extends AppController {
    function admin_changePassword($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid Admin', true));
-         $this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
 
       if (!empty($this->data)) {

@@ -10,6 +10,13 @@ class BlockednetworksController extends AppController {
       #$this->MyAuth->allowedActions = array('*');
    }
 
+   function afterFilter() {
+      $allowedActions = array('admin_index', );
+      if (in_array($this->params['action'],$allowedActions)) {
+         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
+      }
+   }
+
 	function admin_index() {
 		$this->Blockednetwork->recursive = 0;
 		$this->set('blockednetworks', $this->paginate());
@@ -18,18 +25,20 @@ class BlockednetworksController extends AppController {
 	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
 		if (!empty($this->data)) {
 			$this->Blockednetwork->create();
 			if ($this->Blockednetwork->save($this->data)) {
 				$this->Session->setFlash(__('The Blockednetwork has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['Blockednetwork']['id'], 'activity');
-				$this->redirect(array('action'=>'index'));
-			} else {
+            $this->Tracker->back();
+			} 
+         else {
 				$this->Session->setFlash(__('The Blockednetwork could not be saved. Please, try again.', true));
 			}
 		}
+
       # show location code + name 
       $locations_all = $this->Blockednetwork->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
@@ -50,24 +59,26 @@ class BlockednetworksController extends AppController {
 	function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash(__('Invalid Blockednetwork', true));
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 		if (!empty($this->data)) {
 			if ($this->Blockednetwork->save($this->data)) {
 				$this->Session->setFlash(__('The Blockednetwork has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['Blockednetwork']['id'], 'activity');
-				$this->redirect(array('action'=>'index'));
-			} else {
+            $this->Tracker->back();
+			} 
+         else {
 				$this->Session->setFlash(__('The Blockednetwork could not be saved. Please, try again.', true));
 			}
 		}
 		if (empty($this->data)) {
 			$this->data = $this->Blockednetwork->read(null, $id);
 		}
+
       # show location code + name 
       $locations_all = $this->Blockednetwork->Location->find('all',array(
          'fields'=>array('Location.id','Location.code','Location.name'),
@@ -88,12 +99,12 @@ class BlockednetworksController extends AppController {
 	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for Blockednetwork', true));
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 		if ($this->Blockednetwork->delete($id)) {
 			$this->Session->setFlash(__('Blockednetwork deleted', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['Blockednetwork']['id'], 'activity');
-			$this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
 		}
 	}
 

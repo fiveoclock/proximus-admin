@@ -2,11 +2,7 @@
 class GlobalSettingsController extends AppController {
    var $name = 'GlobalSettings';
    var $helpers = array('Html', 'Form');
-   /*
-    * Lockdown all access to admins
- (this uses my custom method for security,
-    *  you'll need to use auth or whatever you prefer to prevent guest or lowly users from access
-    */   
+
    function beforeFilter(){
       parent::beforeFilter();
    }
@@ -17,8 +13,6 @@ class GlobalSettingsController extends AppController {
       }
    }
 
-
-
    function admin_index() {
       $this->GlobalSetting->recursive = 0;
       $this->set('global_settings', $this->paginate());
@@ -27,18 +21,18 @@ class GlobalSettingsController extends AppController {
    function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!empty($this->data)) {
          $this->GlobalSetting->create();
          if ($this->GlobalSetting->save($this->data)) {
             $this->Session->setFlash(__('The setting was saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['GlobalSetting']['id'], 'activity');
-            $this->redirect($this->Tracker->loadLastPos());
+            $this->Tracker->back();
          }
          else {
             $this->Session->setFlash(__('The setting could not be saved. Please, try again.', true));
-            $this->redirect($this->Tracker->loadLastPos());
+            $this->Tracker->back();
          }
       }
    }
@@ -46,18 +40,19 @@ class GlobalSettingsController extends AppController {
    function admin_edit($id = null) {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid setting', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!empty($this->data)) {
          if ($this->GlobalSetting->save($this->data)) {
             $this->Session->setFlash(__('The setting was saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['GlobalSetting']['id'], 'activity');
-            $this->redirect(array('action'=>'index'));
-         } else {
+            $this->Tracker->back();
+         }
+         else {
             $this->Session->setFlash(__('The setting not be saved. Please, try again.', true));
          }
       }
@@ -69,12 +64,12 @@ class GlobalSettingsController extends AppController {
    function admin_delete($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid id', true));
-         $this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
       if ($this->GlobalSetting->delete($id)) {
          $this->Session->setFlash(__('Setting deleted', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['GlobalSetting']['id'], 'activity');
-         $this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
    }
 
