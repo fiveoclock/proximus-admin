@@ -35,9 +35,17 @@ class Group extends AppModel {
       ),
    );
 
-#	var $hasAndBelongsToMany = array('User');
-	var $validate = array(
-		'name' => array('notempty')
-	);
+   var $validate = array
+   (
+       'name' => array
+       (
+           'notempty',
+           'unique' => array
+           (
+               'rule' => array('checkUnique', array('name', 'location_id')),
+               'message' => 'That grop name already exists in this location.',
+           )
+       ),
+   );
 }
 ?>
