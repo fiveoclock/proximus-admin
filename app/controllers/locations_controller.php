@@ -12,7 +12,7 @@ class LocationsController extends AppController {
    }
 
    function afterFilter() {
-      $allowedActions = array('view','index');
+      $allowedActions = array('admin_start', 'admin_view', 'admin_index');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
       }

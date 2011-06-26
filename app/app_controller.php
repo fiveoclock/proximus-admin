@@ -45,8 +45,7 @@ class AppController extends Controller {
    }
 
    function isAuthorized() {
-      $model = $this->MyAuth->getModel();
-      $user = $model->findById( $this->MyAuth->user('id') );
+      $user = $this->getUser();
       //pr( $user);
       //pr( $user['Role']['name'] );
 
@@ -66,6 +65,29 @@ class AppController extends Controller {
       return null;
    }
 
+   function checkSecurity($location_id) {
+      $global = $this->isAuthorized();
+      if ( !is_null($global) ) return $global;
+      
+      if ( !in_array($location_id, $this->getAdminLocationIds()) ) {
+         $this->Session->setFlash(__('Sorry, you have no permissions for this location.', true));
+         return false;
+      }
+      return true;
+   }
+
+   function checkLocationSecurity($location_id) {
+      if ( !in_array($location_id, $this->getAdminLocationIds()) ) {
+         $this->Session->setFlash(__('Sorry, you have no permissions for this location.', true));
+         return false;
+      }
+      return true;
+   }
+
+   function getUser() {
+      $model = $this->MyAuth->getModel();
+      return $model->findById( $this->MyAuth->user('id') );
+   }
 
 } 
 ?>

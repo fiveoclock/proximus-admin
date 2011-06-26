@@ -18,6 +18,7 @@ class TrackerComponent extends Object {
       $this->Session->write('Auth.prevController',$controller);
       $this->Session->write('Auth.prevAction',$action);
       $this->Session->write('Auth.prevId',$id);
+      $this->log( "$controller/$action/$id", 'debug');
    }
 
 # does not work   
@@ -39,7 +40,14 @@ class TrackerComponent extends Object {
       if(!is_null($this->Session->read('Auth.prevId'))) {
          $redirectURL['0'] = $this->Session->read('Auth.prevId');
       }
+      $this->log( $redirectURL , 'debug');
       return $redirectURL;
    }
+
+   
+   function back() {
+      $this->controller->redirect( $this->loadLastPos() ); 
+   }
+
 }
 ?>
