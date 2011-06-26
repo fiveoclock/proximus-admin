@@ -7,11 +7,10 @@ class AdminsController extends AppController {
 
    function beforeFilter() {
       parent::beforeFilter();
-      //$this->MyAuth->allowedActions = array('admin_login');
    }
 
    function afterFilter() {
-      $allowedActions = array('admin_index');
+      $allowedActions = array('admin_index', 'admin_view');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
       }
@@ -128,6 +127,7 @@ class AdminsController extends AppController {
       $this->set('admin', $admin);
    }
 
+   // set password for other users
    function admin_setPassword($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid Admin', true));
@@ -135,24 +135,32 @@ class AdminsController extends AppController {
       }
 
       if (!empty($this->data)) {
-         if ($this->MyAuth->password($this->data['Admin']['password']) == $this->MyAuth->password($this->data['Admin']['password_confirm'])) {
-            $temp_password = $this->MyAuth->password($this->data['Admin']['password']);   
-            $temp_password_confirm = $this->data['Admin']['password_confirm'];
-            $this->Admin->recursive = -1;
-            $admin = $this->Admin->findById($id);
-            $this->data['Admin'] = $admin['Admin'];
-            $this->data['Admin']['password'] = $temp_password;
-            $this->data['Admin']['password_confirm'] = $temp_password_confirm;
-            $this->Admin->set($this->data) && $this->Admin->validates();
-            if ($this->Admin->save($this->data)) {
-               $this->Session->setFlash(__('New password has been set', true));
-               $this->log( $this->MyAuth->user('username') . "; $this->name ; set password for: " . $this->data['Admin']['username'], 'activity');
-               $this->redirect(array('action'=>'index'));
-            } else {
-               $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
-            }
-         } else {
+         $this->Admin->id = $id;
+         $user = $this->Admin->read();
+
+         $password1 = $this->data['Admin']['password'];
+         $password2 = $this->data['Admin']['password_confirm'];
+
+         // check if the new password was typed in correctly
+         if ( $password1 != $password2 ) {
             $this->Session->setFlash(__('New password mismatch. Please, retype the password again.', true));
+            return;
+         }
+
+         // set password in array and do validation
+         $user['Admin']['password'] = $this->MyAuth->password( $password1 );
+         $user['Admin']['password_confirm'] = $password2;
+         $this->Admin->set($user) && $this->Admin->validates();
+
+         // save the password
+         $user['Admin']['password'] = $this->MyAuth->password( $password1 );
+         if ($this->Admin->save($user)) {
+            $this->Session->setFlash(__('New password was set', true));
+            $this->log( $this->MyAuth->user('username') . "; $this->name ; set password for: " . $this->data['Admin']['username'], 'activity');
+            $this->Tracker->back();
+         }
+         else {
+            $this->Session->setFlash(__('Password could not be set. Please, try again.', true));
          }
       }
       if (empty($this->data)) {
@@ -173,8 +181,6 @@ class AdminsController extends AppController {
          // check if old password is correct
          if ( $user['Admin']['password'] != $this->MyAuth->password($this->data['Admin']['password_old']) ) {
             $this->Session->setFlash(__('Your current password is incorrect.', true));
-            pr ($user);
-            pr ( $this->MyAuth->password($this->data['Admin']['password_old']) );
             return;
          }
 
@@ -196,7 +202,7 @@ class AdminsController extends AppController {
             $this->Tracker->back();
          }
          else {
-            $this->Session->setFlash(__('Password could not be saved. Please, try again.', true));
+            $this->Session->setFlash(__('Password could not be set. Please, try again.', true));
          }
       }
    }
@@ -212,15 +218,6 @@ class AdminsController extends AppController {
       if ($this->action == 'admin_view') {
          return true;
       }
-
-      if ($this->action == 'admin_changePassword') {
-         $admin = $this->Admin->read(null, $this->passedArgs['0'] );
-         if ( $admin['Admin']['id'] == $this->Session->read('Auth.Admin.id') ) return true;
-
-         $this->Session->setFlash(__('You can only set your own password', true));
-      }
-
-      return false;
    }
 
 }

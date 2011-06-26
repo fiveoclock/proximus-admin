@@ -53,7 +53,7 @@ foreach ($admins as $admin):
 
 		<td class="actions">
 			<?php echo $html->link(__('Edit', true), array('action'=>'edit', $admin['Admin']['id'])); ?>
-			<?php echo $html->link(__('/ Set Password', true), array('action'=>'changePassword', $admin['Admin']['id'])); ?>
+			<?php echo $html->link(__('/ Set Password', true), array('action'=>'setPassword', $admin['Admin']['id'])); ?>
 			<?php echo $html->link(__('/ Delete', true), array('action'=>'delete', $admin['Admin']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $admin['Admin']['id'])); ?>
 		</td>
 	</tr>
