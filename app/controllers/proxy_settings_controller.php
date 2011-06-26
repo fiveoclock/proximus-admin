@@ -124,7 +124,7 @@ class ProxySettingsController extends AppController {
 		if ($this->ProxySetting->delete($id)) {
 			$this->Session->setFlash(__('Proxy deleted', true));
          $this->log( $this->MyAuth->user('username') . "; $this->name ; delete: " . $this->data['ProxySetting']['id'], 'activity');
-			$this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
 		}
 	}
 

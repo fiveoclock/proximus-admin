@@ -7,7 +7,7 @@ class GlobalSettingsController extends AppController {
       parent::beforeFilter();
    }
    function afterFilter() {
-      $allowedActions = array('index');
+      $allowedActions = array('admin_index');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
       }

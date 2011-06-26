@@ -8,31 +8,23 @@ class TrackerComponent extends Object {
       // saving the controller reference for later use
       $this->controller =& $controller;
    }
-  
  
-   function savePosition($controller = null, $action = null, $id = null) {
+   function savePosition($controller = null, $action = null, $params = null) {
       #let only numeric values into session
+      $id = null;
+      if( isset($params[0]) ) {
+         $id = $params[0];
+      }
       if(!is_numeric($id)) {
          $id = null;
       }
+
       $this->Session->write('Auth.prevController',$controller);
       $this->Session->write('Auth.prevAction',$action);
       $this->Session->write('Auth.prevId',$id);
       $this->log( "$controller/$action/$id", 'debug');
    }
 
-# does not work   
-#   function redirectBack() {
-#      if(is_null($this->Session->read('Auth.prevId'))) {
-#         $this->redirect(array('controller'=>$this->Session->read('Auth.prevController'),
-#                            'action'=>$this->Session->read('Auth.prevAction')));
-#      } else {
-#         $this->redirect(array('controller'=>$this->Session->read('Auth.prevController'),
-#                            'action'=>$this->Session->read('Auth.prevAction'),
-#                            $this->Session->read('PrevPos.Id')));
-#      }
-#   }
-   
    function loadLastPos() {
       $redirectURL = array();
       $redirectURL['controller'] = $this->Session->read('Auth.prevController');
@@ -43,7 +35,6 @@ class TrackerComponent extends Object {
       $this->log( $redirectURL , 'debug');
       return $redirectURL;
    }
-
    
    function back() {
       $this->controller->redirect( $this->loadLastPos() ); 
