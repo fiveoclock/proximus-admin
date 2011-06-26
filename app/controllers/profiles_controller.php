@@ -8,12 +8,14 @@ class ProfilesController extends AppController {
 
    function beforeFilter() {
       //parent::beforeFilter();
-      #$this->MyAuth->allowedActions = array('*');
       $this->MyAuth->userModel = 'User';
       //$this->MyAuth->authorize = 'controller';
-      //$this->MyAuth->actionPath = 'controllers/';
       $this->MyAuth->loginAction = array('user' => true, 'controller' => 'profiles', 'action' => 'login');
-      $this->MyAuth->loginRedirect = array('user' => true, 'controller' => 'profiles', 'action' => 'index');
+      $this->MyAuth->loginRedirect = array('user' => true, 'controller' => 'profiles', 'action' => 'start');
+      $this->MyAuth->logoutRedirect = array('user' => false, 'controller' => 'pages', 'action' => 'start');
+      $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
+      $this->MyAuth->authError = 'Access denied';
+      $this->MyAuth->userScope = array('User.active' => 'Y');
    }
 
    function afterFilter() {
