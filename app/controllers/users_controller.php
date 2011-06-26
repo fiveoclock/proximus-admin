@@ -14,7 +14,7 @@ class UsersController extends AppController {
    function afterFilter() {
       $allowedActions = array('view', 'index');
       if (in_array($this->params['action'],$allowedActions)) {
-         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
+         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
       }   
    }   
 

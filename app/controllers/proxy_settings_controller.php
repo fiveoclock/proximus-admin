@@ -4,17 +4,15 @@ class ProxySettingsController extends AppController {
 	var $name = 'ProxySettings';
 	var $helpers = array('Html', 'Form');
    var $paginate = array('limit' => 100);
-   #var $uses = array('ProxySetting', 'Location');
 
    function beforeFilter() {
       parent::beforeFilter();
-      #$this->MyAuth->allowedActions = array('*');
    }
 
    function afterFilter() {
-      $allowedActions = array('index','delete','add','edit');
+      $allowedActions = array('admin_index');
       if (in_array($this->params['action'],$allowedActions)) {
-         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
+         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
       }
    }   
 
@@ -25,14 +23,14 @@ class ProxySettingsController extends AppController {
 	function admin_add() {
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!empty($this->data)) {
          $this->ProxySetting->create();
          if ($this->ProxySetting->save($this->data)) {
             $this->Session->setFlash(__('The proxy has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; add: " . $this->data['ProxySetting']['id'], 'activity');
-            $this->redirect(array('action'=>'index'));
+            $this->Tracker->back();
          } else {
             $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
          }
@@ -58,17 +56,17 @@ class ProxySettingsController extends AppController {
    function admin_edit($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid proxy', true));
-         $this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!empty($this->data)) {
          if ($this->ProxySetting->save($this->data)) {
             $this->Session->setFlash(__('The proxy has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $this->data['ProxySetting']['id'], 'activity');
-            $this->redirect(array('action'=>'index'));
+            $this->Tracker->back();
          } else {
             $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
          }
@@ -97,17 +95,17 @@ class ProxySettingsController extends AppController {
    function admin_editdb($id = null) {
       if (!$id && empty($this->data)) {
          $this->Session->setFlash(__('Invalid proxy', true));
-         $this->redirect(array('action'=>'index'));
+         $this->Tracker->back();
       }
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));
-         $this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
       }
       if (!empty($this->data)) {
          if ($this->ProxySetting->save($this->data)) {
             $this->Session->setFlash(__('The proxy has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name ; edit database: " . $this->data['ProxySetting']['id'], 'activity');
-            $this->redirect(array('action'=>'index'));
+            $this->Tracker->back();
          } else {
             $this->Session->setFlash(__('The proxy could not be saved. Please, try again.', true));
          }
@@ -121,7 +119,7 @@ class ProxySettingsController extends AppController {
 	function admin_delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid id for proxy', true));
-			$this->redirect($this->Tracker->loadLastPos());
+         $this->Tracker->back();
 		}
 		if ($this->ProxySetting->delete($id)) {
 			$this->Session->setFlash(__('Proxy deleted', true));

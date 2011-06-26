@@ -58,7 +58,7 @@ class PagesController extends AppController {
 
    function afterFilter() {
       $allowedActions = array('view', 'index');
-      $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass'][0]);
+      $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
    }
 
    function beforeFilter() {
