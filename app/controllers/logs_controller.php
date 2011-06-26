@@ -9,26 +9,29 @@ class LogsController extends AppController {
       parent::beforeFilter();
    }
 
-   function admin_searchlist() {
-//      pr($this->params['form'] );
-//      pr($this->data);
-      # retrieve data for form fields
+   function afterFilter() {
+      $allowedActions = array('admin_searchlist');
+      if (in_array($this->params['action'],$allowedActions)) {
+         $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
+      }
+   }
 
+   function admin_searchlist() {
       /* # don't really know.......
       if ($this->Session->read('Auth.godmode') != 1) {
          $this->Session->setFlash(__('You are not allowed to access this search method', true));
-         $this->redirect(array('action'=>'searchlist'));
+         $this->Tracker->back();
       }
       */
 
       # get proxys / locations
-      if($this->Session->read('Auth.godmode') !=1) {
+      if( $this->Session->read('role.name') == "admin_global" ) {
+         $find_conditions = array("Location.id NOT" => "1");
+      }
+      else {
          $allowed_locations = parent::getAdminLocationIds();
          $find_conditions = array('Location.id'=>$allowed_locations,
                                  'Location.id NOT' => "1");
-      }
-      elseif($this->Session->read('Auth.godmode') == 1) {
-         $find_conditions = array("Location.id NOT" => "1");
       }
 
       $locations_list = $this->ProxySetting->find('all',
@@ -53,10 +56,15 @@ class LogsController extends AppController {
       # If form was submitted
       if (!empty($this->data) && isset($this->data['Log']['location'])) {
          $proxy = $this->ProxySetting->findById($this->data['Log']['location']);
+
+         // check permissions
+         if ( ! parent::checkSecurity( $proxy['ProxySetting']['location_id'] ) ) $this->Tracker->back();
+
+         // use correct datasource
          $this->setDataSource($proxy);
 
-         $conditions = array();
          # build up conditions for query
+         $conditions = array();
          if( !empty($this->data['Log']['site'])) {
             $conditions['Log.sitename LIKE'] = '%'.$this->data['Log']['site'].'%';
          }
@@ -157,7 +165,7 @@ class LogsController extends AppController {
 	function admin_view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Invalid Log.', true));
-			$this->redirect(array('action'=>'index'));
+			$this->Tracker->back();
 		}
 		$this->set('log', $this->Log->read(null, $id));
 	}
@@ -165,7 +173,7 @@ class LogsController extends AppController {
 	function admin_delete($id = null, $proxy_id = null) {
 		if (!$id || !$proxy_id) {
 			$this->Session->setFlash(__('Invalid id for Log', true));
-			$this->redirect(array('action'=>'searchlist'));
+			$this->Tracker->back();
       }
       $proxy = $this->ProxySetting->findById($proxy_id);
       //pr($proxy);
@@ -174,7 +182,7 @@ class LogsController extends AppController {
 		if ($this->Log->delete($id)) {
          $this->log( $this->MyAuth->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
 			$this->Session->setFlash(__('Log deleted', true));
-		   $this->redirect(array('action'=>'searchlist'));
+		   $this->Tracker->back();
 		}
 	}
 
@@ -188,29 +196,18 @@ class LogsController extends AppController {
       if ( in_array($this->action, array('admin_delete', 'admin_view' ) )) {
          $log = $this->Log->read(null, $this->passedArgs['0'] );
          $locId = $log['Location']['id'];
-         //pr($locs);
-         //pr($log);
 
-         if (!in_array($locId, $locs )) {
-            $this->Session->setFlash(__('You are not allowed to access this group', true));
-            return false;
-         }
+         if ( ! parent::checkSecurity( $locId)) $this->Tracker->back();
          return true;
       }
-
 
       if ( in_array($this->action, array('admin_searchlist' ) )) {
          if ( isset($this->data) ) {
             $proxy = $this->ProxySetting->read(null, $this->data['Log']['location'] );
             $locId = $proxy['Location']['id'];
-            //pr($locs);
-            //pr($locId);
-            if (!in_array($locId, $locs )) {
-               $this->Session->setFlash(__('You are not allowed to access this group', true));
-               return false;
-            }
-         }
 
+            if ( ! parent::checkSecurity( $locId)) $this->Tracker->back();
+         }
          return true;
       }
 
