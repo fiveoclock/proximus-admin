@@ -4,7 +4,12 @@ class AppController extends Controller {
    var $priv_roles = array('admin_global', 'admin_location_global_ro'); # global- and read-only admins
 
    function beforeRender() {
-      $this->set('auth', $this->MyAuth->user());
+      // get usermodel from auth
+      $userModel = $this->MyAuth->getModel();
+      // set the user_id and read the user
+      $user = $userModel->read( null, $this->MyAuth->user('id') );
+      // and set auth variable for the view
+      $this->set('auth', $user);
    }
 
    function beforeFilter() {
@@ -17,18 +22,6 @@ class AppController extends Controller {
       $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
       $this->MyAuth->authError = 'Access denied';
       $this->MyAuth->userScope = array('Admin.active' => 'Y');
-/*
-      if ($this->MyAuth->user()) {
-         $this->Session->write('Auth.locations', $this->checkAllowedLocations());
-         if ($this->Session->read('Auth.Admin.role_id')==1) {
-            #set godmode to 1 for global admin groups in order to see all entries
-            $this->Session->write('Auth.godmode',1);
-         }
-      }
-      else {
-         $this->Session->destroy();
-      }
- */     
    } 
   
    function getAdminLocations() {
@@ -39,19 +32,14 @@ class AppController extends Controller {
    }
 
    function getAdminLocationIds() {
-      $locations_array = $this->getAdminLocations();
+      $locations_array = self::getAdminLocations();
       $results = Set::extract('/Location/id', $locations_array);
       return $results;   
    }
 
    function isAuthorized() {
       $user = self::getUser();
-      //pr( $user);
-      //pr( $user['Role']['name'] );
-
-      // maybe move this to auth??
-      $this->Session->write('role', $user['Role'] );
-      
+     
       $this->log( $user['Admin']['username'] . "; $this->action; " , 'activity');
       if ( $user['Role']['name'] == 'admin_global') {
          return true;

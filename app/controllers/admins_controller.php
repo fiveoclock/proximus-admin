@@ -16,7 +16,16 @@ class AdminsController extends AppController {
       }
    }
 
-   function admin_login() { }
+   function admin_login() { 
+      if ($this->MyAuth->user()) {
+         $userModel = $this->MyAuth->getModel();
+         $user = $userModel->read( null, $this->MyAuth->user('id') );
+         $this->Session->write('role', $user['Role'] );
+      }
+      else {
+         $this->Session->destroy();
+      }
+   }
  
    function admin_logout() {
       $this->Session->setFlash('Good-Bye');

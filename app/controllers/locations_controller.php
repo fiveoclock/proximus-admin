@@ -139,9 +139,11 @@ class LocationsController extends AppController {
       if ($this->action == 'admin_start') {
          return true;
       }
+
       if ($this->action == 'admin_view') {
          $locs = parent::getAdminLocationIds();
          array_push($locs, 1);
+         $locId = $this->params['pass'][0];
 
          if ( ! parent::checkSecurity( $locId, $locs)) $this->Tracker->back();
          return true;
