@@ -26,9 +26,9 @@
 			<?php echo $admin['Admin']['active']; ?>
 			&nbsp;
 		</dd>
-	</dl>
+		<dt>Assigned locations</dt>
+   </dl>
 
-Assigned locations:
 <ul>
 <?php
 $i = 0;
@@ -38,10 +38,10 @@ endforeach;
 
 ?>
 </ul>
-
 </div>
 
-Actions:
+<br>
+<h2>Actions</h2>
 <div class="actions">
    <ul>
       <li><?php echo $html->link('Change password',array('action'=>'changePassword',$this->data['Admin']['id'])); ?></li>

@@ -1,11 +1,6 @@
 <div class="users view">
-<h2><?php  __('User');?></h2>
+<h2><?php  __('Your profile');?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
-		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $user['User']['id']; ?>
-			&nbsp;
-		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Username'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $user['User']['username']; ?>
@@ -21,14 +16,14 @@
 			<?php echo $user['User']['emailaddress']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Location Id'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Location'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $user['User']['location_id']; ?>
+			<?php echo $user['Location']['code'] . " - " . $user['Location']['name']; ?>
 			&nbsp;
 		</dd>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Group Id'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Group'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
-			<?php echo $user['User']['group_id']; ?>
+			<?php echo $user['Group']['name']; ?>
 			&nbsp;
 		</dd>
 		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Updated'); ?></dt>
@@ -38,8 +33,14 @@
 		</dd>
 	</dl>
 </div>
+<br>
+
+<h2>Actions</h2>
 <div class="actions">
 	<ul>
       <li><?php echo $html->link(__('Change password', true), array('action'=>'setPassword')); ?></li>
 	</ul>
 </div>
+
+<br>
+<br>

@@ -41,7 +41,15 @@ h3 {font-size:120%;}
 
 h4 {font-size:100%;}
 
-li, dd { margin-left:2em; }
+li, dd { 
+   margin-left:2em; 
+}
+
+dt { 
+   font-weight: bold;
+   margin-top: 15px;
+   font-size:110%
+}
 
 /*fieldset { padding: .5em; } */
 
