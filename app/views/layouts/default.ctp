@@ -15,7 +15,7 @@
 <div id="header">
 
 <?php echo $html->image('logo.png', array("id"=>"logo") ); ?>
-<div id="title"><a href="/">ProXimus</a></div>
+<div id="title">ProXimus</div>
 
 
 <div id="slogan">Administration Interface</div>
