@@ -4,9 +4,10 @@
  		<legend><?php __('Edit Proxy Settings');?></legend>
 	<?php
 		echo $form->input('id');
-      echo $form->input('location_id');
-      echo $form->input('fqdn_proxy_hostname');
-      echo $form->input('redirection_host');
+      echo $form->input('location_id', array( 'label'=> 'Location where the proxy resides') );
+      echo $form->input('fqdn_proxy_hostname', array( 'label'=> 'Fully quallified hostname of the proxy server') );
+      echo $form->input('redirection_host', array( 'label'=> 'Redirection host for user messages') );
+      echo $form->input('redirection_path', array( 'label'=> 'Redirection path for user messages (result eg: http://$host$path/proximus.php? )') );
       echo $form->input('smtpserver');
       echo $form->input('admin_email');
       echo $form->input('admincc', array('options' => array('0'=>'No','1'=>'Yes'), 'label'=> 'Send CC mails to admin?' ));
