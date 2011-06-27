@@ -34,6 +34,9 @@ class ProfilesController extends AppController {
       $this->redirect($this->MyAuth->logout());
    }
 
+   function user_start() {
+   }
+
    function user_view($id = null) {
       if (!$id) {
          $this->Session->setFlash(__('Invalid user.', true));
