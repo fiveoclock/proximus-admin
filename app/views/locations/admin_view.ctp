@@ -5,33 +5,36 @@
 	?>
 </h2>
 </div>
-<div class="related">
-	<h3><?php __('Location Groups');?></h3>
-   <li><?php echo $html->link(__('New Group', true), array('controller'=> 'groups', 'action'=>'add', $location['Location']['id']));?> </li>
-   <br>
-	<?php if (!empty($groups)):?>
-	<table cellpadding = "0" cellspacing = "0">
-	<tr>
-		<th><?php __('Name'); ?></th>
-		<th><?php __('Location'); ?></th>
-		<th class="actions"><?php __('Actions');?></th>
-	</tr>
-	<?php
-		foreach ($groups as $group):
-		?>
-		<tr>
-			<td><?php echo $group['Group']['name'];?></td>
-			<td><?php echo $group['Location']['code'];?></td>
-			<td class="actions">
-				<?php echo $html->link(__('Manage', true), array('controller'=> 'groups', 'action'=>'view', $group['Group']['id'])); ?>
-				<?php echo $html->link(__('Delete', true), array('controller'=> 'groups', 'action'=>'delete', $group['Group']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $group['Group']['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</table>
+
+<?php if ( $location['Location']['id'] != 1 ):  // dont show groups section for location 1 ?>
+   <div class="related">
+      <h3><?php __('Location Groups');?></h3>
+      <li><?php echo $html->link(__('New Group', true), array('controller'=> 'groups', 'action'=>'add', $location['Location']['id']));?> </li>
+      <br>
+      <?php if (!empty($groups)):?>
+      <table cellpadding = "0" cellspacing = "0">
+      <tr>
+         <th><?php __('Name'); ?></th>
+         <th><?php __('Location'); ?></th>
+         <th class="actions"><?php __('Actions');?></th>
+      </tr>
+      <?php
+         foreach ($groups as $group):
+         ?>
+         <tr>
+            <td><?php echo $group['Group']['name'];?></td>
+            <td><?php echo $group['Location']['code'];?></td>
+            <td class="actions">
+               <?php echo $html->link(__('Manage', true), array('controller'=> 'groups', 'action'=>'view', $group['Group']['id'])); ?>
+               <?php echo $html->link(__('Delete', true), array('controller'=> 'groups', 'action'=>'delete', $group['Group']['id']), null, sprintf(__('Are you sure you want to delete # %s?', true), $group['Group']['id'])); ?>
+            </td>
+         </tr>
+      <?php endforeach; ?>
+      </table>
+   <?php endif; ?>
+   </div>
 <?php endif; ?>
 
-</div>
 <div class="related">
 	<h3><?php __('Location-wide Rules');?></h3>
 	<li><?php echo $html->link(__('Create new Location Rule', true), array('controller'=> 'rules', 'action'=>'add', $location['Location']['id']));?> </li>
@@ -65,26 +68,28 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
 </div>
-<div class="related">
-	<h3><?php __('Not assigned users');?></h3>
-	<?php if (!empty($users)):?>
-	<table cellpadding = "0" cellspacing = "0">
-	<tr>
-		<th><?php __('Username'); ?></th>
-		<th><?php __('Realname'); ?></th>
-		<th><?php __('Emailaddress'); ?></th>
-	</tr>
-	<?php
-		foreach ($users as $user):
-		?>
-		<tr>
-			<td><?php echo $user['User']['username'];?></td>
-			<td><?php echo $user['User']['realname'];?></td>
-			<td><?php echo $user['User']['emailaddress'];?></td>
-		</tr>
-	<?php endforeach; ?>
-	</table>
+
+<?php if ( $location['Location']['id'] != 1 ):  // dont show user section for location 1 ?>
+   <div class="related">
+      <h3><?php __('Not assigned users');?></h3>
+      <?php if (!empty($users)):?>
+      <table cellpadding = "0" cellspacing = "0">
+      <tr>
+         <th><?php __('Username'); ?></th>
+         <th><?php __('Realname'); ?></th>
+         <th><?php __('Emailaddress'); ?></th>
+      </tr>
+      <?php
+         foreach ($users as $user):
+         ?>
+         <tr>
+            <td><?php echo $user['User']['username'];?></td>
+            <td><?php echo $user['User']['realname'];?></td>
+            <td><?php echo $user['User']['emailaddress'];?></td>
+         </tr>
+      <?php endforeach; ?>
+      </table>
+   <?php endif; ?>
 <?php endif; ?>
 </div>
