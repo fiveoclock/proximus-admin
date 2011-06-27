@@ -9,7 +9,8 @@
       echo $form->input('redirection_host');
       echo $form->input('smtpserver');
       echo $form->input('admin_email');
-      echo $form->input('admin_cc', array('options' => array('0'=>'Off','1'=>'On')));
+      echo $form->input('admincc', array('options' => array('0'=>'No','1'=>'Yes'), 'label'=> 'Send CC mails to admin?' ));
+      echo $timezone->select('timezone', 'Timezone');
 	?>
    <?php echo $form->end('Submit');?>
    <?php echo $this->element('back_btn');?>

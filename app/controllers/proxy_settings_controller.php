@@ -2,7 +2,7 @@
 class ProxySettingsController extends AppController {
 
 	var $name = 'ProxySettings';
-	var $helpers = array('Html', 'Form');
+	var $helpers = array('Html', 'Form', 'Timezone');
    var $paginate = array('limit' => 100);
 
    function beforeFilter() {
