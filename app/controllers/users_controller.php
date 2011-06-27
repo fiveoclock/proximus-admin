@@ -78,23 +78,7 @@ class UsersController extends AppController {
          }
       }
 
-      # show location code + name 
-      $locations_all = $this->User->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
-
-		$groups = $this->User->Group->find('list');
-		$this->set(compact('locations', 'groups'));
+      $this->CommonTasks->setLocationsList();
 	}
 
 	function admin_edit($id = null) {
@@ -118,24 +102,8 @@ class UsersController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->User->read(null, $id);
 		}
-		
-      # show location code + name 
-      $locations_all = $this->User->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
 
-		$groups = $this->User->Group->find('list');
-		$this->set(compact('locations','groups'));
+      $this->CommonTasks->setLocationsList();
 	}
    
    // set password function for the admin

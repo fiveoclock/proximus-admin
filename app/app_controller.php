@@ -1,6 +1,6 @@
 <?php  
 class AppController extends Controller {
-   var $components = array('Acl', 'MyAuth', 'Session', 'Tracker');
+   var $components = array('Acl', 'MyAuth', 'Session', 'Tracker', 'CommonTasks');
    var $priv_roles = array('admin_global', 'admin_location_global_ro'); # global- and read-only admins
 
    function beforeRender() {

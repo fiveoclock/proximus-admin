@@ -21,6 +21,7 @@ class RulesController extends AppController {
    }   
 
    function admin_search($pattern = null) {
+      $user = parent::getUser();
       # code after form submit
 		if (!empty($this->data)) {
          $pattern = "'%".$this->data['Rule']['pattern']."%'";
@@ -36,7 +37,7 @@ class RulesController extends AppController {
          $this->set('results',$search_result);
       }
 
-      if( !in_array($this->Session->read('role.name'), $this->priv_roles) ) {
+      if( in_array($user['Role']['name'], $this->priv_roles) ) {
          $allowed_locations = parent::getAdminLocationIds();
          $find_condition = array('fields' => array('Location.*'),
                               'conditions'=>array("AND" => array(

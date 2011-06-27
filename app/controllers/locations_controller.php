@@ -24,11 +24,12 @@ class LocationsController extends AppController {
 	}
 	
 	function admin_start() {
+      $user = parent::getUser();
       $allowed_locations = parent::getAdminLocationIds();
       # allow everyone to view location ALL...
       array_push($allowed_locations, 1);
 
-      if( in_array($this->Session->read('role.name'), $this->priv_roles) ) {
+      if( in_array($user['Role']['name'], $this->priv_roles) ) {
          $find_condition = array('fields' => array('Location.*'),
                               'order'=>'Location.code'
                                );

@@ -23,9 +23,10 @@ class LogsController extends AppController {
          $this->Tracker->back();
       }
       */
+      $user = parent::getUser();
 
       # get proxys / locations
-      if( $this->Session->read('role.name') == "admin_global" ) {
+      if( $user['Role']['name'] == "admin_global" ) {
          $find_conditions = array("Location.id NOT" => "1");
       }
       else {
