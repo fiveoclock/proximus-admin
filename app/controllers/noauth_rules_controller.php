@@ -31,9 +31,11 @@ class NoauthRulesController extends AppController {
          $this->Session->setFlash(__('Canceled', true));
          $this->Tracker->back();
       }
+      $this->CommonTasks->setLocationsList(true);
+
 		if (!empty($this->data)) {
          // check permission
-         if ( ! parent::checkSecurity( $this->data[ $this->modelClass ][ 'location_id' ] )) $this->Tracker->back();
+         if ( ! parent::checkSecurity( $this->data[ $this->modelClass ][ 'location_id' ] )) return;
 
 			$this->NoauthRule->create();
 			if ($this->NoauthRule->save($this->data)) {
@@ -45,7 +47,6 @@ class NoauthRulesController extends AppController {
 				$this->Session->setFlash(__('The Noauth rule could not be saved. Please, try again.', true));
 			}
 		}
-      $this->CommonTasks->setLocationsList(true);
 	}
 
 	function admin_edit($id = null) {
@@ -93,12 +94,7 @@ class NoauthRulesController extends AppController {
       }
 
       // get global settings
-      $Setting  = ClassRegistry::init('GlobalSetting');
-      $settings = array();
-      foreach( $Setting->find('all') as $key=>$value){
-         $content = $value['GlobalSetting'];
-         $settings[ $content['name'] ] = $content['value'] ;
-      }
+      $settings = $this->CommonTasks->getGlobalSettings();
 
       if ( in_array($this->action, array('admin_view', 'admin_edit', 'admin_delete') )) {
          if ( $settings['locadmin_manage_noauth'] != "true" ) return false;

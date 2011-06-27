@@ -19,11 +19,7 @@ class UsersController extends AppController {
 
 	function admin_index() {
       # get global settings
-      $Setting  = ClassRegistry::init('GlobalSetting');
-      foreach( $Setting->find('all') as $key=>$value ){
-         $content = $value['GlobalSetting'];
-         $settings[ $content['name'] ] = $content['value'] ; 
-      }
+      $settings = $this->CommonTasks->getGlobalSettings();
       $this->set('settings', $settings);
 
       # If form has been submitted
@@ -41,14 +37,8 @@ class UsersController extends AppController {
 
 	function admin_add() {
       # get global settings
-      $Setting  = ClassRegistry::init('GlobalSetting');
-      $settings = array();
-      foreach( $Setting->find('all') as $key=>$value){
-         $content = $value['GlobalSetting'];
-         $settings[ $content['name'] ] = $content['value'] ; 
-      }
+      $settings = $this->CommonTasks->getGlobalSettings();
       $this->set('settings', $settings);
-
 
       if (array_key_exists('cancel', $this->params['form'])) {
          $this->Session->setFlash(__('Canceled', true));

@@ -36,5 +36,13 @@ class CommonTasksComponent extends Object {
       $this->controller->redirect( $this->loadLastPos() ); 
    }
 
+   function getGlobalSettings() {
+      $Setting  = ClassRegistry::init('GlobalSetting');
+      foreach( $Setting->find('all') as $key=>$value ){
+         $content = $value['GlobalSetting'];
+         $settings[ $content['name'] ] = $content['value'] ; 
+      }
+      return $settings;
+   }
 }
 ?>

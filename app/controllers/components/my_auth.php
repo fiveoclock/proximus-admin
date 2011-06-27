@@ -3,6 +3,7 @@ App::import('Component', 'Auth');
 
 class MyAuthComponent extends AuthComponent {
 	var $ldap = null;
+   var $components = array('Session', 'CommonTasks');
 
 	/**
 	 * Main execution method.  Handles redirecting of invalid users, and processing
@@ -56,13 +57,7 @@ class MyAuthComponent extends AuthComponent {
 		$this->ldap = $this->getModel($this->userModel);
 
       # get global settings
-      $Setting  = ClassRegistry::init('GlobalSetting');
-      $settings = array();
-      foreach( $Setting->find('all') as $key=>$value){
-         $content = $value['GlobalSetting'];
-         $settings[ $content['name'] ] = $content['value'] ;
-      }
-
+      $settings = $this->CommonTasks->getGlobalSettings();
 
 		if ($loginAction == $url) {
 			if (empty($controller->data) || !isset($controller->data[$this->userModel])) {
