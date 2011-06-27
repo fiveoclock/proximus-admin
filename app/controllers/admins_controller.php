@@ -56,22 +56,9 @@ class AdminsController extends AppController {
          }
 		}
 
-      $locations_all = $this->Admin->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
-
+      $this->CommonTasks->setLocationsList();
 		$roles = $this->Admin->Role->find('list');
-		$this->set(compact('locations', 'roles'));
+		$this->set(compact('roles'));
 	}
 
 	function admin_edit($id = null) {
@@ -96,22 +83,9 @@ class AdminsController extends AppController {
 			$this->data = $this->Admin->read(null, $id);
 		}
 
-		$locations_all = $this->Admin->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));  
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      ); 
-
-      $roles = $this->Admin->Role->find('list');
-		$this->set(compact('locations','roles'));
+      $this->CommonTasks->setLocationsList();
+		$roles = $this->Admin->Role->find('list');
+		$this->set(compact('roles'));
 	}
 
 	function admin_delete($id = null) {

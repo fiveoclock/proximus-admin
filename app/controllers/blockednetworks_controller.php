@@ -39,21 +39,7 @@ class BlockednetworksController extends AppController {
 			}
 		}
 
-      # show location code + name 
-      $locations_all = $this->Blockednetwork->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
-      $this->set(compact('locations'));
+      $this->CommonTasks->setLocationsList(true);
 	}
 
 	function admin_edit($id = null) {
@@ -79,21 +65,7 @@ class BlockednetworksController extends AppController {
 			$this->data = $this->Blockednetwork->read(null, $id);
 		}
 
-      # show location code + name 
-      $locations_all = $this->Blockednetwork->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
-      $this->set(compact('locations'));
+      $this->CommonTasks->setLocationsList(true);
 	}
 
 	function admin_delete($id = null) {

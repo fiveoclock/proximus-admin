@@ -45,22 +45,7 @@ class NoauthRulesController extends AppController {
 				$this->Session->setFlash(__('The Noauth rule could not be saved. Please, try again.', true));
 			}
 		}
-
-      # show location code + name 
-      $locations_all = $this->NoauthRule->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
-      $this->set(compact('locations'));
+      $this->CommonTasks->setLocationsList(true);
 	}
 
 	function admin_edit($id = null) {
@@ -84,22 +69,7 @@ class NoauthRulesController extends AppController {
 		if (empty($this->data)) {
 			$this->data = $this->NoauthRule->read(null, $id);
 		}
-
-      # show location code + name 
-      $locations_all = $this->NoauthRule->Location->find('all',array(
-         'fields'=>array('Location.id','Location.code','Location.name'),
-         'recursive'=>-1,
-         'conditions'=>array("Location.id NOT" => "1"),
-         'order'=>array(
-            'Location.code',
-      )));
-      # convert array
-      $locations = Set::combine(
-         $locations_all,
-         '{n}.Location.id',
-         array('%s %s','{n}.Location.code','{n}.Location.name')
-      );
-      $this->set(compact('locations'));
+      $this->CommonTasks->setLocationsList(true);
 	}
 
 	function admin_delete($id = null) {
@@ -130,7 +100,6 @@ class NoauthRulesController extends AppController {
          $settings[ $content['name'] ] = $content['value'] ;
       }
 
-
       if ( in_array($this->action, array('admin_view', 'admin_edit', 'admin_delete') )) {
          if ( $settings['locadmin_manage_noauth'] != "true" ) return false;
 
@@ -144,6 +113,7 @@ class NoauthRulesController extends AppController {
       if ($this->action == 'admin_add') {
          // rest of security check in function
          if ( $settings['locadmin_manage_noauth'] != "true" ) return false;
+         return true;
       }
 
       return false;
