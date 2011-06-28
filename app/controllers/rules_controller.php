@@ -123,6 +123,10 @@ class RulesController extends AppController {
          if ( ! parent::checkSecurity( $this->data[ $this->modelClass ][ 'location_id' ] )) $this->Tracker->back();
 
 			$this->Rule->create();
+         if ( $this->data['Rule']['starttime']  == $this->data['Rule']['endtime'] ) {
+            $this->data['Rule']['starttime'] = null;
+            $this->data['Rule']['endtime'] = null;
+         }
 			
          if ($this->Rule->save($this->data)) {
 				$this->Session->setFlash(__('The Rule has been saved', true));
@@ -166,6 +170,11 @@ class RulesController extends AppController {
 		}
       
 		if (!empty($this->data)) {
+         if ( $this->data['Rule']['starttime']  == $this->data['Rule']['endtime'] ) {
+            $this->data['Rule']['starttime'] = null;
+            $this->data['Rule']['endtime'] = null;
+         }
+	
 			if ($this->Rule->save($this->data)) {
 				$this->Session->setFlash(__('The Rule has been saved', true));
             $this->log( $this->MyAuth->user('username') . "; $this->name; edit: " . $this->data['Rule']['id'], 'activity');
