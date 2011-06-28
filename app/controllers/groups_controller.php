@@ -3,6 +3,7 @@ class GroupsController extends AppController {
 
 	var $name = 'Groups';
 	var $helpers = array('Html', 'Form');
+	//var $uses = array('Group', 'Location');
 
    function beforeFilter() {
       parent::beforeFilter();
@@ -95,15 +96,16 @@ class GroupsController extends AppController {
 			$this->data = $this->Group->read(null, $id);
 		}
 		#filter to selected one location, session variable is set in LocationsController->view
-		$locations = $this->Group->Location->find('list',array('conditions'=>array('Location.id'=>$this->Session->read("Location"))));
+		$location_id = $this->Group->field('location_id' );
+		$group_id = $this->Group->getID();
 
 		$users_all = $this->Group->User->find('all',array(
 						'fields'=>array('User.id','User.username','User.realname'),
 						'recursive'=>-1,
 						'conditions'=>array(
-								'User.location_id'=>$this->Session->read("Location"),
+								'User.location_id'=>$location_id,
 								'or'=>array(
-									'User.group_id'=>array(0,$this->Session->read("Group")))),
+									'User.group_id'=>array(0,$group_id))),
 						'order'=>array(
 							'User.group_id DESC',
 							'User.realname')));
@@ -114,8 +116,8 @@ class GroupsController extends AppController {
 			array('%s (%s)','{n}.User.realname','{n}.User.username')
 			);
 		
-		$camefrom = $this->Session->read('PrevPos.Controller');
-		$this->set(compact('locations','users','camefrom'));
+		//$camefrom = $this->Session->read('PrevPos.Controller');
+		$this->set(compact('location_id','users'));
 	}
 	
 	function admin_delete($id = null) {

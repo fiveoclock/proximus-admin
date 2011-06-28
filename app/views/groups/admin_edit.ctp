@@ -5,7 +5,7 @@
 	<?php
 		echo $form->input('id');
 		echo $form->input('name');
-		if ($camefrom == 'locations') { echo $form->input('location_id'); }
+		echo $form->hidden('location_id', array('type' => 'text') );
 		echo $form->input('User',array('type'=>'select','multiple'=>'multiple'));
 	?>
    <?php echo $form->end('Submit');?>
