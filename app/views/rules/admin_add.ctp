@@ -8,7 +8,7 @@
 
       for ($i=$auth['Role']['minprio']; $i<=$auth['Role']['maxprio']; $i++) { $numbers[$i] = $i; }
 		echo $form->input('priority', array('options' => $numbers));
-		echo $form->input('policy', array('options' => $policy->getPolicies($admin['Role']['name'])));
+		echo $form->input('policy', array('options' => $policy->getPolicies($auth['Role']['name'])));
 		echo $form->input('starttime', array('type' => 'time', 'timeFormat' => 24, 'interval' => 15, 'selected' => '00:00:00'));
       echo $form->input('endtime', array('type' => 'time', 'timeFormat' => 24, 'interval' => 15, 'selected' => '00:00:00'));
       echo $form->input('description');
