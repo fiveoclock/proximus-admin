@@ -3,7 +3,7 @@ App::import('Component', 'Auth');
 
 class MyAuthComponent extends AuthComponent {
 	var $ldap = null;
-   var $components = array('Session', 'CommonTasks');
+   var $components = array('Session', 'CommonTasks', 'RequestHandler');
 
 	/**
 	 * Main execution method.  Handles redirecting of invalid users, and processing

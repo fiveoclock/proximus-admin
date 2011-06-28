@@ -45,6 +45,9 @@ class UsersController extends AppController {
          $this->Tracker->back();
       }
       if (!empty($this->data)) {
+         // check permission
+         if ( ! parent::checkSecurity( $this->data[ $this->modelClass ][ 'location_id' ] )) return;
+
          if ( $settings['auth_method_User'] != "internal" ) {
             $this->data['User']['password'] = "notyetset";
             $this->data['User']['password_confirm'] = "notyetset";
@@ -152,6 +155,24 @@ class UsersController extends AppController {
    function isAuthorized() {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
+
+      // get global settings
+      $settings = $this->CommonTasks->getGlobalSettings();
+      // deny according to global setting
+      if ( $settings['locadmin_manage_users'] != "true" ) return false;
+
+      if ( in_array($this->action, array('admin_view', 'admin_edit', 'admin_delete') )) {
+         $user = $this->User->read(null, $this->passedArgs['0'] );
+         $locId = $user['Location']['id'];
+
+         if ( ! parent::checkSecurity( $locId)) $this->Tracker->back();
+         return true;
+      }
+
+      if ( in_array($this->action, array('admin_index', 'admin_add' ) )) {
+         // rest of security check in function
+         return true;
+      }
 
       return false;
    }

@@ -89,16 +89,12 @@ class NoauthRulesController extends AppController {
       $parent = parent::isAuthorized();
       if ( !is_null($parent) ) return $parent;
 
-      if ($this->action == 'admin_index') {
-         return true;
-      }
-
       // get global settings
       $settings = $this->CommonTasks->getGlobalSettings();
+      // deny if according to global setting
+      if ( $settings['locadmin_manage_noauth'] != "true" ) return false;
 
       if ( in_array($this->action, array('admin_view', 'admin_edit', 'admin_delete') )) {
-         if ( $settings['locadmin_manage_noauth'] != "true" ) return false;
-
          $rule = $this->NoauthRule->read(null, $this->passedArgs['0'] );
          $locId = $rule['Location']['id'];
 
@@ -106,9 +102,8 @@ class NoauthRulesController extends AppController {
          return true;
       }
 
-      if ($this->action == 'admin_add') {
+      if ( in_array($this->action, array('admin_index', 'admin_add' ) )) {
          // rest of security check in function
-         if ( $settings['locadmin_manage_noauth'] != "true" ) return false;
          return true;
       }
 

@@ -6,26 +6,31 @@ Below you can find a list of elements you can administer in ProXimus.<br><br>
 <h3>
 
 <?php
+$role = $auth['Role']['name'];
 
 # global admin is logged in 
 if ( isset($auth['Admin']) ) {
-   echo 'Basic Objects:';
-   echo "<br>";
 
-   if ( in_array($auth['Role']['name'], $priv_roles) ) {
-      echo $html->link('Locations','/admin/locations/index',null,null,false);
+   if ( $settings['locadmin_manage_users'] == "true" || in_array($role, $priv_roles) ) {
+      echo 'Basic Objects:';
       echo "<br>";
       echo $html->link('Users','/admin/users/index',null,null,false);
       echo "<br>";
    }
+   if ( in_array($role, $priv_roles) ) {
+      echo $html->link('Locations','/admin/locations/index',null,null,false);
+      echo "<br>";
+   }
 
-   echo "<br>";
-   echo 'Rules:';
-   echo "<br>";
-   echo $html->link('No-Auth rules','/admin/noauth_rules/index',null,null,false);
-   echo "<br>";
+   if ( $settings['locadmin_manage_noauth'] == "true" || in_array($role, $priv_roles) ) {
+      echo "<br>";
+      echo 'Rules:';
+      echo "<br>";
+      echo $html->link('No-Auth rules','/admin/noauth_rules/index',null,null,false);
+      echo "<br>";
+   }
 
-   if ( in_array($auth['Role']['name'], $priv_roles) ) {
+   if ( in_array($role, $priv_roles) ) {
       echo $html->link('Blocked networks','/admin/blockednetworks/index',null,null,false);
       echo "<br>";
       echo "<br>";
