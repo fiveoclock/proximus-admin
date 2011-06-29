@@ -18,7 +18,6 @@ echo $paginator->counter(array(
 <tr>
 	<th><?php echo $paginator->sort('Location','Location.code');?></th>
 	<th><?php echo $paginator->sort('Hostname (fqdn)');?></th>
-	<th><?php echo $paginator->sort('Redirection host');?></th>
 	<th><?php echo $paginator->sort('Admin E-Mail');?></th>
 	<th class="actions"><?php __('Actions');?></th>
 </tr>
@@ -36,9 +35,6 @@ foreach ($proxy_settings as $proxy_setting):
 		</td>
 		<td>
 			<?php echo $proxy_setting['ProxySetting']['fqdn_proxy_hostname']; ?>
-		</td>
-		<td>
-			<?php echo $proxy_setting['ProxySetting']['redirection_host']; ?>
 		</td>
 		<td>
 			<?php echo $proxy_setting['ProxySetting']['admin_email']; ?>
