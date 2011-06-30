@@ -27,7 +27,7 @@ if ( isset($auth['User']) ) {
    $user = $auth['User']['username'];
 
    echo $html->link('Home','/user/profiles/start',null,null,false);
-   #echo $html->link('My logs','/user/profiles/logs',null,null,false);
+   echo $html->link('My logs','/user/profiles/logs',null,null,false);
    echo " | ";
    echo $html->link($user.'s '.'Profile',array('user' => true, 'controller'=>'profiles','action'=>'view',$auth['User']['id']));
    echo $html->link('Logout','/user/profiles/logout',null,null,false);

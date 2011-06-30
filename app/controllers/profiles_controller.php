@@ -4,7 +4,7 @@ class ProfilesController extends AppController {
 	var $name = 'Profiles';
 	var $helpers = array('Html', 'Form');
    var $paginate = array('limit' => 100);
-   var $uses = array('User', 'GlobalSetting');
+   var $uses = array('User', 'GlobalSetting', 'Log', 'ProxySetting');
 
    function beforeFilter() {
       //parent::beforeFilter();
@@ -19,7 +19,7 @@ class ProfilesController extends AppController {
    }
 
    function afterFilter() {
-      $allowedActions = array('view', 'index');
+      $allowedActions = array('user_start', 'user_view', 'user_logs');
       if (in_array($this->params['action'],$allowedActions)) {
          $this->Tracker->savePosition($this->params['controller'],$this->params['action'], $this->params['pass']);
       }   
@@ -44,6 +44,85 @@ class ProfilesController extends AppController {
       }
       $user= $this->User->read(null, $id);
       $this->set('user', $user);
+   }
+
+   function user_logs() {
+      $user = parent::getUser();
+      $this->set('location', $user['Location']['id'] );
+      $this->set('user', $user );
+
+      ##################
+      # If form was submitted
+      if (!empty($this->data) ) {
+         $model = $this->modelClass;
+         $proxy = $this->ProxySetting->find('first', array( 'conditions' => array('Location.id' => $user['Location']['id'] ), ) );
+
+         $this->set('proxy', $proxy);
+
+         // use correct datasource
+         $this->CommonTasks->setDataSource($proxy);
+
+         # build up conditions for query
+         $conditions = array();
+         $conditions['Log.user_id'] =  $user['User']['id'];
+
+         if( !empty($this->data[$model]['site'])) {
+            $conditions['Log.sitename LIKE'] = '%'.$this->data[$model]['site'].'%';
+         }
+         if ( !empty($this->data[$model]['status'])) {
+            $conditions['Log.source'] = $this->data[$model]['status'];
+         }
+         if ( !empty($this->data[$model]['type'])) {
+            if ( $this->data[$model]['type'] == "NOT null" ) array_push($conditions, array("not" => array ( "Log.parent_id" => null) ) );
+            if ( $this->data[$model]['type'] == "null" ) $conditions['Log.parent_id'] = null;
+         }
+         // set parrent id to avoid double entries...
+         if( empty($this->data[$model]['users']) && empty($this->data[$model]['site']) && empty($this->data[$model]['type']) ) {
+            $conditions['Log.parent_id'] = null;
+         }
+
+         // delete if requested...
+         if ( isset($this->params['form']['deleteMatching']) ) {
+            $this->Log->deleteAll($conditions);
+         }
+
+         // do a search 
+         $tree = $this->Log->find('all',array('conditions'=>$conditions ));
+         $this->set('logs',$tree);
+      }
+   }
+
+   function user_confirmlog($id = null, $proxy_id = null) {
+      if (!$id || !$proxy_id) {
+         $this->Session->setFlash(__('Invalid id for Log', true));
+         $this->Tracker->back();
+      }
+      $proxy = $this->ProxySetting->findById($proxy_id);
+      //pr($proxy);
+      $this->CommonTasks->setDataSource($proxy);
+
+      $this->Log->id = $id;
+      $this->Log->set('source', 'USER');
+
+      if ($this->Log->save()) {
+         $this->Session->setFlash(__('Log confirmed', true));
+         $this->Tracker->back();
+      }
+   }
+
+   function user_deletelog($id = null, $proxy_id = null) {
+      if (!$id || !$proxy_id) {
+         $this->Session->setFlash(__('Invalid id for Log', true));
+         $this->Tracker->back();
+      }
+      $proxy = $this->ProxySetting->findById($proxy_id);
+      //pr($proxy);
+      $this->CommonTasks->setDataSource($proxy);
+
+      if ($this->Log->delete($id)) {
+         $this->Session->setFlash(__('Log deleted', true));
+         $this->Tracker->back();
+      }
    }
 
    function user_setPassword($id = null) {
@@ -84,6 +163,9 @@ class ProfilesController extends AppController {
          }
       }
    }
+
+
+
 }
 
 ?>

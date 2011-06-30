@@ -62,7 +62,7 @@ class LogsController extends AppController {
          if ( ! parent::checkSecurity( $proxy['ProxySetting']['location_id'] ) ) $this->Tracker->back();
 
          // use correct datasource
-         $this->setDataSource($proxy);
+         $this->CommonTasks->setDataSource($proxy);
 
          # build up conditions for query
          $conditions = array();
@@ -108,56 +108,6 @@ class LogsController extends AppController {
       }
    }
 
-
-   function setDataSource($proxy) {
-      //pr($proxy);  # debug
-      if ( $proxy['ProxySetting']['db_default'] != 1 ) {
-         $serverConfig = array(
-            'host' => $proxy['ProxySetting']['db_host'],
-            'database' => $proxy['ProxySetting']['db_name'],
-            'login' => $proxy['ProxySetting']['db_user'],
-            'password' => $proxy['ProxySetting']['db_pass'],
-            'datasource' => "default",
-         );
-
-         $newDbConfig = $this->dbConnect($serverConfig);
-         //pr($newDbConfig);  ## debug
-         if ( ! $newDbConfig ) {
-            return;
-         }
-         else {
-            //return $newDbConfig['name'];
-            $this->Log->useDbConfig = $newDbConfig['name'];
-            $this->Log->cacheQueries = false;
-            #pr($newDbConfig);
-         }
-      }
-   }
-
-   /**
-    * Connects to specified database
-    *
-    * @param array $config Server config to use {datasource:?, database:?}
-    * @return array db->config on success, false on failure
-    * @access public
-    */
-   function dbConnect($config = array()) {
-      ClassRegistry::init('ConnectionManager');
-
-      $nds = $config['datasource'] . '_' . $config['host'];
-      $db =& ConnectionManager::getDataSource($config['datasource']);
-      #$db->setConfig(array('name' => $nds, 'database' => $config['database'], 'persistent' => false));
-      $db->setConfig(array('name' => $nds, 
-         'host' => $config['host'], 
-         'database' => $config['database'], 
-         'login' => $config['login'], 
-         'password' => $config['password'], 
-         'persistent' => false
-      ));
-      if ( ( $ds = ConnectionManager::create($nds, $db->config) ) && $db->connect() ) return $db->config;
-      return false;
-   }
-
 	function admin_index() {
 		$this->Log->recursive = 0;
 		$this->set('logs', $this->paginate());
@@ -178,7 +128,7 @@ class LogsController extends AppController {
       }
       $proxy = $this->ProxySetting->findById($proxy_id);
       //pr($proxy);
-      $this->setDataSource($proxy);
+      $this->CommonTasks->setDataSource($proxy);
 
 		if ($this->Log->delete($id)) {
          $this->log( $this->MyAuth->user('username') . "; $this->name; delete: " . $this->data['Log']['id'], 'activity');
