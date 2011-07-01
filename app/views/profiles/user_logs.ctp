@@ -24,7 +24,6 @@
       <th><?php __('Protocol'); ?></th>
       <th><?php __('Client IP'); ?></th>
       <th><?php __('Source'); ?></th>
-      <th><?php __('User'); ?></th>
       <th><?php __('Created'); ?></th>
       <th class="actions"><?php __('Actions');?></th>
    </tr>
@@ -77,7 +76,6 @@
             <td>". $l['protocol'] ."</td>
             <td>". $l['ipaddress'] ."</td>
             <td>". $l['source'] ."</td>
-            <td>". $log['User']['username'] ."</td>
             <td>". $l['created'] ."</td>
             <td class=\"actions\">" .
                $html->link(__('Confirm', true), array('controller'=> 'profiles', 'action'=>'confirmlog', $l['id'], $proxy['ProxySetting']['id'])) . " " .
