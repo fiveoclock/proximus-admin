@@ -10,8 +10,8 @@ class ProfilesController extends AppController {
       //parent::beforeFilter();
       $this->MyAuth->userModel = 'User';
       //$this->MyAuth->authorize = 'controller';
+      $this->MyAuth->autoRedirect = false;
       $this->MyAuth->loginAction = array('user' => true, 'controller' => 'profiles', 'action' => 'login');
-      $this->MyAuth->loginRedirect = array('user' => true, 'controller' => 'profiles', 'action' => 'start');
       $this->MyAuth->logoutRedirect = array('user' => false, 'controller' => 'pages', 'action' => 'start');
       $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
       $this->MyAuth->authError = 'Access denied';
@@ -26,6 +26,9 @@ class ProfilesController extends AppController {
    }   
 
    function user_login() {
+      if( $this->MyAuth->user()) {
+        $this->redirect( array('user' => true, 'controller' => 'profiles', 'action' => 'start') );
+      }
    }
 
    function user_logout() {

@@ -8,7 +8,7 @@
       echo $form->input('status', array('options' => array(''=>'All', 'USER'=>'Confirmed by user','REDIRECT'=>'Not confirmed yet', 'LEARN'=>'Automatically learned')));
       echo $form->input('type', array('options' => array(''=>'All sites', 'null'=>'Only parent sites','NOT null'=>'Only subsites')));
 	?>
-   <?php echo $form->submit('Search',array('name'=>'search'));?>
+   <?php echo $form->submit('Show',array('name'=>'search'));?>
    <?php echo $form->submit('Delete all', array('name'=>'deleteMatching'));?>
 	</fieldset>
 </div>
