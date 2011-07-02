@@ -2,6 +2,7 @@
 class LocationsController extends AppController {
 
 	var $name = 'Locations';
+	var $pageTitle = 'Locations';
 	var $helpers = array('Html', 'Form');
 	var $actsAs = array('Containable');
    var $paginate = array('limit' => 100);

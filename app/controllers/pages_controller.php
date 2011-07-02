@@ -1,6 +1,7 @@
 <?php
 class PagesController extends AppController {
 	var $name = 'Pages';
+	var $pageTitle = 'Pages';
 	var $helpers = array('Html');
 	var $uses = array();
 

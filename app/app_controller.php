@@ -1,6 +1,6 @@
 <?php  
 class AppController extends Controller {
-   var $components = array('MyAuth', 'Session', 'Tracker', 'CommonTasks');
+   var $components = array('MyAuth', 'Session', 'Tracker', 'CommonTasks' );
    var $priv_roles = array('admin_global', 'admin_location_global_ro'); # global- and read-only admins
 
    function beforeRender() {
@@ -10,6 +10,10 @@ class AppController extends Controller {
       $user = $userModel->read( null, $this->MyAuth->user('id') );
       // and set auth variable for the view
       $this->set('auth', $user);
+
+      // set last pos
+      $this->set('lastPos', $this->Tracker->lastPos());
+      $this->Tracker->lastPos();
    }
 
    function beforeFilter() {

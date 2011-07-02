@@ -1,6 +1,7 @@
 <?php
 class LogsController extends AppController {
    var $name = 'Logs';
+   var $pageTitle = 'Logs';
    var $helpers = array('Html', 'Form');
    var $uses = array('Log','Location','User','ProxySetting');
    var $paginate = array('limit' => 100);

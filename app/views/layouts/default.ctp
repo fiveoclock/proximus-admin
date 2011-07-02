@@ -6,52 +6,47 @@
 <head>
 <title>Proximus Admin :: <?php echo $title_for_layout?></title>
 <?php echo $html->charset('UTF-8')?>
-<?php echo $html->css('cake.forms', 'stylesheet', array("media"=>"all" ));?>
+<?php //echo $html->css('cake.forms', 'stylesheet', array("media"=>"all" ));?>
 <?php echo $html->css('contented1', 'stylesheet', array("media"=>"all" ));?>
 <?php echo $this->Html->script('jquery-1.6.1'); ?> 
 <?php echo $this->Html->script('ani'); ?> 
 </head>
 <body>
 <div id="header">
-
-<?php echo $html->image('logo.png', array("id"=>"logo") ); ?>
-<div id="title">ProXimus</div>
-
-
-<div id="slogan">Administration Interface</div>
-
+   <?php echo $html->image('logo.png', array("id"=>"logo") ); ?>
+   <div id="title">ProXimus</div>
+   <div id="slogan">Administration Interface</div>
 </div>
 
+
 <div id="nav">
-<?php 
-   echo $this->element('menu'); 
-?>
+   <?php echo $this->element('menu'); ?>
 </div>
 
 
 <div id="content">
-<div id="maincontent">
-<?php echo $this->Session->flash(); ?>
-<?php echo $this->Session->flash('auth'); ?>
-<?php echo $content_for_layout?>
-
+   <div id="maincontent">
+   <?php echo $this->Session->flash(); ?>
+   <?php echo $this->Session->flash('auth'); ?>
+   <?php echo $content_for_layout?>
 </div>
 
 
 <div id="footer">
-<div id="copyrightdesign">
-ProXimus-Admin
+   <div id="copyrightdesign">
+      ProXimus-Admin
+   </div>
+
+   <div id="footercontact">
+      <a href="http://proximus.5-o-clock.net">Proximus Website</a>
+   </div>
 </div>
 
-<div id="footercontact">
-<a href="http://proximus.5-o-clock.net">Proximus Website</a>
-</div>
 
-</div>
-
-
+<br>
 <br>
 <br>
 <?php echo $this->element('sql_dump');?>
+<br>
 </body>
 </html>

@@ -2,6 +2,7 @@
 class RulesController extends AppController {
 
 	var $name = 'Rules';
+	var $pageTitle = 'Rules';
 	var $helpers = array('Html', 'Form', 'Policy');
    var $uses = array('Rule','ProxySetting','Log','Location','Group');
 

@@ -25,19 +25,18 @@ class TrackerComponent extends Object {
       $this->log( "$controller/$action/$id", 'debug');
    }
 
-   function loadLastPos() {
+   function lastPos() {
       $redirectURL = array();
       $redirectURL['controller'] = $this->Session->read('Auth.prevController');
       $redirectURL['action'] = $this->Session->read('Auth.prevAction');
       if(!is_null($this->Session->read('Auth.prevId'))) {
          $redirectURL['0'] = $this->Session->read('Auth.prevId');
       }
-      $this->log( $redirectURL , 'debug');
       return $redirectURL;
    }
    
    function back() {
-      $this->controller->redirect( $this->loadLastPos() ); 
+      $this->controller->redirect( $this->lastPos() ); 
    }
 
 }
