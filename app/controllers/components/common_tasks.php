@@ -10,8 +10,16 @@ class CommonTasksComponent extends Object {
    }
  
    function setLocationsList($loc1=false, $all=false ) {
-      $conditions = null;
-      if ( ! $loc1 ) $conditions = array("Location.id NOT" => "1");
+      $user =  $this->Session->read('User');
+
+      $conditions = array();
+      if ( ! $loc1 ) $conditions['Location.id NOT'] = "1";
+
+      # get proxys / locations
+      if( ! in_array($user['Role']['name'], $this->controller->priv_roles) ) {
+         $allowed_locations = $this->controller->getAdminLocationIds();
+         $conditions['Location.id'] = $allowed_locations;
+      }
       
       $this->controller->loadModel('Location');
       $Location =& new Location();

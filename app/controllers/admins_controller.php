@@ -19,9 +19,9 @@ class AdminsController extends AppController {
 
    function admin_login() { 
       if ($this->MyAuth->user()) {
-         $userModel = $this->MyAuth->getModel();
-         $user = $userModel->read( null, $this->MyAuth->user('id') );
-         $this->Session->write('role', $user['Role'] );
+         $user = $this->Admin->findById( $this->MyAuth->user('id'));
+         $this->Session->write('User', $user );
+         $this->redirect( array('admin' => true, 'controller' => 'locations', 'action' => 'start') );
       }
       else {
          $this->Session->destroy();

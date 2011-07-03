@@ -20,8 +20,8 @@ class AppController extends Controller {
       //Configure AuthComponent
       $this->MyAuth->userModel = 'Admin';
       $this->MyAuth->authorize = 'controller';
+      $this->MyAuth->autoRedirect = false;
       $this->MyAuth->loginAction = array('admin' => true, 'controller' => 'admins', 'action' => 'login');
-      $this->MyAuth->loginRedirect = array('admin' => true, 'controller' => 'locations', 'action' => 'start');
       $this->MyAuth->logoutRedirect = array('admin' => false, 'controller' => 'pages', 'action' => 'start');
       $this->MyAuth->loginError = 'Invalid username / password combination. Please try again';
       $this->MyAuth->authError = 'Access denied';
@@ -74,8 +74,10 @@ class AppController extends Controller {
    }
 
    function getUser() {
+      return $this->Session->read('User');
+      /*
       $model = $this->MyAuth->getModel();
-      return $model->findById( $this->MyAuth->user('id') );
+      return $model->findById( $this->MyAuth->user('id') ); */
    }
 
 } 

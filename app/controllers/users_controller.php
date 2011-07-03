@@ -22,17 +22,23 @@ class UsersController extends AppController {
       $settings = $this->CommonTasks->getGlobalSettings();
       $this->set('settings', $settings);
 
-      # If form has been submitted
-      if (!empty($this->data) && isset($this->data['User']['searchstring'])) {
-         $this->NoauthRules->recursive = 0;
-         $string = $this->data['User']['searchstring'];
-         $this->set('users', $this->paginate('User',array("User.username LIKE '%$string%' OR User.realname LIKE '%$string%'")));
-      }
-      else {
-         $this->User->recursive = 0;
-         $this->set('users', $this->paginate());
+      $user = parent::getUser();
+
+      $conditions = array();
+      # get proxys / locations
+      if( ! in_array($user['Role']['name'], $this->priv_roles) ) {
+         $allowed_locations = parent::getAdminLocationIds();
+         $conditions['Location.id'] = $allowed_locations;
       }
 
+      # If form has been submitted
+      if (!empty($this->data) && isset($this->data['User']['searchstring'])) {
+         $string = $this->data['User']['searchstring'];
+         $conditions['User'] = array("User.username LIKE '%$string%' OR User.realname LIKE '%$string%'");
+      }
+
+      $this->User->recursive = 0;
+      $this->set('users', $this->paginate('User', $conditions));
    }
 
 	function admin_add() {
