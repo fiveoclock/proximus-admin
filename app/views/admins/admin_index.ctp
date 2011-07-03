@@ -13,7 +13,7 @@ echo $paginator->counter(array(
 'format' => __('Page %page% of %pages%, showing %current% records out of %count% total, starting on record %start%, ending on %end%', true)
 ));
 ?></p>
-<table cellpadding="0" cellspacing="0">
+<table>
 <tr>
 	<th><?php echo $paginator->sort('username');?></th>
 	<th><?php echo $paginator->sort('name');?></th>

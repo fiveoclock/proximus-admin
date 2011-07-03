@@ -1,6 +1,6 @@
 <div class="globalsettings index">
 <h2><?php __('Global settings');?></h2>
-<table cellpadding="0" cellspacing="0">
+<table>
 <br>
 <tr>
 	<th>Setting name</th>

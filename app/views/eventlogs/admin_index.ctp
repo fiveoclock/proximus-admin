@@ -12,7 +12,7 @@
    </fieldset>
 </div>
 
-<table cellpadding="0" cellspacing="0">
+<table>
 <br>
 <tr>
    <th>Date</th>

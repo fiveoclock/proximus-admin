@@ -336,14 +336,14 @@ table {
 }
 th {
   background-color: #ccc;
-  border-right: 1px solid #fff;
-  text-align: center;
   padding:1px;
 }
 table tr td {
-  padding: 2px 2px;
+  padding:2px 2px;
+  text-align: center;
   vertical-align:top;
   text-align: center;
+  border-right: 1px solid #ccc;
 }
 table tr:hover {
    background-color: #f0f0f0;

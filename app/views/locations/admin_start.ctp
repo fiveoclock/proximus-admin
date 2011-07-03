@@ -1,7 +1,7 @@
 <div class="locations index">
 <h2><?php __('Your Locations');?></h2>
 
-<table cellpadding="0" cellspacing="0">
+<table>
 <tr>
 	<th>Location</th>
 	<th>Full Name</th>
