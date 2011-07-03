@@ -193,7 +193,7 @@ a:hover {
 
 #header {
 	color: #6699FF;
-	width: 99%;
+	width: 100%;
 	clear:both;
 }
 
@@ -201,7 +201,7 @@ a:hover {
 	color:#6699FF;
 	font-size:300%;
 	font-weight:bold;
-	padding:6px 0px 8px 0px;
+	padding:0px 0px 8px 0px;
 	float:left;
 }
 
@@ -225,8 +225,6 @@ a:hover {
 	color:#666666;
 	font-size:117%;
 	font-weight:bold;
-	font-style:normal;
-	padding:0px 0px 0px 0px;
 	width:520px;
 	clear:left;
 	float:left;
@@ -234,9 +232,8 @@ a:hover {
 
 #nav {
 	line-height:250%;
-	padding: 15px 0px 0px 0px;
-	margin:0 0 5px 0;
-	width: 900px;
+	padding: 10px 0px 0px 0px;
+	width: 800px;
 	clear:left;
 }
 
@@ -245,7 +242,7 @@ a:hover {
 	background-color:#6699FF;
 	font-weight:bold;
 	text-decoration:none;
-	padding:4px 10px 4px 15px;
+	padding:4px 8px 4px 8px;
    margin: 0px 1px;
 	/*border:0px solid #3366FF;*/
 }
@@ -312,7 +309,7 @@ a:hover {
 }
 #logo {
    padding:0px;
-   margin-top: 6px;
+   margin-top: 0px;
    margin-right: 0px;
    float:right;
    clear:none;
@@ -339,16 +336,12 @@ table {
 }
 th {
   background-color: #ccc;
-  border-top: 1px solid #fff;
-  border-left: 1px solid #fff;
-  border-right: 1px solid #003d4c;
-  border-bottom: 1px solid #003d4c;
+  border-right: 1px solid #fff;
   text-align: center;
   padding:1px;
 }
 table tr td {
-  border-right: 1px solid #ccc;
-  padding:2px 2px;
+  padding: 2px 2px;
   vertical-align:top;
   text-align: center;
 }

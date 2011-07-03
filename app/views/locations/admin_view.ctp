@@ -12,7 +12,7 @@
       <li><?php echo $html->link(__('New Group', true), array('controller'=> 'groups', 'action'=>'add', $location['Location']['id']));?> </li>
       <br>
       <?php if (!empty($groups)):?>
-      <table cellpadding = "0" cellspacing = "0">
+      <table>
       <tr>
          <th><?php __('Name'); ?></th>
          <th><?php __('Location'); ?></th>
@@ -40,7 +40,7 @@
 	<li><?php echo $html->link(__('Create new Location Rule', true), array('controller'=> 'rules', 'action'=>'add', $location['Location']['id']));?> </li>
    <br>
 	<?php if (!empty($rules)):?>
-	<table cellpadding = "0" cellspacing = "0">
+	<table>
 	<tr>
 		<th><?php __('Sitename'); ?></th>
 		<th><?php __('Protocol'); ?></th>
@@ -74,7 +74,7 @@
    <div class="related">
       <h3><?php __('Not assigned users');?></h3>
       <?php if (!empty($users)):?>
-      <table cellpadding = "0" cellspacing = "0">
+      <table>
       <tr>
          <th><?php __('Username'); ?></th>
          <th><?php __('Realname'); ?></th>

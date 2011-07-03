@@ -10,7 +10,7 @@
    <li><?php echo $html->link(__('Add Rule', true), array('controller'=> 'rules', 'action'=>'add', $group['Location']['id'], $group['Group']['id']));?> </li>
    <br>
 	<?php if (!empty($group['Rule'])):?>
-	<table cellpadding = "0" cellspacing = "0">
+	<table>
 	<tr>
 		<th><?php __('Sitename'); ?></th>
 		<th><?php __('Protocol'); ?></th>
@@ -45,7 +45,7 @@
    <li> <?php echo $html->link(__('Add or remove users', true), array('controller'=> 'groups', 'action'=>'edit', $group['Group']['id'])); ?> </li>
    <br>
 	<?php if (!empty($group['User'])):?>
-	<table cellpadding = "0" cellspacing = "0">
+	<table>
 	<tr>
 		<th><?php __('Username'); ?></th>
 		<th><?php __('Name'); ?></th>

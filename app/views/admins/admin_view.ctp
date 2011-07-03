@@ -1,7 +1,7 @@
 <div class="admin view">
 <h2><?php  __('Profile of '. $admin['Admin']['username']);?></h2>
 	<dl><?php $i = 0; $class = ' class="altrow"';?>
-		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Id'); ?></dt>
+		<dt<?php if ($i % 2 == 0) echo $class;?>><?php __('Admin Id'); ?></dt>
 		<dd<?php if ($i++ % 2 == 0) echo $class;?>>
 			<?php echo $admin['Admin']['id']; ?>
 			&nbsp;

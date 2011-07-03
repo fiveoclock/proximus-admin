@@ -17,7 +17,7 @@
 <div class="related">
    <h3><?php __('Logs and dynamically created rules');?></h3>
    <?php if (!empty($logs)):?>
-   <table cellpadding = "0" cellspacing = "0">
+   <table>
    <tr>
       <th><?php __('Site'); ?></th>
       <th><?php __('Hits'); ?></th>
