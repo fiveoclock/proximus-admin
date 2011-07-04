@@ -55,6 +55,11 @@ class CommonTasksComponent extends Object {
       //pr($proxy);  # debug
       $Setting  = ClassRegistry::init('ProxySetting');
       if ( $proxy['ProxySetting']['db_default'] != 1 ) {
+         // if db_host is not defined use the fqdn of the proxy
+         if ( empty( $proxy['ProxySetting']['db_host'] ) ) {
+            $proxy['ProxySetting']['db_host'] = $proxy['ProxySetting']['fqdn_proxy_hostname'];
+         }
+
          $serverConfig = array(
             'host' => $proxy['ProxySetting']['db_host'],
             'database' => $proxy['ProxySetting']['db_name'],
