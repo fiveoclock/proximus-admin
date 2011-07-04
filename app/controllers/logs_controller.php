@@ -2,8 +2,8 @@
 class LogsController extends AppController {
    var $name = 'Logs';
    var $pageTitle = 'Logs';
-   var $helpers = array('Html', 'Form');
-   var $uses = array('Log','Location','User','ProxySetting');
+   var $helpers = array('Html', 'Form', 'Policy');
+   var $uses = array('Log','Location','User','ProxySetting', 'Rule');
    var $paginate = array('limit' => 100);
 
    function beforeFilter() {
@@ -36,7 +36,7 @@ class LogsController extends AppController {
                                  'Location.id NOT' => "1");
       }
 
-      $locations_list = $this->ProxySetting->find('all',
+      $proxy_list = $this->ProxySetting->find('all',
             array(
                'fields'=>array(
                   'Location.id','Location.code','Location.name','ProxySetting.fqdn_proxy_hostname', 'ProxySetting.id'
@@ -46,18 +46,18 @@ class LogsController extends AppController {
             )
          );
 
-      $locations = Set::combine(
-         $locations_list,
+      $proxyIds = Set::combine(
+         $proxy_list,
          '{n}.ProxySetting.id',
          array('%s - %s','{n}.Location.code','{n}.ProxySetting.fqdn_proxy_hostname')
       );
-      $this->set(compact('locations'));
+      $this->set(compact('proxyIds'));
 
 
       ##################
       # If form was submitted
-      if (!empty($this->data) && isset($this->data['Log']['location'])) {
-         $proxy = $this->ProxySetting->findById($this->data['Log']['location']);
+      if (!empty($this->data) && isset($this->data['Log']['proxyId'])) {
+         $proxy = $this->ProxySetting->findById($this->data['Log']['proxyId']);
 
          // check permissions
          if ( ! parent::checkSecurity( $proxy['ProxySetting']['location_id'] ) ) $this->Tracker->back();
@@ -138,6 +138,89 @@ class LogsController extends AppController {
 		}
 	}
 
+	function admin_createRule($id = null, $proxy_id = null) {
+      // if the form was submitted
+      if (!empty($this->data)) {
+         $this->Rule->create();
+
+         // check security
+         if ( ! parent::checkSecurity( $this->data['Rule']['location_id'] )) $this->Tracker->back();
+
+         // set the time to null if start and end is the same
+         if ( $this->data['Rule']['starttime']  == $this->data['Rule']['endtime'] ) {
+            $this->data['Rule']['starttime'] = null;
+            $this->data['Rule']['endtime'] = null;
+         }
+
+         // if group a group was selected set it, else use 0
+         if (!empty($this->data['Rule']['groups'])) {
+            $this->data['Rule']['group_id'] = $this->data['Rule']['groups'];
+         }
+         else {
+            $this->data['Rule']['group_id'] = 0;
+         }
+
+         // save the rule
+         //debug($this->data['Rule']); return;
+         if ($this->Rule->save($this->data)) {
+            if ($this->data['Rule']['delete_log'] == 1) {
+               // set the right datasource
+               $proxy = $this->ProxySetting->findById( $this->data['Rule']['proxy_id'] );
+               $this->CommonTasks->setDataSource($proxy);
+
+               // and delete the log
+               if ($this->Log->delete( $this->data['Rule']['log_id'] )) {
+                  $this->Session->setFlash(__('The Rule has been saved', true));
+               }
+               else {
+                  $this->Session->setFlash(__('The Rule has been saved but logs could not be deleted, check manually', true));
+               }
+            }
+            else {
+               $this->Session->setFlash(__('The Rule has been saved', true));
+            }
+            $this->redirect(array('controller'=>'logs','action'=>'searchlist'));
+         }
+         else {
+            $this->Session->setFlash(__('The Rule could not be saved. Please, try again.', true));
+            $this->redirect(array('controller'=>'logs','action'=>'searchlist'));
+         }
+      }
+
+      // show form
+      if (!is_null($proxy_id) && !is_null($id)) {
+         $proxy = $this->ProxySetting->findById($proxy_id);
+         $this->CommonTasks->setDataSource($proxy);
+
+         // get the log entrie and the user information
+         $log = $this->Log->findById($id);
+         $user = $this->Log->User->findById($log['Log']['user_id']);
+
+         // check security
+         if ( ! parent::checkSecurity( $user['Location']['id'] )) $this->Tracker->back();
+
+         // get the groups
+         $this->Location->Group->unbindModel(array('hasMany' => array('Rule','User')));
+         $groups = $this->Location->Group->find('all',array(
+                                                   'conditions'=>array(
+                                                      'Group.location_id'=>$user['Location']['id']),
+                                                   'order'=>array('Group.name') ));
+         $groups_list = Set::combine($groups,'{n}.Group.id',array('%s - %s',"{n}.Location.code","{n}.Group.name"));
+
+         // set variables for the view
+         $this->set('groups',$groups_list);
+         $this->set('location',$user['Location']['code']);
+
+         $this->data['Rule']['sitename'] = $log['Log']['sitename'];
+         $this->data['Rule']['protocol'] = $log['Log']['protocol'];
+         $this->data['Rule']['description'] = 'Generated for user '.$user['User']['username'];
+         $this->data['Rule']['location_id'] = $user['Location']['id'];
+         $this->data['Rule']['log_id'] = $id;
+         $this->data['Rule']['proxy_id'] = $proxy_id;
+      }
+	}
+
+
 
    function isAuthorized() {
       $parent = parent::isAuthorized();
@@ -155,11 +238,16 @@ class LogsController extends AppController {
 
       if ( in_array($this->action, array('admin_searchlist' ) )) {
          if ( isset($this->data) ) {
-            $proxy = $this->ProxySetting->read(null, $this->data['Log']['location'] );
+            $proxy = $this->ProxySetting->read(null, $this->data['Log']['proxyId'] );
             $locId = $proxy['Location']['id'];
 
             if ( ! parent::checkSecurity( $locId)) $this->Tracker->back();
          }
+         return true;
+      }
+
+      if ( in_array($this->action, array('admin_createRule' ) )) {
+         // security check in action
          return true;
       }
 

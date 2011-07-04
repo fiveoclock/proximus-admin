@@ -10,10 +10,6 @@ class RulesController extends AppController {
       parent::beforeFilter();
    }
 
-	function getAll() {
-		return $this->Rule->find('all');
-	}
-
    function afterFilter() {
       $allowedActions = array('admin_searchlist');
       if (in_array($this->params['action'],$allowedActions)) {
@@ -57,61 +53,6 @@ class RulesController extends AppController {
          array('%s %s','{n}.Location.code','{n}.Location.name')
       );
       $this->set(compact('locations'));
-   }
-
-   // todo ... check this code... + auth
-	function admin_createFromLog($log_id = null,$location_id = null) {
-      if (!empty($this->data)) {
-         $this->Rule->create();
-         $this->data['Rule']['group_id'] = 0;
-         if (!empty($this->data['Rule']['groups'])) {
-            $this->data['Rule']['group_id'] = $this->data['Rule']['groups'];
-         }
-         if ($this->Rule->save($this->data)) {
-            #debug($this->data['Rule']);
-            if ($this->data['Rule']['delete_log'] == 1) {
-               if ($this->Log->deleteLog($this->data['Rule']['log_id'],$this->data['Rule']['location_code'])) {
-                  $this->Session->setFlash(__('The Rule has been saved', true));
-               }
-               else {
-               $this->Session->setFlash(__('The Rule has been saved but logs could not be deleted, check manually', true));
-               }
-            }
-            else {
-               $this->Session->setFlash(__('The Rule has been saved', true));
-               $this->log( $this->MyAuth->user('username') . "; $this->name; create from log: " . $this->data['Rule']['id'], 'activity');
-            } 
-            $this->redirect(array('controller'=>'logs','action'=>'searchlist'));
-         } else {
-            $this->Session->setFlash(__('The Rule could not be saved. Please, try again.', true));
-            $this->redirect(array('controller'=>'logs','action'=>'searchlist'));
-         }
-      }
-#OPEN: check if the user is allowed to create this rule, access this log
-      
-      if (!is_null($location_id) && !is_null($log_id)) {
-         $location = $this->Location->findById($location_id);
-         $this->Log->useDbConfig = $location['Location']['code'];
-         $log = $this->Log->findById($log_id);
-         $user = $this->Location->Group->User->findById($log['Log']['user_id']);
-         $this->Location->Group->unbindModel(array('hasMany' => array('Rule','User')));
-         $groups = $this->Location->Group->find('all',array(
-                                                   'conditions'=>array(
-                                                      'Group.location_id'=>$location_id),
-                                                   'order'=>array(
-                                                      'Group.name')));
-         $groups_list = Set::combine($groups,'{n}.Group.id',array('%s - %s',"{n}.Location.code","{n}.Group.name"));
-
-         $this->set('groups',$groups_list);
-         $this->set('location',$location['Location']['code']);
-
-         $this->data['Rule']['sitename'] = $log['Log']['sitename'];
-         $this->data['Rule']['protocol'] = $log['Log']['protocol'];
-         $this->data['Rule']['description'] = 'Generated for user '.$user['User']['username'];
-         $this->data['Rule']['location_id'] = $location_id;
-         $this->data['Rule']['log_id'] = $log_id;
-         $this->data['Rule']['location_code'] = $location['Location']['code'];
-      }
    }
 
 	function admin_add($location_id = null, $group_id = null) {

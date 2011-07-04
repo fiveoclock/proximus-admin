@@ -3,9 +3,9 @@
 	<fieldset>
       <legend><?php __('View Logs');?></legend>
 	<?php
-      echo $form->input('location');
+      echo $form->input('proxyId', array('label'=>'Location / Proxy Server') );
       echo $form->input('users', array('label'=>'User (search pattern - part of username or real name)'));
-      echo $form->input('site', array('label'=>'Site (search pattern - part of hostname or ip)'));
+      echo $form->input('site', array('label'=>'Site (search pattern - part of hostname or IP)'));
       echo $form->input('status', array('options' => array(''=>'All', 'USER'=>'Confirmed by user','REDIRECT'=>'Not confirmed yet', 'LEARN'=>'Automatically learned')));
       echo $form->input('type', array('options' => array(''=>'All sites', 'null'=>'Only parent sites','NOT null'=>'Only subsites')));
       echo $form->input('onlyThisLoc', array('label'=>'Show only users from this location', 'type'=>'checkbox'));
@@ -17,7 +17,6 @@
 
 <div class="related">
    <h3><?php __('Logs and dynamically created rules');?></h3>
-   <br>
    <?php if (!empty($logs)):?>
    <table>
    <tr>
@@ -82,8 +81,8 @@
             <td>". $log['User']['username'] ."</td>
             <td>". $l['created'] ."</td>
             <td class=\"actions\">" .
-               $html->link(__('Create rule', true), array('controller'=> 'rules', 'action'=>'createFromLog', $l['id'], $view->data['Log']['location'])) . " " .
-               $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'delete', $l['id'], $view->data['Log']['location']), null, sprintf(__('Are you sure you want to delete # %s?', true), $l['id'])) .
+               $html->link(__('Create rule', true), array('controller'=> 'logs', 'action'=>'createRule', $l['id'], $view->data['Log']['proxyId'])) . " " .
+               $html->link(__('Delete', true), array('controller'=> 'logs', 'action'=>'delete', $l['id'], $view->data['Log']['proxyId']), null, sprintf(__('Are you sure you want to delete # %s?', true), $l['id'])) .
                "
             </td>
          </tr>";

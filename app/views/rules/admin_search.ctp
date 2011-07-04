@@ -8,11 +8,10 @@
 	?>
    <?php echo $form->end('Search');?>
 	</fieldset>
+   <br>
    <?php if (!empty($results)):?>
       <table>
-   	<?php
-      echo "Results: ";    
-      ?>
+      <h3><?php __('Rules matching your citeria:');?></h3>
       <tr>
          <th><?php __('Site'); ?></th>
          <th><?php __('Protocol'); ?></th>
