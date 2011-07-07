@@ -4,7 +4,7 @@
  		<legend><?php __('Edit Rule');?></legend>
 	<?php
 		echo $form->input('id');
-      echo $form->input('sitename', array( 'label'=> 'Hostname or IP address - regex (eg. .example.com / 10.1.1.1)' ) );
+      echo $form->input('sitename', array( 'label'=> 'Hostname or IP address (eg. .example.com / 10.1.1.1) or Regex (eg: regex:.*)' ) );
       echo $form->input('protocol', array('options' => array('*'=>'*','HTTP'=>'HTTP','SSL'=>'SSL')));
 
       for ($i=$auth['Role']['minprio']; $i<=$auth['Role']['maxprio']; $i++) { $numbers[$i] = $i; }
