@@ -207,8 +207,7 @@ class MyAuthComponent extends AuthComponent {
 
 		   $ldapUser = $this->ldap->find('all', array('scope'=>'base', 'targetDn'=>$dn));
 
-         //$this->ldap->useDbConfig = "default";
-         //$this->ldap->useTable = "admins";
+         $this->ldap->useDbConfig = "default";
 
 			$user_data = $user[$this->userModel];
 			$user_data['bindDN'] = $dn;
@@ -229,10 +228,8 @@ class MyAuthComponent extends AuthComponent {
       // change database model to ldap
       // maybe this should be changed back after the query....
       $this->ldap->useDbConfig = "ldap";
-      $this->ldap->primaryKey = 'samaccountname';
-      $this->ldap->useTable = "";
 
-		$userObj = $this->ldap->find('all', array('conditions'=>"$attr=$query", 'scope'=>'sub'));
+		$userObj = $this->ldap->find('all', array('conditions'=>"$attr=$query", 'scope'=>'sub', 'recursive' => 1 ));
       //pr($userObj);
       //$this->log("1" . print_r($userObj,true), "debug");
 		//$this->log("auth lookup found: ".print_r($userObj,true)." with the following conditions: ".print_r(array('conditions'=>"$attr=$query", 'scope'=>'one'),true),'debug');
