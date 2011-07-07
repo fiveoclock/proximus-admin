@@ -4,12 +4,12 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Proximus Admin :: <?php echo $title_for_layout?></title>
-<?php echo $html->charset('UTF-8')?>
-<?php //echo $html->css('cake.forms', 'stylesheet', array("media"=>"all" ));?>
-<?php echo $html->css('contented1', 'stylesheet', array("media"=>"all" ));?>
-<?php echo $this->Html->script('jquery-1.6.1'); ?> 
-<?php echo $this->Html->script('ani'); ?> 
+   <title>Proximus Admin :: <?php echo $title_for_layout?></title>
+   <?php echo $html->charset('UTF-8')?>
+   <?php //echo $html->css('cake.forms', 'stylesheet', array("media"=>"all" ));?>
+   <?php echo $html->css('contented1', 'stylesheet', array("media"=>"all" ));?>
+   <?php echo $this->Html->script('jquery-1.6.1'); ?> 
+   <?php echo $this->Html->script('ani'); ?> 
 </head>
 <body>
 <div id="header">
@@ -49,4 +49,18 @@
 <?php echo $this->element('sql_dump');?>
 <br>
 </body>
+   <script type="text/javascript">
+      // set focus to first form field
+      if (document.forms.length > 0 ) {
+         var elements = document.forms[0].elements;
+         for (var i = 0; i <= elements.length; i++) {
+            if ( elements[i].nodeName in {'INPUT':'', 'SELECT':'','smith':''} )  {
+               if ( elements[i].type != "hidden" ) {
+                  elements[i].focus();
+                  break;
+               }
+            }
+         }
+      }  
+   </script>
 </html>
