@@ -17,7 +17,7 @@
 }
 
 body {
-	color: #666666;
+	color: #555555;
 	background-color:#f1f1f1;
 	font-family:Verdana, Arial, Helvetica, sans-serif;
 	font-size:83%;
@@ -176,7 +176,6 @@ div.message {
 	font-weight: bold;
    padding-left: 14px;
    margin-top: 6px;
-   padding-bottom: 6px;
 }
 
 a {
@@ -222,7 +221,7 @@ a:hover {
 }
 
 #slogan {
-	color:#666666;
+	color:#555555;
 	font-size:117%;
 	font-weight:bold;
 	width:520px;
