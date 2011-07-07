@@ -1,14 +1,16 @@
 <div class="locations view">	
 <h2>
 	<?php 
-	  echo "Location: "; echo $html->link(__($location['Location']['code'], true), array('controller'=> 'locations', 'action'=>'edit', $location['Location']['id'])); echo " - "; echo $location['Location']['name']; 
-	?>
+     echo $html->link('Locations','/admin/locations/start',null,null,false);
+     echo " / ";
+     echo $location['Location']['code'] . " - " . $location['Location']['name'];
+   ?>
 </h2>
 </div>
 
 <?php if ( $location['Location']['id'] != 1 ):  // dont show groups section for location 1 ?>
    <div class="related">
-      <h3><?php __('Location Groups');?></h3>
+      <h3><?php __('Groups');?></h3>
       <li><?php echo $html->link(__('New Group', true), array('controller'=> 'groups', 'action'=>'add', $location['Location']['id']));?> </li>
       <br>
       <?php if (!empty($groups)):?>
@@ -72,7 +74,7 @@
 
 <?php if ( $location['Location']['id'] != 1 ):  // dont show user section for location 1 ?>
    <div class="related">
-      <h3><?php __('Not assigned users');?></h3>
+      <h3><?php __('Users in this location (which are not assigned to a group)');?></h3>
       <?php if (!empty($users)):?>
       <table>
       <tr>

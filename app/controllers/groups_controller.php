@@ -93,7 +93,9 @@ class GroupsController extends AppController {
 		}
 		
 		if (empty($this->data)) {
-			$this->data = $this->Group->read(null, $id);
+         $group = $this->Group->read(null, $id);
+			$this->data = $group;
+         $this->set('group', $group);
 		}
 		#filter to selected one location, session variable is set in LocationsController->view
 		$location_id = $this->Group->field('location_id' );

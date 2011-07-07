@@ -1,7 +1,11 @@
 <div class="groups view">
 	<h2>
 		<?php 
-		  echo "Group: "; echo $html->link(__($group['Location']['code'], true), array('controller'=> 'locations', 'action'=>'view', $group['Location']['id'])); echo " - ".$group['Group']['name']; 
+		  echo $html->link('Locations','/admin/locations/start',null,null,false);
+        echo " / ";
+        echo $html->link($group['Location']['code'] . " - " . $group['Location']['name'], array('controller'=> 'locations', 'action'=>'view', $group['Location']['id']));
+        echo " / ";
+        echo $group['Group']['name'];
 		?>
 	</h2>
 </div>
