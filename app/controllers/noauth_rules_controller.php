@@ -40,7 +40,6 @@ class NoauthRulesController extends AppController {
 			$this->NoauthRule->create();
 			if ($this->NoauthRule->save($this->data)) {
 				$this->Session->setFlash(__('The Noauth rule has been saved', true));
-            $this->log( $this->MyAuth->user('username') . "; $this->name ; edit: " . $id, 'activity');
             $this->Tracker->back();
 			}
          else {
