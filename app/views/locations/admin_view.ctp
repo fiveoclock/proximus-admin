@@ -3,7 +3,7 @@
 	<?php 
      echo $html->link('Locations','/admin/locations/start',null,null,false);
      echo " / ";
-     echo $location['Location']['code'] . " - " . $location['Location']['name'];
+     echo $location['Location']['code'];
    ?>
 </h2>
 </div>

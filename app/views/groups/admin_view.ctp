@@ -3,7 +3,7 @@
 		<?php 
 		  echo $html->link('Locations','/admin/locations/start',null,null,false);
         echo " / ";
-        echo $html->link($group['Location']['code'] . " - " . $group['Location']['name'], array('controller'=> 'locations', 'action'=>'view', $group['Location']['id']));
+        echo $html->link($group['Location']['code'], array('controller'=> 'locations', 'action'=>'view', $group['Location']['id']));
         echo " / ";
         echo $group['Group']['name'];
 		?>

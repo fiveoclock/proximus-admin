@@ -1,5 +1,5 @@
 <div class="locations index">
-<h2><?php __('Your Locations');?></h2>
+<h2><?php __('Locations');?></h2>
 
 <table>
 <tr>
