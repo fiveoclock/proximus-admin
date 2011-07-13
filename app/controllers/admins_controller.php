@@ -3,7 +3,6 @@ class AdminsController extends AppController {
 
 	var $name = 'Admins';
 	var $pageTitle = 'Admins';
-	var $helpers = array('Html', 'Form');
    var $paginate = array('limit' => 100);
 
    function beforeFilter() {

@@ -2,6 +2,7 @@
 class AppController extends Controller {
    var $components = array('MyAuth', 'Session', 'Tracker', 'CommonTasks' );
    var $priv_roles = array('admin_global', 'admin_location_global_ro'); # global- and read-only admins
+   var $helpers = array('Html', 'Form', 'Session', 'Menu');
 
    function beforeRender() {
       // get usermodel from auth
@@ -14,6 +15,12 @@ class AppController extends Controller {
       // set last pos
       $this->set('lastPos', $this->Tracker->lastPos());
       $this->Tracker->lastPos();
+
+      # get global settings
+      $settings = $this->CommonTasks->getGlobalSettings();
+      $this->set('settings', $settings);
+      $priv_roles = $this->priv_roles;
+      $this->set('priv_roles', $priv_roles);
    }
 
    function beforeFilter() {

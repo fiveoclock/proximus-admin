@@ -2,7 +2,6 @@
 class ProfilesController extends AppController {
 
 	var $name = 'Profiles';
-	var $helpers = array('Html', 'Form');
    var $paginate = array('limit' => 100);
    var $uses = array('User', 'GlobalSetting', 'Log', 'ProxySetting');
 

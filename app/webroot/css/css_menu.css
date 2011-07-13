@@ -1,0 +1,154 @@
+/* 
+ * CSS for css menu helper. 
+ * Author: John Reeves 
+ * Credit given to Jake Gordon, author of Nice Menus module 
+ * for Drupal, for much of the idea. 
+ */ 
+ul.css_menu, 
+ul.css_menu ul{ 
+    list-style: none; 
+    margin: 0; 
+    padding: 1px; 
+} 
+
+ul.css_menu ul{ 
+    display: none; 
+    position: absolute; 
+    margin-right: 0; 
+    z-index: 5; 
+} 
+
+ul.css_menu li{ 
+    margin: 0; 
+    padding: .1em; 
+} 
+
+ul.css_menu li{ 
+    float: left; 
+    border: 1px solid black; 
+    background-color: #99fefd; 
+    width: 6em; 
+    position: relative; 
+    left: 2px; 
+    top: 0; 
+     
+} 
+
+ul.css_menu ul li{ 
+    display: block; 
+} 
+
+ul.css_menu:after{ 
+    clear: both; 
+    display: block; 
+    height: 0; 
+    visibility: hidden; 
+} 
+
+ul.css_menu li:hover{ 
+    background-color: #66cbca; 
+} 
+
+/* 
+ * Hide sub menus that are not hovered over. 
+ * It only works for 5 levels deep.  If for some reason you need 
+ * more, it should be easy to see how to copy the last selector and 
+ * add one more li:hover.  Same goes for the display: block; part below. 
+ */ 
+ul.css_menu ul, 
+ul.css_menu li:hover ul ul, 
+ul.css_menu li:hover li:hover ul ul, 
+ul.css_menu li:hover li:hover li:hover ul ul{ 
+  display: none;  
+}  
+
+/* show hovered submenus */ 
+ul.css_menu li:hover ul, 
+ul.css_menu li:hover li:hover ul, 
+ul.css_menu li:hover li:hover li:hover ul, 
+ul.css_menu li:hover li:hover li:hover li:hover ul{ 
+    display: block; 
+} 
+
+/* RIGHT type menus */ 
+
+ul.cm_right li{ 
+    float: none; 
+} 
+
+ul.cm_right li.parent:hover, 
+ul.cm_right li li.parent:hover{  
+    background: #66cbca url(arrow-right.png) right center no-repeat; 
+} 
+
+ul.cm_right li.parent, 
+ul.cm_right li li.parent{  
+    background-image: url(arrow-right.png); 
+    background-position: right center; 
+    background-repeat: no-repeat; 
+} 
+
+ul.cm_right li ul, 
+ul.cm_right li ul li.parent ul{ 
+    left: 5.9em; 
+    top: -2px; 
+} 
+
+
+/* LEFT type menus */ 
+
+ul.cm_left li{ 
+    float: none; 
+    padding-left: 15px; 
+} 
+
+ul.cm_left li.parent:hover, 
+ul.cm_left li li.parent:hover{  
+    background: #66cbca url(arrow-left.png) left center no-repeat; 
+} 
+
+ul.cm_left li.parent, 
+ul.cm_left li li.parent{  
+    background-image: url(arrow-left.png); 
+    background-position: left center; 
+    background-repeat: no-repeat; 
+} 
+
+ul.cm_left li ul, 
+ul.cm_left li ul li.parent ul{ 
+    left: -7.8em; 
+    top: -2px; 
+} 
+
+
+
+/* DOWN type menus */ 
+ul.cm_down li ul{ 
+    top: 1.5em; 
+    left: -4px; 
+} 
+
+ul.cm_down li ul li.parent ul{ 
+    left: 5.9em; 
+    top: -0.1em; 
+} 
+
+ul.cm_down li.parent:hover{ 
+    background: #66cbca url(arrow-down.png) right center no-repeat; 
+} 
+
+ul.cm_down li.parent{ 
+    background-image: url(arrow-down.png); 
+    background-position: right center; 
+    background-repeat: no-repeat; 
+} 
+
+ul.cm_down li li.parent:hover{  
+    background: #66cbca url(arrow-right.png) right center no-repeat; 
+} 
+
+ul.cm_down li li.parent{  
+    background-image: url(arrow-right.png); 
+    background-position: right center; 
+    background-repeat: no-repeat; 
+}

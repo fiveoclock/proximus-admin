@@ -36,13 +36,6 @@ class PagesController extends AppController {
 			$title = Inflector::humanize($path[$count - 1]);
 		}
 
-      # get global settings
-      $settings = $this->CommonTasks->getGlobalSettings();
-
-      $this->set('settings', $settings);
-      $this->set('priv_roles', $this->priv_roles);
-		$this->set(compact('page', 'subpage', 'title'));
-
 		$this->render(join('/', $path));
 	}
 }
