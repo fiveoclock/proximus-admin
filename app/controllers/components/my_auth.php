@@ -195,27 +195,37 @@ class MyAuthComponent extends AuthComponent {
          $this->log("User was not found in the database: $uid", "debug");
 			return $this->_loggedIn;
       }
-      
+
+      // change database model to ldap
+      $this->ldap->useDbConfig = "ldap";
+      // remember the table and change it for the ldap query
+      $table = $this->ldap->useTable;
+      $this->ldap->useTable = false;
+
       // search the user in ldap
-		$dn = $this->getDn('samaccountname', $uid);
+      $dn = $this->getDn('samaccountname', $uid);
       $this->log($dn, "debug");
 
       // check auth against ldap
-		$loginResult = $this->ldapauth($dn, $password); 
-		if( $loginResult == 1){
-			$this->_loggedIn = true;
+      $loginResult = $this->ldapauth($dn, $password); 
+      if( $loginResult == 1){
+         $this->_loggedIn = true;
 
-		   $ldapUser = $this->ldap->find('all', array('scope'=>'base', 'targetDn'=>$dn));
+         $ldapUser = $this->ldap->find('all', array('scope'=>'base', 'targetDn'=>$dn));
 
-         $this->ldap->useDbConfig = "default";
+         $user_data = $user[$this->userModel];
+         $user_data['bindDN'] = $dn;
+         //$user_data['bindPasswd'] = $password;
+         $this->Session->write($this->sessionKey, $user_data);
+      }
+      else{
+         $this->loginError =  $loginResult;
+      }
 
-			$user_data = $user[$this->userModel];
-			$user_data['bindDN'] = $dn;
-			//$user_data['bindPasswd'] = $password;
-			$this->Session->write($this->sessionKey, $user_data);
-		}else{
-			$this->loginError =  $loginResult;
-		}
+      // change database and table back to default
+      $this->ldap->useDbConfig = "default";
+      $this->ldap->useTable = $table;
+
       return $this->_loggedIn;
 	}
 
@@ -225,10 +235,6 @@ class MyAuthComponent extends AuthComponent {
 	}
 
 	function getDn( $attr, $query){
-      // change database model to ldap
-      // maybe this should be changed back after the query....
-      $this->ldap->useDbConfig = "ldap";
-
 		$userObj = $this->ldap->find('all', array('conditions'=>"$attr=$query", 'scope'=>'sub', 'recursive' => 1 ));
       //pr($userObj);
       //$this->log("1" . print_r($userObj,true), "debug");
