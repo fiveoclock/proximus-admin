@@ -72,7 +72,6 @@ class RulesController extends AppController {
 			
          if ($this->Rule->save($this->data)) {
 				$this->Session->setFlash(__('The Rule has been saved', true));
-            $this->log( $this->MyAuth->user('username') . "; $this->name; add: " . $this->data['Rule']['id'], 'activity');
             $this->Tracker->back();
 
 			} else {

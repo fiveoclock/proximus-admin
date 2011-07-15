@@ -60,7 +60,6 @@ if ( isset($auth['User']) ) {
 
    echo $menu->item('Home','/user/profiles/start',null,null,false);
    echo $menu->item('My logs','/user/profiles/logs',null,null,false);
-   echo " | ";
    echo $menu->item($user.'s '.'Profile',array('user' => true, 'controller'=>'profiles','action'=>'view',$auth['User']['id']));
    echo $menu->item('Logout','/user/profiles/logout',null,null,false);
 }
