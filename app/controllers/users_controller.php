@@ -34,7 +34,7 @@ class UsersController extends AppController {
       # If form has been submitted
       if (!empty($this->data) && isset($this->data['User']['searchstring'])) {
          $string = $this->data['User']['searchstring'];
-         $conditions['User'] = array("User.username LIKE '%$string%' OR User.realname LIKE '%$string%'");
+         $conditions = array("User.username LIKE '%$string%' OR User.realname LIKE '%$string%'");
       }
 
       $this->User->recursive = 0;
