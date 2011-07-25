@@ -7,7 +7,7 @@
 </div>
 
 <div class="users form"> 
-<?php echo $form->create(null, array('url' => '/users/index')); ?> 
+<?php echo $form->create(null, array('url' => '/admin/users/index')); ?> 
    <fieldset> 
    <?php 
       echo $form->input('searchstring',array('label'=>'Search for a user:'));
